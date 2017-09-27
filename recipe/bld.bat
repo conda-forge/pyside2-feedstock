@@ -51,6 +51,3 @@ if errorlevel 1 exit 1
 cmake --build . --config %CMAKE_CONFIG% --target install
 if errorlevel 1 exit 1
 
-
-rem https://bugreports.qt.io/browse/PYSIDE-564
-copy %RECIPE_DIR%\pyside2-uic.bat %LIBRARY_PREFIX%\bin
