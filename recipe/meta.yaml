@@ -7,9 +7,6 @@ package:
 source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
   git_tag: 5.6
-  patches:
-    # https://bugreports.qt.io/browse/PYSIDE-562
-    - PYSIDE-562.patch
 
 build:
   number: 0
