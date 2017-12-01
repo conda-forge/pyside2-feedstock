@@ -9,7 +9,7 @@ source:
   git_tag: 5.6
 
 build:
-  number: 1
+  number: 2
   features:
     - vc9  # [win and py27]
     - vc14  # [win and py>=35]
@@ -35,8 +35,7 @@ requirements:
 
 test:
   imports:
-    # right now this does not build on windows
-    - PySide2.QtConcurrent  # [not win]
+    - PySide2.QtConcurrent
     - PySide2.QtCore
     - PySide2.QtGui
     - PySide2.QtHelp
@@ -49,8 +48,7 @@ test:
     - PySide2.QtQuick
     - PySide2.QtQuickWidgets
     - PySide2.QtScript
-    # right now this does not build on windows
-    - PySide2.QtScriptTools  # [not win]
+    - PySide2.QtScriptTools
     - PySide2.QtSql
     - PySide2.QtSvg
     - PySide2.QtTest
