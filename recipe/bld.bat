@@ -32,7 +32,7 @@ if errorlevel 1 exit 1
 cmake --build . --config %CMAKE_CONFIG% --target install
 if errorlevel 1 exit 1
 
-ctest --output-on-failure --timeout 100 || echo "no ok"
+ctest --output-on-failure --timeout 100 -E QtWebKit || echo "no ok"
 rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%\sources\pyside2-tools

@@ -3,7 +3,7 @@
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
-  XVFB_RUN=xvfb-run
+  XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
 pushd sources/shiboken2
@@ -32,8 +32,9 @@ cmake \
   ..
 make install -j${CPU_COUNT}
 
+cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
-eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 || echo "no ok"
+eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 popd
 
 pushd sources/pyside2-tools
