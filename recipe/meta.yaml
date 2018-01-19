@@ -9,7 +9,7 @@ source:
   git_tag: 5.6
 
 build:
-  number: 3
+  number: 4
   features:
     - vc9  # [win and py27]
     - vc14  # [win and py>=35]
