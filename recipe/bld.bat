@@ -4,7 +4,7 @@ set CMAKE_CONFIG="Release"
 cd %SRC_DIR%\sources\shiboken2
 mkdir build && cd build
 
-cmake -LAH -G"NMake Makefiles"                               ^
+cmake -LAH -G"Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
@@ -20,7 +20,7 @@ if errorlevel 1 exit 1
 cd %SRC_DIR%\sources\pyside2
 mkdir build && cd build
 
-cmake -LAH -G"NMake Makefiles"                               ^
+cmake -LAH -G"Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
@@ -39,7 +39,7 @@ cd %SRC_DIR%\sources\pyside2-tools
 git checkout 5.6
 mkdir build && cd build
 
-cmake -LAH -G"NMake Makefiles"                               ^
+cmake -LAH -G"Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
