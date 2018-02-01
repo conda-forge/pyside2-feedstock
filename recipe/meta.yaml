@@ -26,6 +26,7 @@ requirements:
     - vc 9  # [win and py27]
     - vc 14  # [win and py>=35]
     - gcc  # [linux]
+    - ninja  # [win]
   run:
     - python
     - qt 5.6.*
