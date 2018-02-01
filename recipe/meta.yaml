@@ -1,4 +1,4 @@
-{% set version = "2.0.0.dev0" %}
+{% set version = "2.0.0~alpha0" %}
 
 package:
   name: pyside2
@@ -9,7 +9,7 @@ source:
   git_tag: 5.6
 
 build:
-  number: 4
+  number: 0
   features:
     - vc9  # [win and py27]
     - vc14  # [win and py>=35]
