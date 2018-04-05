@@ -9,7 +9,7 @@ source:
   git_tag: 5.6
 
 build:
-  number: 0
+  number: 1
   features:
     - vc9  # [win and py27]
     - vc14  # [win and py>=35]
@@ -25,7 +25,6 @@ requirements:
     - libxml2
     - vc 9  # [win and py27]
     - vc 14  # [win and py>=35]
-    - gcc  # [linux]
   run:
     - python
     - qt 5.6.*
@@ -33,7 +32,6 @@ requirements:
     - libxml2
     - vc 9  # [win and py27]
     - vc 14  # [win and py>=35]
-    - libgcc  # [linux]
 
 test:
   imports:
