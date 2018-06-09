@@ -21,6 +21,7 @@ requirements:
     - libxslt
     - libxml2
     - python
+    - clangdev
   run:
     - python
     - qt 5.9.*
