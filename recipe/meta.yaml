@@ -1,4 +1,4 @@
-{% set version = "5.6.0a1" %}
+{% set version = "5.9.0a1" %}
 
 package:
   name: pyside2
@@ -6,34 +6,29 @@ package:
 
 source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
-  git_tag: 5.6
+  git_tag: 5.9
 
 build:
-  number: 2
-  features:
-    - vc9  # [win and py27]
-    - vc14  # [win and py>=35]
+  number: 0
   detect_binary_files_with_prefix: True
+  skip:
+    - True  # [py < 36 or win]
 
 requirements:
   build:
-    - toolchain
-    - python
+    - {{ compiler("cxx") }}
     - cmake
-    - qt 5.6.*
+  host:
+    - qt 5.9.*
     - libxslt
     - libxml2
-    - vc 9  # [win and py27]
-    - vc 14  # [win and py>=35]
-    - gcc  # [linux]
+    - python
+    - clangdev
   run:
     - python
-    - qt 5.6.*
+    - qt 5.9.*
     - libxslt
     - libxml2
-    - vc 9  # [win and py27]
-    - vc 14  # [win and py>=35]
-    - libgcc  # [linux]
 
 test:
   imports:
