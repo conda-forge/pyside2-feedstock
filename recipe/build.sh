@@ -17,6 +17,7 @@ cmake \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
+  -DCLANG_INSTALL_DIR=$PREFIX/lib/clang/* \
   ..
 make install -j${CPU_COUNT}
 popd
@@ -29,6 +30,7 @@ cmake \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DPYTHON_EXECUTABLE=${PYTHON} \
+  -DCLANG_INSTALL_DIR=$PREFIX/lib/clang/* \
   -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   ..
 make install -j${CPU_COUNT}
@@ -47,5 +49,6 @@ cmake \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=OFF \
+  -DCLANG_INSTALL_DIR=$PREFIX/lib/clang/* \
   ..
 make install -j${CPU_COUNT}
