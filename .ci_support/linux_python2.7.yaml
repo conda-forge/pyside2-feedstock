@@ -1,0 +1,18 @@
+c_compiler:
+- toolchain_c
+cxx_compiler:
+- toolchain_cxx
+libxml2:
+- '2.9'
+pin_run_as_build:
+  libxml2:
+    max_pin: x.x
+  python:
+    min_pin: x.x
+    max_pin: x.x
+  qt:
+    max_pin: x.x
+python:
+- '2.7'
+qt:
+- '5.6'

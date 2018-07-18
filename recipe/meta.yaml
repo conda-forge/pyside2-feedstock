@@ -9,31 +9,24 @@ source:
   git_tag: 5.6
 
 build:
-  number: 2
-  features:
-    - vc9  # [win and py27]
-    - vc14  # [win and py>=35]
+  number: 3
   detect_binary_files_with_prefix: True
 
 requirements:
   build:
-    - toolchain
-    - python
     - cmake
-    - qt 5.6.*
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - python
+    - qt
     - libxslt
     - libxml2
-    - vc 9  # [win and py27]
-    - vc 14  # [win and py>=35]
-    - gcc  # [linux]
   run:
     - python
-    - qt 5.6.*
+    - qt
     - libxslt
     - libxml2
-    - vc 9  # [win and py27]
-    - vc 14  # [win and py>=35]
-    - libgcc  # [linux]
 
 test:
   imports:
