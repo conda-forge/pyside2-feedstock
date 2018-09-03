@@ -1,13 +1,11 @@
 c_compiler:
-- toolchain_c
+- vs2015
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- toolchain_cxx
-docker_image:
-- condaforge/linux-anvil
+- vs2015
 libxml2:
 - '2.9'
 pin_run_as_build:
@@ -19,6 +17,10 @@ pin_run_as_build:
   qt:
     max_pin: x.x
 python:
-- '2.7'
+- '3.7'
 qt:
 - '5.6'
+zip_keys:
+- - python
+  - c_compiler
+  - cxx_compiler
