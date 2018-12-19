@@ -1,13 +1,21 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '10.9'
+build_number_decrement:
+- '1000'
 c_compiler:
-- vs2015
+- toolchain_c
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- vs2015
+- toolchain_cxx
 libxml2:
 - '2.9'
+macos_machine:
+- x86_64-apple-darwin13.4.0
+macos_min_version:
+- '10.9'
 pin_run_as_build:
   libxml2:
     max_pin: x.x
@@ -17,10 +25,12 @@ pin_run_as_build:
   qt:
     max_pin: x.x
 python:
-- '3.6'
+- '2.7'
 qt:
 - '5.6'
 zip_keys:
-- - python
-  - c_compiler
+- - c_compiler
   - cxx_compiler
+  - channel_sources
+  - channel_targets
+  - build_number_decrement
