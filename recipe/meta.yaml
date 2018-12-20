@@ -7,9 +7,12 @@ package:
 source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
   git_tag: 5.6
+  patches:
+    # https://codereview.qt-project.org/#/c/234124/
+    - 55d8970.patch
 
 build:
-  number: 3
+  number: 1003
   detect_binary_files_with_prefix: True
 
 requirements:
@@ -17,6 +20,15 @@ requirements:
     - cmake
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - {{ cdt('mesa-libgl-devel') }}  # [linux]
+    - {{ cdt('mesa-dri-drivers') }}  # [linux]
+    - {{ cdt('libselinux') }}  # [linux]
+    - {{ cdt('libxdamage') }}  # [linux]
+    - {{ cdt('libxfixes') }}  # [linux]
+    - {{ cdt('libxxf86vm') }}  # [linux]
+    - {{ cdt('libxcb') }}  # [linux]
+    - {{ cdt('libxext') }}  # [linux]
+    - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
   host:
     - python
     - qt
