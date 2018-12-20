@@ -1,0 +1,47 @@
+diff --git a/sources/pyside2/PySide2/CMakeLists.txt b/sources/pyside2/PySide2/CMakeLists.txt
+index 02b4a7c1..bf14bb45 100644
+--- a/sources/pyside2/PySide2/CMakeLists.txt
++++ b/sources/pyside2/PySide2/CMakeLists.txt
+@@ -24,10 +24,6 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/support/signature/mapping.py"
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/support/signature/parser.py"
+                "${CMAKE_CURRENT_BINARY_DIR}/support/signature/parser.py" COPYONLY)
+ if (PYTHON_VERSION_MAJOR EQUAL 3)
+-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/support/signature/inspect.py"
+-                   "${CMAKE_CURRENT_BINARY_DIR}/support/signature/inspect.py" COPYONLY)
+-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/support/signature/typing36.py"
+-                   "${CMAKE_CURRENT_BINARY_DIR}/support/signature/typing.py" COPYONLY)
+ else()
+     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/support/signature/backport_inspect.py"
+                    "${CMAKE_CURRENT_BINARY_DIR}/support/signature/backport_inspect.py" COPYONLY)
+diff --git a/sources/pyside2/PySide2/support/signature/loader.py b/sources/pyside2/PySide2/support/signature/loader.py
+index b734436e..21962586 100644
+--- a/sources/pyside2/PySide2/support/signature/loader.py
++++ b/sources/pyside2/PySide2/support/signature/loader.py
+@@ -59,7 +59,7 @@ for _ in "four":
+     package_dir = os.path.dirname(package_dir)
+ sys.path.insert(0, package_dir)
+ if sys.version_info >= (3,):
+-    from PySide2.support.signature import inspect
++    import inspect
+ else:
+     import inspect
+     namespace = inspect.__dict__
+diff --git a/sources/pyside2/PySide2/support/signature/mapping.py b/sources/pyside2/PySide2/support/signature/mapping.py
+index a04a9e92..5127248f 100644
+--- a/sources/pyside2/PySide2/support/signature/mapping.py
++++ b/sources/pyside2/PySide2/support/signature/mapping.py
+@@ -55,8 +55,11 @@ See _resolve_value() in singature.py
+ import sys
+ import struct
+ import PySide2
++try:
++    from . import typing
++except ImportError:
++    import typing
+ 
+-from . import typing
+ ellipsis = "..."
+ Char = typing.Union[str, int]     # how do I model the limitation to 1 char?
+ StringList = typing.List[str]
+* Unmerged path sources/shiboken2/libshiboken/pep384impl.cpp
+* Unmerged path sources/shiboken2/libshiboken/pep384impl.h
