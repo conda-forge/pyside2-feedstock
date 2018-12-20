@@ -22,13 +22,15 @@ requirements:
     - qt
     - libxslt
     - libxml2
-    - libxcb  # [linux]
+    - libxcb   # [linux]
+    - mesalib  # [linux]
   run:
     - python
     - qt
     - libxslt
     - libxml2
-    - libxcb  # [linux]
+    - libxcb   # [linux]
+    - mesalib  # [linux]
 
 test:
   imports:
