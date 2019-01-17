@@ -8,11 +8,13 @@ source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
   git_tag: 5.6
   patches:
+    # https://bugreports.qt.io/browse/PYSIDE-140
+    - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
     # https://codereview.qt-project.org/#/c/234124/
     - 55d8970.patch
 
 build:
-  number: 1003
+  number: 1004
   detect_binary_files_with_prefix: True
 
 requirements:
