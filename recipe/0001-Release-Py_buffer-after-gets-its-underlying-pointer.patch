@@ -1,0 +1,57 @@
+From b8201a3ad2e778ed58cb285369055dc4d0d450bd Mon Sep 17 00:00:00 2001
+From: Boxiang Sun <daetalusun@gmail.com>
+Date: Tue, 18 Sep 2018 03:44:03 +0800
+Subject: [PATCH] Release Py_buffer after gets its underlying pointer
+
+PyObject_GetBuffer will increment the reference of Py_buffer, when the
+buffer is no longer being used, we should call PyBuffer_Release to
+reduce the reference count.
+
+See https://docs.python.org/3/c-api/buffer.html#c.PyBuffer_Release
+
+Task-number: PYSIDE-140
+Change-Id: Ia7c231aff317252db83b2405237031fc73af2651
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+---
+ sources/shiboken2/libshiboken/shibokenbuffer.cpp | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/sources/shiboken2/libshiboken/shibokenbuffer.cpp b/sources/shiboken2/libshiboken/shibokenbuffer.cpp
+index 05b68dad..dc29b40a 100644
+--- a/sources/shiboken2/libshiboken/shibokenbuffer.cpp
++++ b/sources/shiboken2/libshiboken/shibokenbuffer.cpp
+@@ -48,26 +48,25 @@ bool Shiboken::Buffer::checkType(PyObject* pyObj)
+ 
+ void* Shiboken::Buffer::getPointer(PyObject* pyObj, Py_ssize_t* size)
+ {
+-
++    const void* buffer = 0;
+ #ifdef IS_PY3K
+     Py_buffer view;
+     if (PyObject_GetBuffer(pyObj, &view, PyBUF_ND) == 0) {
+         if (size)
+             *size = view.len;
++        buffer = view.buf;
++        PyBuffer_Release(&view);
+         return view.buf;
+-    } else {
+-        return 0;
+     }
+ #else
+-    const void* buffer = 0;
+     Py_ssize_t bufferSize = 0;
+ 
+     PyObject_AsReadBuffer(pyObj, &buffer, &bufferSize);
+ 
+     if (size)
+         *size = bufferSize;
+-    return const_cast<void*>(buffer);
+ #endif
++    return const_cast<void*>(buffer);
+ }
+ 
+ PyObject* Shiboken::Buffer::newObject(void* memory, Py_ssize_t size, Type type)
+-- 
+2.17.1
+
