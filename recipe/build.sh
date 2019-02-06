@@ -5,7 +5,7 @@ if test `uname` = "Linux"
 then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
   export CXXFLAGS="${CXXFLAGS} -I/usr/include/"
-  export LDFLAGS="${LDFLAGS} -L/usr/lib -Wl,-rpath-link,/usr/lib"
+  export LDFLAGS="${LDFLAGS} -L/usr/lib64 -Wl,-rpath-link,/usr/lib64"
 fi
 
 pushd sources/shiboken2
