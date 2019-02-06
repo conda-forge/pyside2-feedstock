@@ -49,4 +49,4 @@ cmake \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=OFF \
   ..
-make install -j${CPU_COUNT}
+make install -j${CPU_COUNT} VERBOSE=1
