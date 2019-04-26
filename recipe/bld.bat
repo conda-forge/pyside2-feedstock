@@ -36,13 +36,13 @@ ctest --output-on-failure --timeout 100 -E QtWebKit || echo "no ok"
 rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%\sources\pyside2-tools
-git checkout 5.6
+git checkout 5.9
 mkdir build && cd build
 
 cmake -LAH -G"NMake Makefiles"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
-    -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
+    -DSITE_PACKAGE="%SP_DIR:\=/%"                            ^
     -DCMAKE_BUILD_TYPE=Release                               ^
     -DBUILD_TESTS=OFF                                        ^
     ..

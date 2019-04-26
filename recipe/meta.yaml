@@ -1,4 +1,4 @@
-{% set version = "5.6.0a1" %}
+{% set version = "5.9.0a1" %}
 
 package:
   name: pyside2
@@ -6,7 +6,7 @@ package:
 
 source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
-  git_tag: 5.6
+  git_tag: 5.9
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-140
     - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
@@ -14,7 +14,8 @@ source:
     - 55d8970.patch
 
 build:
-  number: 1005
+  number: 0
+  skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
 requirements:
@@ -32,6 +33,8 @@ requirements:
     - {{ cdt('libxext') }}  # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
   host:
+    - clangdev
+    - llvmdev
     - python
     - qt
     - libxslt
