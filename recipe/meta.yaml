@@ -14,7 +14,7 @@ source:
     - 55d8970.patch
 
 build:
-  number: 1004
+  number: 1005
   detect_binary_files_with_prefix: True
 
 requirements:
