@@ -38,7 +38,7 @@ eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWeb
 popd
 
 pushd sources/pyside2-tools
-git checkout 5.6
+git checkout 5.9
 mkdir build && cd build
 
 cmake \
@@ -48,3 +48,5 @@ cmake \
   -DBUILD_TESTS=OFF \
   ..
 make install -j${CPU_COUNT}
+
+python -c "import PySide2; print(PySide2.__version__)"
