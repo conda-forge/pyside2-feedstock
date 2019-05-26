@@ -45,6 +45,8 @@ requirements:
     - libxslt
     - libxml2
   run:
+    - clangdev
+    - llvmdev
     - python
     - qt
     - libxslt
