@@ -10,9 +10,13 @@ source:
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-140
     - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
-    # https://codereview.qt-project.org/#/c/234124/
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263267
     - 55d8970.patch
     - project.patch
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263251
+    - 0001-shiboken-Provide-g-internal-headers-for-CentOS-too.patch
+    # https://bugreports.qt.io/browse/PYSIDE-1012
+    - gnu_includes.patch
 
 build:
   number: 0
