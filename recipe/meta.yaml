@@ -12,6 +12,7 @@ source:
     - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
     # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263267
     - 55d8970.patch
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/262953
     - project.patch
     # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263251
     - 0001-shiboken-Provide-g-internal-headers-for-CentOS-too.patch

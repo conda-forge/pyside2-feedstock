@@ -1,0 +1,73 @@
+From e0c31d2d95616888c74ad152cb17c3119a10b1ed Mon Sep 17 00:00:00 2001
+From: Julien Schueller <schueller@phimeca.com>
+Date: Fri, 25 Aug 2017 15:25:03 +0200
+Subject: [PATCH] Return 0 with pyside2-rcc -help
+
+This fixes pyside2-rcc -help to exit with return code 0
+instead of 1 when there are no errors.
+Also fixes the return code of pyside2-rcc -version.
+
+Task-number: PYSIDE-562
+Change-Id: I4aa5e6512bdd1ac01b45525bc190d855d8ec8b7a
+---
+ pyrcc/main.cpp | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/pyrcc/main.cpp b/pyrcc/main.cpp
+index aa5ff33..9028e95 100644
+--- a/pyrcc/main.cpp
++++ b/pyrcc/main.cpp
+@@ -89,7 +89,7 @@ bool processResourceFile(const QStringList &filenamesIn, const QString &filename
+     return ret;
+ }
+ 
+-int showHelp(const char *argv0, const QString &error)
++void showHelp(const char *argv0, const QString &error)
+ {
+     fprintf(stderr, "PySide2 resource compiler\n");
+     if (!error.isEmpty())
+@@ -107,13 +107,12 @@ int showHelp(const char *argv0, const QString &error)
+             "    -version          Display version\n"
+             "    -help             Display this information\n",
+             argv0);
+-    return 1;
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+     QString outFilename;
+-    bool helpRequested = false, list = false;
++    bool list = false;
+     QStringList files;
+ 
+     //parse options
+@@ -163,9 +162,10 @@ int main(int argc, char *argv[])
+                 list = true;
+             } else if(opt == "version") {
+                 fprintf(stderr, "Resource Compiler for Qt version %s\n", QT_VERSION_STR);
+-                return 1;
++                return 0;
+             } else if(opt == "help" || opt == "h") {
+-                helpRequested = true;
++                showHelp(argv[0], errorMsg);
++                return 0;
+             } else if(opt == "no-compress") {
+                 compressLevel = -2;
+             } else {
+@@ -180,8 +180,11 @@ int main(int argc, char *argv[])
+         }
+     }
+ 
+-    if (!files.size() || !errorMsg.isEmpty() || helpRequested)
+-        return showHelp(argv[0], errorMsg);
++    if (!files.size() || !errorMsg.isEmpty())
++    {
++        showHelp(argv[0], errorMsg);
++        return 1;
++    }
+     return int(!processResourceFile(files, outFilename, list));
+ }
+ 
+-- 
+2.21.0
+

@@ -39,6 +39,8 @@ popd
 
 pushd sources/pyside2-tools
 git checkout 5.9
+patch -p1 -i ${RECIPE_DIR}/0001-Return-0-with-pyside2-rcc-help.patch
+patch -p1 -i ${RECIPE_DIR}/0001-Make-pyside2-uic-executable-by-windows-shell.patch
 mkdir build && cd build
 
 cmake \
