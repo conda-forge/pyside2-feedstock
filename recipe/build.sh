@@ -3,6 +3,7 @@
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
+  xvfb-run -h
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
