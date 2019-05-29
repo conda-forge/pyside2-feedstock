@@ -1,4 +1,4 @@
-{% set version = "5.6.0a1" %}
+{% set version = "5.9.0a1" %}
 
 package:
   name: pyside2
@@ -6,15 +6,22 @@ package:
 
 source:
   git_url: https://codereview.qt-project.org/pyside/pyside-setup
-  git_tag: 5.6
+  git_tag: 5.9
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-140
     - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
-    # https://codereview.qt-project.org/#/c/234124/
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263267
     - 55d8970.patch
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/262953
+    - project.patch
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263251
+    - 0001-shiboken-Provide-g-internal-headers-for-CentOS-too.patch
+    # https://bugreports.qt.io/browse/PYSIDE-1012
+    - gnu_includes.patch
 
 build:
-  number: 1005
+  number: 0
+  skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
 requirements:
@@ -22,21 +29,45 @@ requirements:
     - cmake
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ cdt('mesa-libgl-devel') }}  # [linux]
-    - {{ cdt('mesa-dri-drivers') }}  # [linux]
-    - {{ cdt('libselinux') }}  # [linux]
-    - {{ cdt('libxdamage') }}  # [linux]
-    - {{ cdt('libxfixes') }}  # [linux]
-    - {{ cdt('libxxf86vm') }}  # [linux]
-    - {{ cdt('libxcb') }}  # [linux]
-    - {{ cdt('libxext') }}  # [linux]
+    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
+    - {{ cdt('libx11-devel') }}          # [linux]
+    - {{ cdt('libxext-devel') }}         # [linux]
+    - {{ cdt('libxrender-devel') }}      # [linux]
+    - {{ cdt('mesa-libgl-devel') }}      # [linux]
+    - {{ cdt('mesa-libegl-devel') }}     # [linux]
+    - {{ cdt('mesa-dri-drivers') }}      # [linux]
+    - {{ cdt('libxau-devel') }}          # [linux]
+    - {{ cdt('alsa-lib-devel') }}        # [linux]
+    - {{ cdt('gtk2-devel') }}            # [linux]
+    - {{ cdt('gtkmm24-devel') }}         # [linux]
+    - {{ cdt('libdrm-devel') }}          # [linux]
+    - {{ cdt('libxcomposite-devel') }}   # [linux]
+    - {{ cdt('libxcursor-devel') }}      # [linux]
+    - {{ cdt('libxi-devel') }}           # [linux]
+    - {{ cdt('libxrandr-devel') }}       # [linux]
+    - {{ cdt('pciutils-devel') }}        # [linux]
+    - {{ cdt('libxscrnsaver-devel') }}   # [linux]
+    - {{ cdt('libxtst-devel') }}         # [linux]
+    - {{ cdt('libselinux-devel') }}      # [linux]
+    - {{ cdt('libxdamage') }}            # [linux]
+    - {{ cdt('libxdamage-devel') }}      # [linux]
+    - {{ cdt('libxfixes') }}             # [linux]
+    - {{ cdt('libxfixes-devel') }}       # [linux]
+    - {{ cdt('libxxf86vm') }}            # [linux]
+    - {{ cdt('libxrandr') }}             # [linux]
+    - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
+
   host:
+    - clangdev
+    - llvmdev
     - python
     - qt
     - libxslt
     - libxml2
   run:
+    - clangdev
+    - llvmdev
     - python
     - qt
     - libxslt
@@ -44,29 +75,45 @@ requirements:
 
 test:
   imports:
+    - PySide2.QtCharts
     - PySide2.QtConcurrent
     - PySide2.QtCore
+    - PySide2.QtDataVisualization
     - PySide2.QtGui
     - PySide2.QtHelp
+    - PySide2.QtLocation
     - PySide2.QtMultimedia
     - PySide2.QtMultimediaWidgets
     - PySide2.QtNetwork
     - PySide2.QtOpenGL
+    - PySide2.QtPositioning
     - PySide2.QtPrintSupport
     - PySide2.QtQml
     - PySide2.QtQuick
     - PySide2.QtQuickWidgets
     - PySide2.QtScript
     - PySide2.QtScriptTools
+    - PySide2.QtScxml
+    - PySide2.QtSensors
     - PySide2.QtSql
     - PySide2.QtSvg
     - PySide2.QtTest
+    - PySide2.QtTextToSpeech
     - PySide2.QtUiTools
     - PySide2.QtWebChannel
+    - PySide2.QtWebEngineCore
+    - PySide2.QtWebEngineWidgets
     - PySide2.QtWebSockets
     - PySide2.QtWidgets
     - PySide2.QtXml
     - PySide2.QtXmlPatterns
+    - PySide2.Qt3DAnimation
+    - PySide2.Qt3DCore
+    - PySide2.Qt3DExtras
+    - PySide2.Qt3DInput
+    - PySide2.Qt3DLogic
+    - PySide2.Qt3DRender
+
   commands:
     - shiboken2 --help
     - pyside2-lupdate -help

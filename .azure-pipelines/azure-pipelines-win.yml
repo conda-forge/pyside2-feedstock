@@ -10,16 +10,12 @@ jobs:
   strategy:
     maxParallel: 4
     matrix:
-      win_c_compilervs2008cxx_compilervs2008python2.7:
-        CONFIG: win_c_compilervs2008cxx_compilervs2008python2.7
+      win_c_compilervs2015cxx_compilervs2015python3.6vc14:
+        CONFIG: win_c_compilervs2015cxx_compilervs2015python3.6vc14
         CONDA_BLD_PATH: D:\\bld\\
         UPLOAD_PACKAGES: False
-      win_c_compilervs2015cxx_compilervs2015python3.6:
-        CONFIG: win_c_compilervs2015cxx_compilervs2015python3.6
-        CONDA_BLD_PATH: D:\\bld\\
-        UPLOAD_PACKAGES: False
-      win_c_compilervs2015cxx_compilervs2015python3.7:
-        CONFIG: win_c_compilervs2015cxx_compilervs2015python3.7
+      win_c_compilervs2015cxx_compilervs2015python3.7vc14:
+        CONFIG: win_c_compilervs2015cxx_compilervs2015python3.7vc14
         CONDA_BLD_PATH: D:\\bld\\
         UPLOAD_PACKAGES: False
   steps:

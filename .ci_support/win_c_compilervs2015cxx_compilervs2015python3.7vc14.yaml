@@ -16,11 +16,16 @@ pin_run_as_build:
     max_pin: x.x
   qt:
     max_pin: x.x
+  vc:
+    max_pin: x
 python:
-- '3.6'
+- '3.7'
 qt:
-- '5.6'
+- '5.9'
+vc:
+- '14'
 zip_keys:
 - - python
+  - vc
   - c_compiler
   - cxx_compiler

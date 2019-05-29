@@ -3,6 +3,7 @@
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
+  xvfb-run -h
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
@@ -38,7 +39,9 @@ eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWeb
 popd
 
 pushd sources/pyside2-tools
-git checkout 5.6
+git checkout 5.9
+patch -p1 -i ${RECIPE_DIR}/0001-Return-0-with-pyside2-rcc-help.patch
+patch -p1 -i ${RECIPE_DIR}/0001-Make-pyside2-uic-executable-by-windows-shell.patch
 mkdir build && cd build
 
 cmake \

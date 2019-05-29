@@ -1,11 +1,11 @@
 c_compiler:
-- vs2008
+- vs2015
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- vs2008
+- vs2015
 libxml2:
 - '2.9'
 pin_run_as_build:
@@ -16,11 +16,16 @@ pin_run_as_build:
     max_pin: x.x
   qt:
     max_pin: x.x
+  vc:
+    max_pin: x
 python:
-- '2.7'
+- '3.6'
 qt:
-- '5.6'
+- '5.9'
+vc:
+- '14'
 zip_keys:
 - - python
+  - vc
   - c_compiler
   - cxx_compiler
