@@ -1,23 +1,16 @@
-{% set version = "5.9.0a1" %}
+{% set version = "5.12.4" %}
 
 package:
   name: pyside2
   version: {{ version }}
 
 source:
-  git_url: https://codereview.qt-project.org/pyside/pyside-setup
-  git_tag: 5.9
+  fn: pyside-setup-everywhere-src-{{ version }}.tar.xz
+  url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
+  sha256: 4a64ed11eb22af46db02615f9b1f597de0feaf8555cf41f355ec2b366d5bc2b4
   patches:
-    # https://bugreports.qt.io/browse/PYSIDE-140
-    - 0001-Release-Py_buffer-after-gets-its-underlying-pointer.patch
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263267
-    - 55d8970.patch
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/262953
-    - project.patch
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/263251
-    - 0001-shiboken-Provide-g-internal-headers-for-CentOS-too.patch
-    # https://bugreports.qt.io/browse/PYSIDE-1012
-    - gnu_includes.patch
+    # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
+    - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
 
 build:
   number: 0
@@ -57,6 +50,7 @@ requirements:
     - {{ cdt('libxrandr') }}             # [linux]
     - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
+    - {{ cdt('pciutils-devel') }}        # [linux]
 
   host:
     - clangdev
@@ -91,6 +85,7 @@ test:
     - PySide2.QtQml
     - PySide2.QtQuick
     - PySide2.QtQuickWidgets
+    #- PySide2.QtRemoteObjects
     - PySide2.QtScript
     - PySide2.QtScriptTools
     - PySide2.QtScxml
@@ -123,7 +118,7 @@ test:
 about:
   home: https://wiki.qt.io/PySide2
   license: LGPL3
-  license_file: LICENSE.LGPL3
+  license_file: LICENSE.LGPLv3
   summary: Python bindings for Qt
 
 extra:

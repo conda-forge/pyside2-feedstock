@@ -26,6 +26,7 @@ cmake -LAH -G"NMake Makefiles"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
     -DCMAKE_BUILD_TYPE=Release                               ^
     -DPYTHON_EXECUTABLE="%PYTHON%"                           ^
+    -DSKIP_MODULES=RemoteObjects ^
     ..
 if errorlevel 1 exit 1
 
@@ -36,9 +37,6 @@ ctest --output-on-failure --timeout 100 -E QtWebKit || echo "no ok"
 rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%\sources\pyside2-tools
-git checkout 5.9
-patch -p1 -i %RECIPE_DIR%\0001-Return-0-with-pyside2-rcc-help.patch
-patch -p1 -i %RECIPE_DIR%\0001-Make-pyside2-uic-executable-by-windows-shell.patch
 mkdir build && cd build
 
 cmake -LAH -G"NMake Makefiles"                               ^

@@ -11,8 +11,8 @@ Change-Id: I326287dabe1c09a4474f10a5afdbcaefa36a4919
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index af33d0f..0428f3c 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
+--- a/sources/pyside2-tools/CMakeLists.txt
++++ b/sources/pyside2-tools/CMakeLists.txt
 @@ -43,6 +43,12 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pyside2-uic
          GROUP_EXECUTE GROUP_READ
          WORLD_EXECUTE WORLD_READ)
