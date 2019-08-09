@@ -29,4 +29,4 @@ pin_run_as_build:
 python:
 - '2.7'
 qt:
-- '5.9'
+- '5.12'
