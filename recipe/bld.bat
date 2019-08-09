@@ -26,7 +26,6 @@ cmake -LAH -G"NMake Makefiles"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
     -DCMAKE_BUILD_TYPE=Release                               ^
     -DPYTHON_EXECUTABLE="%PYTHON%"                           ^
-    -DSKIP_MODULES=RemoteObjects ^
     ..
 if errorlevel 1 exit 1
 
