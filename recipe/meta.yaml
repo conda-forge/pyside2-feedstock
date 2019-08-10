@@ -87,6 +87,7 @@ test:
     - PySide2.QtQml
     - PySide2.QtQuick
     - PySide2.QtQuickWidgets
+    # https://bugreports.qt.io/browse/PYSIDE-1072
     #- PySide2.QtRemoteObjects
     - PySide2.QtScript
     - PySide2.QtScriptTools
