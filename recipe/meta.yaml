@@ -11,8 +11,6 @@ source:
   patches:
     # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
     - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
-    # Symbol not found: __cg_jpeg_resync_to_restart
-    - no_pyi.patch  # [osx]
 
 build:
   number: 1
