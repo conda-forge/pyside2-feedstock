@@ -6,6 +6,12 @@ then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
+# https://github.com/conda-forge/qt-feedstock/issues/123
+if test `uname` = "Linux"
+then
+  sed -i 's|_qt5gui_find_extra_libs(EGL.*)|_qt5gui_find_extra_libs(EGL "EGL" "" "")|g' $PREFIX/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake
+  sed -i 's|_qt5gui_find_extra_libs(OPENGL.*)|_qt5gui_find_extra_libs(OPENGL "GL" "" "")|g' $PREFIX/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake
+fi
 
 pushd sources/shiboken2
 mkdir build && cd build
