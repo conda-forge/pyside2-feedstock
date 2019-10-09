@@ -51,13 +51,12 @@ rem  cmake --build . --config %CMAKE_CONFIG% --target install
 rem  if errorlevel 1 exit 1
 
 rem shiboken test
-cd %RECIPE_DIR%\cmake_shiboken
-mkdir build && cd build
+mkdir build_cmake_shiboken && cd build_cmake_shiboken
 
 cmake -LAH -G"NMake Makefiles"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
-    ..
+    %RECIPE_DIR%\cmake_shiboken
 if errorlevel 1 exit 1
 
 cmake --build . --config %CMAKE_CONFIG% --target install
@@ -65,3 +64,6 @@ if errorlevel 1 exit 1
 
 hello.exe
 if errorlevel 1 exit 1
+
+dir /P %LIBRARY_PREFIX%/bin
+dir /P %LIBRARY_PREFIX%/lib

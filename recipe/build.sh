@@ -55,11 +55,10 @@ popd
 #   ..
 # make install -j${CPU_COUNT}
 
-pushd ${RECIPE_DIR}/cmake_shiboken
-mkdir build && cd build
+mkdir build_cmake_shiboken && cd build_cmake_shiboken
 cmake \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  ..
+  ${RECIPE_DIR}/cmake_shiboken
 make install -j${CPU_COUNT}
 ./hello

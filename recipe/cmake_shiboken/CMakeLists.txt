@@ -17,3 +17,6 @@ add_executable (hello main.cxx)
 target_link_libraries (hello Shiboken2::libshiboken)
 
 install (TARGETS hello DESTINATION bin)
+
+message(STATUS "XXX SHIBOKEN_SHARED_LIBRARY_DIR=${SHIBOKEN_SHARED_LIBRARY_DIR}")
+
