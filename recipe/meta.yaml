@@ -15,7 +15,7 @@ source:
     - no_pyi.patch  # [osx]
 
 build:
-  number: 3
+  number: 4
   skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
@@ -58,9 +58,10 @@ requirements:
   host:
     - python
     - qt
+    - libxml2
+    - libxslt
   run:
     - python
-    - qt
 
 test:
   imports:
