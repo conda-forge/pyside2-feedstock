@@ -15,7 +15,7 @@ source:
     - no_pyi.patch  # [osx]
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
@@ -24,6 +24,8 @@ requirements:
     - cmake
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - clangdev
+    - llvmdev
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
@@ -54,19 +56,11 @@ requirements:
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
 
   host:
-    - clangdev
-    - llvmdev
     - python
     - qt
-    - libxslt
-    - libxml2
   run:
-    - clangdev
-    - llvmdev
     - python
     - qt
-    - libxslt
-    - libxml2
 
 test:
   imports:
