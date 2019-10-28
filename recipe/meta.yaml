@@ -25,7 +25,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - clangdev
-    - llvmdev
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
