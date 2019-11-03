@@ -11,8 +11,9 @@ source:
   patches:
     # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
     - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
-    # Symbol not found: __cg_jpeg_resync_to_restart
-    - no_pyi.patch  # [osx]
+    # osx: Symbol not found: __cg_jpeg_resync_to_restart
+    # win: ImportError: DLL load failed while importing QtCore: The specified module could not be found.
+    - no_pyi.patch  # [osx or win]
 
 build:
   number: 6
