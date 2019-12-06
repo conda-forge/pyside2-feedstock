@@ -16,7 +16,7 @@ source:
     - no_pyi.patch  # [osx or win]
 
 build:
-  number: 6
+  number: 7
   skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
