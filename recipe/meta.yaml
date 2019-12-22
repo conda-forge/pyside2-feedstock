@@ -1,4 +1,4 @@
-{% set version = "5.13.1" %}
+{% set version = "5.14.0" %}
 
 package:
   name: pyside2
@@ -6,17 +6,17 @@ package:
 
 source:
   fn: pyside-setup-everywhere-src-{{ version }}.tar.xz
-  url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: c57c71ddece90b29d0934cf5fac1e1634719484637b56dcbe49eb277c1c01536
+  url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
+  sha256: 8c2ad1901a99165ed7bac8f522ee351ae3ebadd580024248f5a1db52e4a94b30
   patches:
-    # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
-    - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
     # osx: Symbol not found: __cg_jpeg_resync_to_restart
     # win: ImportError: DLL load failed while importing QtCore: The specified module could not be found.
     - no_pyi.patch  # [osx or win]
+    # ImportError: ...PySide2/QtCore.cpython-36m-x86_64-linux-gnu.so: undefined symbol: _ZN18QMessageLogContext4copyERKS_
+    - qt512.patch
 
 build:
-  number: 6
+  number: 0
   skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
@@ -108,8 +108,6 @@ test:
   commands:
     - shiboken2 --help
     - pyside2-lupdate -help
-    - pyside2-rcc -help
-    - pyside2-uic -help
 
 about:
   home: https://wiki.qt.io/PySide2
