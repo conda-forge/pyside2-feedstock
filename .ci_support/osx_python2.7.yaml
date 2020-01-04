@@ -24,9 +24,5 @@ pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
-  qt:
-    max_pin: x.x
 python:
 - '2.7'
-qt:
-- '5.12'
