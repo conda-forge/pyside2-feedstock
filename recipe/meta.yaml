@@ -64,7 +64,7 @@ requirements:
     - libxcb                             # [linux]
   run:
     - python
-    - qt  5.12
+    - qt
 
 test:
   imports:
