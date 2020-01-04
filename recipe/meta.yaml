@@ -58,7 +58,7 @@ requirements:
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
   host:
     - python
-    - qt  5.12.1
+    - qt 
     - libxml2
     - libxslt
     - libxcb                             # [linux]
