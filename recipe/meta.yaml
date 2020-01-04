@@ -56,6 +56,11 @@ requirements:
     - {{ cdt('libxrandr') }}             # [linux]
     - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
+
+    # TODO: these last two were added by syncing the recipe from qt 5.12.5
+    # They might not be needed
+    - {{ cdt('libxxf86vm-devel') }}      # [linux]
+    - {{ cdt('cups-devel') }}            # [linux]
   host:
     - python
     - qt 
