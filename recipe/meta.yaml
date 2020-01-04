@@ -11,7 +11,8 @@ source:
   patches:
     # osx: Symbol not found: __cg_jpeg_resync_to_restart
     # win: ImportError: DLL load failed while importing QtCore: The specified module could not be found.
-    - no_pyi.patch  # [osx or win]
+    # linux: QtCore.cpython-37m-x86_64-linux-gnu.so: undefined symbol: _ZN18QMessageLogContext4copyERKS_
+    - no_pyi.patch 
 
 build:
   number: 0
