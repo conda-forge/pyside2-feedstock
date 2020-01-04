@@ -18,3 +18,9 @@ alsa-lib-devel
 xcb-util-devel
 xorg-x11-server-Xvfb
 pciutils-devel
+chrpath
+gtk2-devel
+dbus-devel
+libSM-devel
+libICE-devel
+ruby
