@@ -30,7 +30,8 @@ cmake \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   ..
-make install -j${CPU_COUNT}
+# make install -j${CPU_COUNT}
+make install VERBOSE=1
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
