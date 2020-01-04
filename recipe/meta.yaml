@@ -15,6 +15,8 @@ source:
 
 build:
   number: 0
+  # https://github.com/conda-forge/qt-feedstock/blob/master/recipe/meta.yaml#L71
+  merge_build_host: true  # [linux]
   skip: true  # [win and vc<14]
   skip: true  # [not linux]
   skip: true  # [py!=37]
