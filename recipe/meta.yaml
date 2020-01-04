@@ -55,11 +55,12 @@ requirements:
     - {{ cdt('libxcb') }}                # [linux]
   host:
     - python
-    - qt
+    - qt  5.12.1
     - libxml2
     - libxslt
   run:
     - python
+    - qt  5.12
 
 test:
   imports:
