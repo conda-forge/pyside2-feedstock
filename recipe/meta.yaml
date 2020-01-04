@@ -19,7 +19,7 @@ build:
   # https://github.com/conda-forge/qt-feedstock/blob/master/recipe/meta.yaml#L71
   merge_build_host: true  # [linux]
   skip: true  # [win and vc<14]
-  skip: true  # [not linux]
+  # skip: true  # [not linux]
   skip: true  # [py!=37]
   detect_binary_files_with_prefix: True
 
