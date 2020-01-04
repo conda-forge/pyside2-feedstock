@@ -52,12 +52,12 @@ requirements:
     - {{ cdt('libxrandr') }}             # [linux]
     - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
   host:
     - python
     - qt  5.12.1
     - libxml2
     - libxslt
+    - libxcb                             # [linux]
   run:
     - python
     - qt  5.12
