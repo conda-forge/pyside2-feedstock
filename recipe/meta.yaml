@@ -16,8 +16,8 @@ source:
     - no_pyi.patch  # [osx or win]
     # pyside2 5.13.1 needs a few backports from 5.14 to work with python3.8
     - 0002-Fix-Python-3.8-problems.patch  # [py >= 38]
-    - 0003-make-compilation-work-after-backporting.patch  # [py >= 38]
-    - 0004-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch  # [py >= 38]
+    - 0003-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch  # [py >= 38]
+    - 0004-make-compilation-work-after-backporting.patch  # [py >= 38]
 
 build:
   number: 7
