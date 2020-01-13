@@ -1,0 +1,559 @@
+From 40a1a6bbeea82d8ccaaf7ec840ae8e0b8a183bc6 Mon Sep 17 00:00:00 2001
+From: Christian Tismer <tismer@stackless.com>
+Date: Tue, 26 Nov 2019 11:54:37 +0100
+Subject: [PATCH 1/3] Fix Python 3.8 problems
+
+This patch fixes some refcounting problems with Python 3.8 .
+One incompatible change was announced in the what's new
+document, but actually there were two more problems which
+were not explicitly mentioned but took much time to sort out.
+
+The patch is compatible with the limited API changes
+(tested with debug build and API error disabled).
+It is also independent of the Python version which is
+full Limited API support.
+
+For more info, see the documentation mentioned below.
+
+The flag error is circumvented now! We either find a better
+solution or leave it as it is. For now this is ok.
+
+Fixes: PYSIDE-939
+Change-Id: Iff4a9816857a6ebe86efd4b654d8921e4e464939
+Reviewed-by: Qt CI Bot <qt_ci_bot@qt-project.org>
+Reviewed-by: Cristian Maureira-Fredes <cristian.maureira-fredes@qt.io>
+---
+ .../PySide2/QtQml/pysideqmlregistertype.cpp   |  4 +-
+ sources/pyside2/libpyside/pysideclassinfo.cpp |  2 +-
+ .../pyside2/libpyside/pysidemetafunction.cpp  |  2 +-
+ sources/pyside2/libpyside/pysideproperty.cpp  |  5 ++
+ sources/pyside2/libpyside/pysideqflags.cpp    |  2 +-
+ sources/pyside2/libpyside/pysidesignal.cpp    |  8 +--
+ sources/pyside2/libpyside/pysideslot.cpp      |  2 +-
+ sources/pyside2/libpyside/pysideweakref.cpp   | 10 ++-
+ sources/pyside2/tests/signals/bug_79.py       |  6 +-
+ .../generator/shiboken2/cppgenerator.cpp      |  2 +-
+ sources/shiboken2/libshiboken/basewrapper.cpp | 66 +++++++++++++++++--
+ sources/shiboken2/libshiboken/basewrapper.h   |  5 +-
+ sources/shiboken2/libshiboken/pep384impl.cpp  | 25 ++++++-
+ sources/shiboken2/libshiboken/pep384impl.h    | 26 +++++++-
+ sources/shiboken2/libshiboken/sbkenum.cpp     |  7 +-
+ sources/shiboken2/libshiboken/typespec.cpp    |  2 +-
+ sources/shiboken2/libshiboken/voidptr.cpp     |  2 +-
+ 17 files changed, 146 insertions(+), 30 deletions(-)
+
+diff --git a/sources/pyside2/PySide2/QtQml/pysideqmlregistertype.cpp b/sources/pyside2/PySide2/QtQml/pysideqmlregistertype.cpp
+index 6427e519..fb9a5a0c 100644
+--- a/sources/pyside2/PySide2/QtQml/pysideqmlregistertype.cpp
++++ b/sources/pyside2/PySide2/QtQml/pysideqmlregistertype.cpp
+@@ -236,7 +236,7 @@ void propListTpFree(void *self)
+ static PyType_Slot PropertyListType_slots[] = {
+     {Py_tp_init, (void *)propListTpInit},
+     {Py_tp_free, (void *)propListTpFree},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PropertyListType_spec = {
+@@ -450,7 +450,7 @@ static PyType_Slot QtQml_VolatileBoolType_slots[] = {
+     {Py_tp_str, (void *)reinterpret_cast<reprfunc>(QtQml_VolatileBoolObject_str)},
+     {Py_tp_methods, (void *)QtQml_VolatileBoolObject_methods},
+     {Py_tp_new, (void *)QtQml_VolatileBoolObject_new},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec QtQml_VolatileBoolType_spec = {
+diff --git a/sources/pyside2/libpyside/pysideclassinfo.cpp b/sources/pyside2/libpyside/pysideclassinfo.cpp
+index fe5ca876..c4bace77 100644
+--- a/sources/pyside2/libpyside/pysideclassinfo.cpp
++++ b/sources/pyside2/libpyside/pysideclassinfo.cpp
+@@ -60,7 +60,7 @@ static PyType_Slot PySideClassInfoType_slots[] = {
+     {Py_tp_init, (void *)classInfoTpInit},
+     {Py_tp_new, (void *)classInfoTpNew},
+     {Py_tp_free, (void *)classInfoFree},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideClassInfoType_spec = {
+diff --git a/sources/pyside2/libpyside/pysidemetafunction.cpp b/sources/pyside2/libpyside/pysidemetafunction.cpp
+index e0e0c439..637aa059 100644
+--- a/sources/pyside2/libpyside/pysidemetafunction.cpp
++++ b/sources/pyside2/libpyside/pysidemetafunction.cpp
+@@ -62,7 +62,7 @@ static PyType_Slot PySideMetaFunctionType_slots[] = {
+     {Py_tp_call, (void *)functionCall},
+     {Py_tp_new, (void *)PyType_GenericNew},
+     {Py_tp_free, (void *)functionFree},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideMetaFunctionType_spec = {
+diff --git a/sources/pyside2/libpyside/pysideproperty.cpp b/sources/pyside2/libpyside/pysideproperty.cpp
+index d9d15eb3..009a17a3 100644
+--- a/sources/pyside2/libpyside/pysideproperty.cpp
++++ b/sources/pyside2/libpyside/pysideproperty.cpp
+@@ -210,6 +210,11 @@ int qpropertyTpInit(PyObject *self, PyObject *args, PyObject *kwds)
+ void qpropertyDeAlloc(PyObject *self)
+ {
+     qpropertyClear(self);
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // This was not needed before Python 3.8 (Python issue 35810)
++        Py_DECREF(Py_TYPE(self));
++    }
+     Py_TYPE(self)->tp_free(self);
+ }
+ 
+diff --git a/sources/pyside2/libpyside/pysideqflags.cpp b/sources/pyside2/libpyside/pysideqflags.cpp
+index fd0ed005..33351440 100644
+--- a/sources/pyside2/libpyside/pysideqflags.cpp
++++ b/sources/pyside2/libpyside/pysideqflags.cpp
+@@ -152,7 +152,7 @@ namespace QFlags
+ #endif
+         {Py_tp_new, (void *)PySideQFlagsNew},
+         {Py_tp_richcompare, (void *)PySideQFlagsRichCompare},
+-        {Py_tp_dealloc, (void *)object_dealloc},
++        {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+         {0, 0}
+     };
+     static PyType_Spec SbkNewQFlagsType_spec = {
+diff --git a/sources/pyside2/libpyside/pysidesignal.cpp b/sources/pyside2/libpyside/pysidesignal.cpp
+index a09c17a2..22c27d3d 100644
+--- a/sources/pyside2/libpyside/pysidesignal.cpp
++++ b/sources/pyside2/libpyside/pysidesignal.cpp
+@@ -109,7 +109,7 @@ static PyType_Slot PySideMetaSignalType_slots[] = {
+     {Py_tp_methods, (void *)MetaSignal_methods},
+     {Py_tp_base, (void *)&PyType_Type},
+     {Py_tp_free, (void *)PyObject_GC_Del},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideMetaSignalType_spec = {
+@@ -141,7 +141,7 @@ static PyType_Slot PySideSignalType_slots[] = {
+     {Py_tp_init, (void *)signalTpInit},
+     {Py_tp_new, (void *)PyType_GenericNew},
+     {Py_tp_free, (void *)signalFree},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideSignalType_spec = {
+@@ -180,7 +180,7 @@ static PyType_Slot PySideSignalInstanceType_slots[] = {
+     {Py_tp_methods, (void *)SignalInstance_methods},
+     {Py_tp_new, (void *)PyType_GenericNew},
+     {Py_tp_free, (void *)signalInstanceFree},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideSignalInstanceType_spec = {
+@@ -615,7 +615,7 @@ void init(PyObject *module)
+ {
+     if (SbkSpecial_Type_Ready(module, PySideMetaSignalTypeF(), MetaSignal_SignatureStrings) < 0)
+         return;
+-    Py_INCREF(PySideSignalTypeF());
++    Py_INCREF(PySideMetaSignalTypeF());
+     PyModule_AddObject(module, "MetaSignal", reinterpret_cast<PyObject *>(PySideMetaSignalTypeF()));
+ 
+     if (SbkSpecial_Type_Ready(module, PySideSignalTypeF(), Signal_SignatureStrings) < 0)
+diff --git a/sources/pyside2/libpyside/pysideslot.cpp b/sources/pyside2/libpyside/pysideslot.cpp
+index 204253aa..04212a64 100644
+--- a/sources/pyside2/libpyside/pysideslot.cpp
++++ b/sources/pyside2/libpyside/pysideslot.cpp
+@@ -71,7 +71,7 @@ static PyType_Slot PySideSlotType_slots[] = {
+     {Py_tp_call, (void *)slotCall},
+     {Py_tp_init, (void *)slotTpInit},
+     {Py_tp_new, (void *)PyType_GenericNew},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideSlotType_spec = {
+diff --git a/sources/pyside2/libpyside/pysideweakref.cpp b/sources/pyside2/libpyside/pysideweakref.cpp
+index 2b27f954..faa3abe8 100644
+--- a/sources/pyside2/libpyside/pysideweakref.cpp
++++ b/sources/pyside2/libpyside/pysideweakref.cpp
+@@ -53,7 +53,7 @@ static PyObject *CallableObject_call(PyObject *callable_object, PyObject *args,
+ 
+ static PyType_Slot PySideCallableObjectType_slots[] = {
+     {Py_tp_call, (void *)CallableObject_call},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, 0}
+ };
+ static PyType_Spec PySideCallableObjectType_spec = {
+@@ -94,9 +94,15 @@ PyObject *create(PyObject *obj, PySideWeakRefFunction func, void *userData)
+         PyType_Ready(PySideCallableObjectTypeF());
+     }
+ 
+-    PySideCallableObject *callable = PyObject_New(PySideCallableObject, PySideCallableObjectTypeF());
++    PyTypeObject *type = PySideCallableObjectTypeF();
++    PySideCallableObject *callable = PyObject_New(PySideCallableObject, type);
+     if (!callable || PyErr_Occurred())
+         return 0;
++    if (!PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // Workaround for Python issue 35810; no longer necessary in Python 3.8
++        Py_INCREF(type);
++    }
+ 
+     PyObject *weak = PyWeakref_NewRef(obj, reinterpret_cast<PyObject *>(callable));
+     if (!weak || PyErr_Occurred())
+diff --git a/sources/pyside2/tests/signals/bug_79.py b/sources/pyside2/tests/signals/bug_79.py
+index 9eb783d7..4a595912 100644
+--- a/sources/pyside2/tests/signals/bug_79.py
++++ b/sources/pyside2/tests/signals/bug_79.py
+@@ -56,13 +56,15 @@ class ConnectTest(unittest.TestCase):
+         # if this is no debug build, then we check at least that
+         # we do not crash any longer.
+         if not skiptest:
+-            total = sys.gettotalrefcount()
++            total = gettotalrefcount()
+         for idx in range(1000):
+             o.selectionModel().destroyed.connect(self.callback)
+             o.selectionModel().destroyed.disconnect(self.callback)
+         gc.collect()
+         if not skiptest:
+-            self.assertTrue(abs(gettotalrefcount() - total) < 10)
++            delta = gettotalrefcount() - total
++            print("delta total refcount =", delta)
++            self.assertTrue(abs(delta) < 10)
+ 
+ 
+ if __name__ == '__main__':
+diff --git a/sources/shiboken2/generator/shiboken2/cppgenerator.cpp b/sources/shiboken2/generator/shiboken2/cppgenerator.cpp
+index 68bcfe50..8aed7845 100644
+--- a/sources/shiboken2/generator/shiboken2/cppgenerator.cpp
++++ b/sources/shiboken2/generator/shiboken2/cppgenerator.cpp
+@@ -3863,7 +3863,7 @@ void CppGenerator::writeClassDefinition(QTextStream &s,
+     if (metaClass->isNamespace() || metaClass->hasPrivateDestructor()) {
+         tp_dealloc = metaClass->hasPrivateDestructor() ?
+                      QLatin1String("SbkDeallocWrapperWithPrivateDtor") :
+-                     QLatin1String("object_dealloc /* PYSIDE-832: Prevent replacement of \"0\" with subtype_dealloc. */");
++                     QLatin1String("Sbk_object_dealloc /* PYSIDE-832: Prevent replacement of \"0\" with subtype_dealloc. */");
+         tp_init.clear();
+     } else {
+         QString deallocClassName;
+diff --git a/sources/shiboken2/libshiboken/basewrapper.cpp b/sources/shiboken2/libshiboken/basewrapper.cpp
+index 9d233b84..e9bef07f 100644
+--- a/sources/shiboken2/libshiboken/basewrapper.cpp
++++ b/sources/shiboken2/libshiboken/basewrapper.cpp
+@@ -57,6 +57,10 @@
+ #include "qapp_macro.h"
+ #include "voidptr.h"
+ 
++#if defined(__APPLE__)
++#include <dlfcn.h>
++#endif
++
+ namespace {
+     void _destroyParentInfo(SbkObject *obj, bool keepReference);
+ }
+@@ -73,6 +77,17 @@ static void callDestructor(const Shiboken::DtorAccumulatorVisitor::DestructorEnt
+ extern "C"
+ {
+ 
++// PYSIDE-939: A general replacement for object_dealloc.
++void Sbk_object_dealloc(PyObject *self)
++{
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // This was not needed before Python 3.8 (Python issue 35810)
++        Py_DECREF(Py_TYPE(self));
++    }
++    Py_TYPE(self)->tp_free(self);
++}
++
+ static void SbkObjectTypeDealloc(PyObject *pyObj);
+ static PyObject *SbkObjectTypeTpNew(PyTypeObject *metatype, PyObject *args, PyObject *kwds);
+ 
+@@ -309,8 +324,32 @@ static void SbkDeallocWrapperCommon(PyObject *pyObj, bool canDelete)
+     // Need to decref the type if this is the dealloc func; if type
+     // is subclassed, that dealloc func will decref (see subtype_dealloc
+     // in typeobject.c in the python sources)
+-    bool needTypeDecref = (PyType_GetSlot(pyType, Py_tp_dealloc) == SbkDeallocWrapper
++    bool needTypeDecref = (false
++                           || PyType_GetSlot(pyType, Py_tp_dealloc) == SbkDeallocWrapper
+                            || PyType_GetSlot(pyType, Py_tp_dealloc) == SbkDeallocWrapperWithPrivateDtor);
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Additional rule: Also when a subtype is heap allocated,
++        // then the subtype_dealloc deref will be suppressed, and we need again
++        // to supply a decref.
++        needTypeDecref |= (pyType->tp_base->tp_flags & Py_TPFLAGS_HEAPTYPE) != 0;
++    }
++
++#if defined(__APPLE__)
++    // Just checking once that our assumptions are right.
++    if (false) {
++        void *p = PyType_GetSlot(pyType, Py_tp_dealloc);
++        Dl_info dl_info;
++        dladdr(p, &dl_info);
++        fprintf(stderr, "tp_dealloc is %s\n", dl_info.dli_sname);
++    }
++    // Gives one of our functions
++    //  "Sbk_object_dealloc"
++    //  "SbkDeallocWrapperWithPrivateDtor"
++    //  "SbkDeallocQAppWrapper"
++    //  "SbkDeallocWrapper"
++    // but for typedealloc_test.py we get
++    //  "subtype_dealloc"
++#endif
+ 
+     // Ensure that the GC is no longer tracking this object to avoid a
+     // possible reentrancy problem.  Since there are multiple steps involved
+@@ -369,6 +408,11 @@ static void SbkDeallocWrapperCommon(PyObject *pyObj, bool canDelete)
+ 
+     if (needTypeDecref)
+         Py_DECREF(pyType);
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // This was not needed before Python 3.8 (Python issue 35810)
++        Py_DECREF(pyType);
++    }
+ }
+ 
+ void SbkDeallocWrapper(PyObject *pyObj)
+@@ -412,6 +456,11 @@ void SbkObjectTypeDealloc(PyObject *pyObj)
+ #ifndef Py_LIMITED_API
+     Py_TRASHCAN_SAFE_END(pyObj);
+ #endif
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // This was not needed before Python 3.8 (Python issue 35810)
++        Py_DECREF(Py_TYPE(pyObj));
++    }
+ }
+ 
+ PyObject *SbkObjectTypeTpNew(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
+@@ -453,7 +502,16 @@ PyObject *SbkObjectTypeTpNew(PyTypeObject *metatype, PyObject *args, PyObject *k
+ 
+     // The meta type creates a new type when the Python programmer extends a wrapped C++ class.
+     auto type_new = reinterpret_cast<newfunc>(PyType_Type.tp_new);
++
++    // PYSIDE-939: This is a temporary patch that circumvents the problem
++    // with Py_TPFLAGS_METHOD_DESCRIPTOR until this is finally solved.
++    PyObject *ob_PyType_Type = reinterpret_cast<PyObject *>(&PyType_Type);
++    PyObject *mro = PyObject_GetAttr(ob_PyType_Type, Shiboken::PyName::mro());
++    auto hold = Py_TYPE(mro)->tp_flags;
++    Py_TYPE(mro)->tp_flags &= ~Py_TPFLAGS_METHOD_DESCRIPTOR;
+     auto *newType = reinterpret_cast<SbkObjectType *>(type_new(metatype, args, kwds));
++    Py_TYPE(mro)->tp_flags = hold;
++
+     if (!newType)
+         return nullptr;
+ #if PY_VERSION_HEX < 0x03000000
+@@ -554,12 +612,6 @@ PyObject *SbkQAppTpNew(PyTypeObject *subtype, PyObject *, PyObject *)
+     return self == nullptr ? nullptr : _setupNew(self, subtype);
+ }
+ 
+-void
+-object_dealloc(PyObject *self)
+-{
+-    Py_TYPE(self)->tp_free(self);
+-}
+-
+ PyObject *
+ SbkDummyNew(PyTypeObject *type, PyObject *, PyObject *)
+ {
+diff --git a/sources/shiboken2/libshiboken/basewrapper.h b/sources/shiboken2/libshiboken/basewrapper.h
+index 7faf223b..813870da 100644
+--- a/sources/shiboken2/libshiboken/basewrapper.h
++++ b/sources/shiboken2/libshiboken/basewrapper.h
+@@ -64,6 +64,9 @@ struct LIBSHIBOKEN_API SbkObject
+ };
+ 
+ 
++/// PYSIDE-939: A general replacement for object_dealloc.
++LIBSHIBOKEN_API void Sbk_object_dealloc(PyObject *self);
++
+ /// Dealloc the python object \p pyObj and the C++ object represented by it.
+ LIBSHIBOKEN_API void SbkDeallocWrapper(PyObject *pyObj);
+ LIBSHIBOKEN_API void SbkDeallocQAppWrapper(PyObject *pyObj);
+@@ -116,7 +119,7 @@ LIBSHIBOKEN_API PyObject *SbkQAppTpNew(PyTypeObject *subtype, PyObject *args, Py
+  *  nullptr. But the default before conversion to heaptypes was to assign
+  *  object_dealloc. This seems to be a bug in the Limited API.
+  */
+-LIBSHIBOKEN_API void object_dealloc(PyObject *);
++/// PYSIDE-939: Replaced by Sbk_object_dealloc.
+ LIBSHIBOKEN_API PyObject *SbkDummyNew(PyTypeObject *type, PyObject *, PyObject *);
+ 
+ } // extern "C"
+diff --git a/sources/shiboken2/libshiboken/pep384impl.cpp b/sources/shiboken2/libshiboken/pep384impl.cpp
+index fe7157d2..b2584fd7 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.cpp
++++ b/sources/shiboken2/libshiboken/pep384impl.cpp
+@@ -39,6 +39,8 @@
+ 
+ #include "pep384impl.h"
+ #include "autodecref.h"
++#include <stdlib.h>
++
+ 
+ extern "C"
+ {
+@@ -156,7 +158,8 @@ check_PyTypeObject_valid()
+         || probe_tp_free            != check->tp_free
+         || probe_tp_is_gc           != check->tp_is_gc
+         || probe_tp_bases           != typetype->tp_bases
+-        || probe_tp_mro             != typetype->tp_mro)
++        || probe_tp_mro             != typetype->tp_mro
++        || Py_TPFLAGS_DEFAULT       != (check->tp_flags & Py_TPFLAGS_DEFAULT))
+         Py_FatalError("The structure of type objects has changed!");
+     Py_DECREF(check);
+     Py_DECREF(probe_tp_base);
+@@ -661,6 +664,25 @@ _Pep_PrivateMangle(PyObject *self, PyObject *name)
+ #endif  // Py_LIMITED_API
+ }
+ 
++/*****************************************************************************
++ *
++ * Runtime support for Python 3.8 incompatibilities
++ *
++ */
++
++int PepRuntime_38_flag = 0;
++
++static void
++init_PepRuntime()
++{
++    // We expect a string of the form "\d\.\d+\."
++    const char *version = Py_GetVersion();
++    if (version[0] < '3')
++        return;
++    if (std::atoi(version + 2) >= 8)
++        PepRuntime_38_flag = 1;
++}
++
+ /*****************************************************************************
+  *
+  * Module Initialization
+@@ -671,6 +693,7 @@ void
+ Pep384_Init()
+ {
+     check_PyTypeObject_valid();
++    init_PepRuntime();
+ #ifdef Py_LIMITED_API
+     Pep_GetVerboseFlag();
+     PepMethod_TypePtr = getMethodType();
+diff --git a/sources/shiboken2/libshiboken/pep384impl.h b/sources/shiboken2/libshiboken/pep384impl.h
+index 93f71898..dfad8ccd 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.h
++++ b/sources/shiboken2/libshiboken/pep384impl.h
+@@ -89,7 +89,7 @@ typedef struct _typeobject {
+     Py_ssize_t tp_basicsize;
+     void *X03; // Py_ssize_t tp_itemsize;
+     void *X04; // destructor tp_dealloc;
+-    void *X05; // printfunc tp_print;
++    void *X05; // Py_ssize_t tp_vectorcall_offset;
+     void *X06; // getattrfunc tp_getattr;
+     void *X07; // setattrfunc tp_setattr;
+     void *X08; // PyAsyncMethods *tp_as_async;
+@@ -103,7 +103,7 @@ typedef struct _typeobject {
+     void *X16; // getattrofunc tp_getattro;
+     void *X17; // setattrofunc tp_setattro;
+     void *X18; // PyBufferProcs *tp_as_buffer;
+-    void *X19; // unsigned long tp_flags;
++    unsigned long tp_flags;
+     void *X20; // const char *tp_doc;
+     traverseproc tp_traverse;
+     inquiry tp_clear;
+@@ -129,6 +129,13 @@ typedef struct _typeobject {
+ 
+ } PyTypeObject;
+ 
++#ifndef PyObject_IS_GC
++/* Test if an object has a GC head */
++#define PyObject_IS_GC(o) \
++    (PyType_IS_GC(Py_TYPE(o)) \
++     && (Py_TYPE(o)->tp_is_gc == NULL || Py_TYPE(o)->tp_is_gc(o)))
++#endif
++
+ // This was a macro error in the limited API from the beginning.
+ // It was fixed in Python master, but did make it only in Python 3.8 .
+ #define PY_ISSUE33738_SOLVED 0x03080000
+@@ -292,7 +299,7 @@ LIBSHIBOKEN_API PyObject *PyRun_String(const char *, int, PyObject *, PyObject *
+ // But this is no problem as we check it's validity for every version.
+ 
+ #define PYTHON_BUFFER_VERSION_COMPATIBLE    (PY_VERSION_HEX >= 0x03030000 && \
+-                                             PY_VERSION_HEX <  0x0307FFFF)
++                                             PY_VERSION_HEX <  0x0308FFFF)
+ #if !PYTHON_BUFFER_VERSION_COMPATIBLE
+ # error Please check the buffer compatibility for this python version!
+ #endif
+@@ -486,6 +493,19 @@ extern LIBSHIBOKEN_API PyTypeObject *PepMethodDescr_TypePtr;
+ #define PepMethodDescr_TypePtr &PyMethodDescr_Type
+ #endif
+ 
++/*****************************************************************************
++ *
++ * Runtime support for Python 3.8 incompatibilities
++ *
++ */
++
++#ifndef Py_TPFLAGS_METHOD_DESCRIPTOR
++/* Objects behave like an unbound method */
++#define Py_TPFLAGS_METHOD_DESCRIPTOR (1UL << 17)
++#endif
++
++extern LIBSHIBOKEN_API int PepRuntime_38_flag;
++
+ /*****************************************************************************
+  *
+  * Module Initialization
+diff --git a/sources/shiboken2/libshiboken/sbkenum.cpp b/sources/shiboken2/libshiboken/sbkenum.cpp
+index 2dc78588..ec408023 100644
+--- a/sources/shiboken2/libshiboken/sbkenum.cpp
++++ b/sources/shiboken2/libshiboken/sbkenum.cpp
+@@ -321,6 +321,11 @@ void SbkEnumTypeDealloc(PyObject *pyObj)
+ #ifndef Py_LIMITED_API
+     Py_TRASHCAN_SAFE_END(pyObj);
+ #endif
++    if (PepRuntime_38_flag) {
++        // PYSIDE-939: Handling references correctly.
++        // This was not needed before Python 3.8 (Python issue 35810)
++        Py_DECREF(Py_TYPE(pyObj));
++    }
+ }
+ 
+ PyObject *SbkEnumTypeTpNew(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
+@@ -519,7 +524,7 @@ static PyType_Slot SbkNewType_slots[] = {
+     {Py_nb_index, (void *)enum_int},
+     {Py_tp_richcompare, (void *)enum_richcompare},
+     {Py_tp_hash, (void *)enum_hash},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {0, nullptr}
+ };
+ static PyType_Spec SbkNewType_spec = {
+diff --git a/sources/shiboken2/libshiboken/typespec.cpp b/sources/shiboken2/libshiboken/typespec.cpp
+index 6dc5b00b..a1d4d6ca 100644
+--- a/sources/shiboken2/libshiboken/typespec.cpp
++++ b/sources/shiboken2/libshiboken/typespec.cpp
+@@ -713,7 +713,7 @@ PyType_FromSpecWithBases(PyType_Spec *spec, PyObject *bases)
+     if (PyType_Ready(type) < 0)
+         goto fail;
+ 
+-    // no ht_hached_keys in Python 2
++    // no ht_cached_keys in Python 2
+     // if (type->tp_dictoffset) {
+     //     res->ht_cached_keys = _PyDict_NewKeysForClass();
+     // }
+diff --git a/sources/shiboken2/libshiboken/voidptr.cpp b/sources/shiboken2/libshiboken/voidptr.cpp
+index d4ce58c8..46f49b67 100644
+--- a/sources/shiboken2/libshiboken/voidptr.cpp
++++ b/sources/shiboken2/libshiboken/voidptr.cpp
+@@ -335,7 +335,7 @@ static PyType_Slot SbkVoidPtrType_slots[] = {
+     {Py_tp_richcompare, (void *)SbkVoidPtrObject_richcmp},
+     {Py_tp_init, (void *)SbkVoidPtrObject_init},
+     {Py_tp_new, (void *)SbkVoidPtrObject_new},
+-    {Py_tp_dealloc, (void *)object_dealloc},
++    {Py_tp_dealloc, (void *)Sbk_object_dealloc},
+     {Py_tp_methods, (void *)SbkVoidPtrObject_methods},
+     {0, nullptr}
+ };
+-- 
+2.17.1
+
