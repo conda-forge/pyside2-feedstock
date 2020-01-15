@@ -48,3 +48,6 @@ cmake \
   -DBUILD_TESTS=OFF \
   ..
 make install -j${CPU_COUNT}
+
+rm -rf ${PREFIX}/include/qt/xcb
+
