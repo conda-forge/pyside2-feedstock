@@ -11,15 +11,15 @@ source:
   patches:
     # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
     - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
-    # osx: Symbol not found: __cg_jpeg_resync_to_restart
-    - no_pyi.patch  # [osx]
+    # https://bugreports.qt.io/browse/PYSIDE-1193
+    - pyi.patch
     # pyside2 5.13.1 needs a few backports from 5.14 to work with python3.8
     - 0002-Fix-Python-3.8-problems.patch
     - 0003-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch
     - 0004-make-compilation-work-after-backporting.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
