@@ -1,4 +1,4 @@
-{% set version = "5.13.2" %}
+{% set version = "5.15.0" %}
 
 package:
   name: pyside2
@@ -7,7 +7,7 @@ package:
 source:
   fn: pyside-setup-everywhere-src-{{ version }}.tar.xz
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 3e255d64df08880d0281ebe86009d5ea45f24332b308954d967c33995f75e543
+  sha256: f1cdee53de3b76e22c1117a014a91ed95ac16e4760776f4f12dc38cd5a7b6b68
   patches:
     # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
     - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
@@ -19,9 +19,9 @@ source:
     - 0004-make-compilation-work-after-backporting.patch
 
 build:
-  number: 2
+  number: 0
   skip: true  # [win and vc<14]
-  detect_binary_files_with_prefix: True
+  detect_binary_files_with_prefix: true
 
 requirements:
   build:
