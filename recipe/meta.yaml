@@ -1,4 +1,4 @@
-{% set version = "5.13.2" %}
+{% set version = "5.14.2" %}
 
 package:
   name: pyside2
