@@ -1,23 +1,13 @@
-MACOSX_DEPLOYMENT_TARGET:
-- '10.9'
 c_compiler:
-- clang
-c_compiler_version:
-- '9'
+- vs2017
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- clangxx
-cxx_compiler_version:
-- '9'
+- vs2017
 libxml2:
 - '2.9'
-macos_machine:
-- x86_64-apple-darwin13.4.0
-macos_min_version:
-- '10.9'
 pin_run_as_build:
   libxml2:
     max_pin: x.x
@@ -27,6 +17,10 @@ pin_run_as_build:
   qt:
     max_pin: x.x
 python:
-- '3.6'
+- 3.6.* *_cpython
 qt:
 - '5.12'
+target_platform:
+- win-64
+vc:
+- '14'
