@@ -17,11 +17,12 @@ source:
     - 0002-Fix-Python-3.8-problems.patch
     - 0003-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch
     - 0004-make-compilation-work-after-backporting.patch
+    # clang 10
+    - 0001-shiboken-Support-Clang-version-10.patch
 
 build:
   number: 2
-  skip: true  # [win and vc<14]
-  detect_binary_files_with_prefix: True
+  detect_binary_files_with_prefix: true
 
 requirements:
   build:
