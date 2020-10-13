@@ -23,7 +23,7 @@ pin_run_as_build:
   qt:
     max_pin: x.x
 python:
-- 3.8.* *_cpython
+- 3.9.* *_cpython
 qt:
 - '5.12'
 target_platform:
