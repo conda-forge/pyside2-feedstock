@@ -19,9 +19,12 @@ source:
     - 0004-make-compilation-work-after-backporting.patch
     # clang 10
     - 0001-shiboken-Support-Clang-version-10.patch
+    # Backport of "Fix Python 3.8 warnings about deprecated int conversions of enums/flags"
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/288381
+    - 6294578.patch
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
 
 requirements:
