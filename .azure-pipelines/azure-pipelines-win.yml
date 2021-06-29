@@ -11,6 +11,9 @@ jobs:
       win_64_python3.6.____cpython:
         CONFIG: win_64_python3.6.____cpython
         UPLOAD_PACKAGES: 'True'
+      win_64_python3.7.____73_pypy:
+        CONFIG: win_64_python3.7.____73_pypy
+        UPLOAD_PACKAGES: 'True'
       win_64_python3.7.____cpython:
         CONFIG: win_64_python3.7.____cpython
         UPLOAD_PACKAGES: 'True'
