@@ -19,8 +19,8 @@ if errorlevel 1 exit 1
 
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=shiboken2
-FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_path; print(get_path('platlib'))"') DO set VARIABLE=%%i
-ROBOCOPY shiboken2.dist-info "%LIBRARY_PREFIX%"\%%i\shiboken2.dist-info /e
+FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_python_version; print(get_python_version())"') DO set VARIABLE=%%i
+ROBOCOPY shiboken2.dist-info "%LIBRARY_PREFIX%"\Lib\python%%i\site-packages\shiboken2.dist-info /e
 
 cd %SRC_DIR%\sources\pyside2
 mkdir build && cd build
@@ -42,8 +42,8 @@ rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=PySide2
-FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_path; print(get_path('platlib'))"') DO set VARIABLE=%%i
-ROBOCOPY PySide2.dist-info "%LIBRARY_PREFIX%"\%%i\PySide2.dist-info /e
+FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_python_version; print(get_python_version())"') DO set VARIABLE=%%i
+ROBOCOPY PySide2.dist-info "%LIBRARY_PREFIX%"\Lib\python%%i\site-packages\PySide2.dist-info /e
 
 cd %SRC_DIR%\sources\pyside2-tools
 mkdir build && cd build

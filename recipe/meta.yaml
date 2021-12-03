@@ -63,6 +63,8 @@ requirements:
     - {{ cdt('libxrandr') }}             # [linux]
     - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
+    - make                               # [not win]
+    - ninja                              # [win]
 
   host:
     - python
