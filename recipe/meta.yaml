@@ -22,6 +22,8 @@ source:
     # Backport of "Fix Python 3.8 warnings about deprecated int conversions of enums/flags"
     # https://codereview.qt-project.org/c/pyside/pyside-setup/+/288381
     - 6294578.patch
+    # Remove python version check to allow building dist_info
+    - 0005-remove-py-version-check.patch
 
 build:
   number: 4
@@ -67,6 +69,8 @@ requirements:
     - qt
     - libxml2
     - libxslt
+    - pip
+    - setuptools
   run:
     - python
 
@@ -117,6 +121,9 @@ test:
     - pyside2-lupdate -help
     - pyside2-rcc -help
     - pyside2-uic -help
+    # Ensure installs are registered properly with pip
+    - pip show PySide2
+    - pip show shiboken2
 
 about:
   home: https://wiki.qt.io/PySide2
