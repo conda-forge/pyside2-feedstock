@@ -65,7 +65,7 @@ requirements:
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
     - make                               # [not win]
     - ninja                              # [win]
-    - gxx
+    - gxx                                # [linux]
 
   host:
     - python
