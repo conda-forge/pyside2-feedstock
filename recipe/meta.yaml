@@ -65,6 +65,7 @@ requirements:
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
     - make                               # [not win]
     - ninja                              # [win]
+    - gxx
 
   host:
     - python
@@ -126,6 +127,9 @@ test:
     # Ensure installs are registered properly with pip
     - pip show PySide2
     - pip show shiboken2
+
+  requires:
+    - pip
 
 about:
   home: https://wiki.qt.io/PySide2
