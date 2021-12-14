@@ -22,6 +22,7 @@ source:
     # Backport of "Fix Python 3.8 warnings about deprecated int conversions of enums/flags"
     # https://codereview.qt-project.org/c/pyside/pyside-setup/+/288381
     - 6294578.patch
+    - python_3_10_shiboken.patch  # [py>=310]
 
 build:
   number: 5
