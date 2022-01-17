@@ -21,6 +21,10 @@ cmake \
 make install -j${CPU_COUNT}
 popd
 
+${PYTHON} setup.py dist_info --build-type=shiboken2
+_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
+cp -r shiboken2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
+
 pushd sources/pyside2
 mkdir build && cd build
 
@@ -37,6 +41,10 @@ cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
 eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 popd
+
+${PYTHON} setup.py dist_info --build-type=pyside2
+_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
+cp -r PySide2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
 
 pushd sources/pyside2-tools
 mkdir build && cd build

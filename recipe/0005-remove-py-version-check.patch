@@ -1,0 +1,24 @@
+From 78a474ea1c00e2c0ec9440723344a2fc7fef8bf3 Mon Sep 17 00:00:00 2001
+From: Kyle Sunden <git@ksunden.space>
+Date: Fri, 3 Dec 2021 00:22:10 -0600
+Subject: [PATCH] remove py version check
+
+---
+ setup.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index aa770d402..59a357376 100644
+--- a/setup.py
++++ b/setup.py
+@@ -72,7 +72,5 @@ from build_scripts.setup_runner import SetupRunner
+ # used as a value source. Use get_package_version() instead.
+ __version__ = get_package_version()
+ 
+-check_allowed_python_version()
+-
+ setup_runner = SetupRunner(original_argv)
+ setup_runner.run_setup()
+-- 
+2.34.0
+
