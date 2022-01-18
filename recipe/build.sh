@@ -3,6 +3,7 @@
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
+  cp -r /usr/include/xcb ${PREFIX}/include/qt
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
@@ -19,6 +20,10 @@ cmake \
   ..
 make install -j${CPU_COUNT}
 popd
+
+${PYTHON} setup.py dist_info --build-type=shiboken2
+_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
+cp -r shiboken2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
 
 pushd sources/pyside2
 mkdir build && cd build
@@ -37,8 +42,11 @@ cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 popd
 
+${PYTHON} setup.py dist_info --build-type=pyside2
+_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
+cp -r PySide2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
+
 pushd sources/pyside2-tools
-git checkout 5.6
 mkdir build && cd build
 
 cmake \
@@ -48,3 +56,6 @@ cmake \
   -DBUILD_TESTS=OFF \
   ..
 make install -j${CPU_COUNT}
+
+rm -rf ${PREFIX}/include/qt/xcb
+

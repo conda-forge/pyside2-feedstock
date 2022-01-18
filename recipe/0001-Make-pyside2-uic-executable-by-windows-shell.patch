@@ -1,0 +1,31 @@
+From a7e5d84af49177e2d98eb7e5d618017b9d87eff3 Mon Sep 17 00:00:00 2001
+From: Julien Schueller <schueller@phimeca.com>
+Date: Tue, 5 Sep 2017 13:21:29 +0200
+Subject: [PATCH] Make pyside2-uic executable by windows shell
+
+Task-number: PYSIDE-564
+Change-Id: I326287dabe1c09a4474f10a5afdbcaefa36a4919
+---
+ CMakeLists.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af33d0f..0428f3c 100644
+--- a/sources/pyside2-tools/CMakeLists.txt
++++ b/sources/pyside2-tools/CMakeLists.txt
+@@ -43,6 +43,12 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pyside2-uic
+         GROUP_EXECUTE GROUP_READ
+         WORLD_EXECUTE WORLD_READ)
+ 
++# on win32 we cannot rely on the shebang for the shell to interpret the pyside2-uic command
++if (WIN32)
++    file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/pyside2-uic.bat "python %~dp0pyside2-uic %*\n")
++    install (FILES ${CMAKE_CURRENT_BINARY_DIR}/pyside2-uic.bat DESTINATION bin)
++endif ()
++
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pyside2uic/__init__.py"
+         DESTINATION "${SITE_PACKAGE}/pyside2uic")
+ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/pyside2uic
+-- 
+2.21.0
+
