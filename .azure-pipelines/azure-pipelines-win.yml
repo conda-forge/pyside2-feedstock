@@ -5,9 +5,12 @@
 jobs:
 - job: win
   pool:
-    vmImage: vs2017-win2016
+    vmImage: windows-2019
   strategy:
     matrix:
+      win_64_python3.10.____cpython:
+        CONFIG: win_64_python3.10.____cpython
+        UPLOAD_PACKAGES: 'True'
       win_64_python3.7.____cpython:
         CONFIG: win_64_python3.7.____cpython
         UPLOAD_PACKAGES: 'True'
