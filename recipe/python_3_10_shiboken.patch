@@ -1,0 +1,106 @@
+diff --git a/sources/shiboken2/libshiboken/pep384impl.cpp b/sources/shiboken2/libshiboken/pep384impl.cpp
+index b2584fd..df537c4 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.cpp
++++ b/sources/shiboken2/libshiboken/pep384impl.cpp
+@@ -581,6 +581,77 @@ PepType_GetNameStr(PyTypeObject *type)
+  *
+  */
+ 
++#if PY_VERSION_HEX >= 0x03000000
++PyObject *
++_Py_Mangle(PyObject *privateobj, PyObject *ident)
++{
++    /* Name mangling: __private becomes _classname__private.
++       This is independent from how the name is used. */
++    PyObject *result;
++    size_t nlen, plen, ipriv;
++    Py_UCS4 maxchar;
++    if (privateobj == NULL || !PyUnicode_Check(privateobj) ||
++        PyUnicode_READ_CHAR(ident, 0) != '_' ||
++        PyUnicode_READ_CHAR(ident, 1) != '_') {
++        Py_INCREF(ident);
++        return ident;
++    }
++    nlen = PyUnicode_GET_LENGTH(ident);
++    plen = PyUnicode_GET_LENGTH(privateobj);
++    /* Don't mangle __id__ or names with dots.
++
++       The only time a name with a dot can occur is when
++       we are compiling an import statement that has a
++       package name.
++
++       TODO(jhylton): Decide whether we want to support
++       mangling of the module name, e.g. __M.X.
++    */
++    if ((PyUnicode_READ_CHAR(ident, nlen-1) == '_' &&
++         PyUnicode_READ_CHAR(ident, nlen-2) == '_') ||
++        PyUnicode_FindChar(ident, '.', 0, nlen, 1) != -1) {
++        Py_INCREF(ident);
++        return ident; /* Don't mangle __whatever__ */
++    }
++    /* Strip leading underscores from class name */
++    ipriv = 0;
++    while (PyUnicode_READ_CHAR(privateobj, ipriv) == '_')
++        ipriv++;
++    if (ipriv == plen) {
++        Py_INCREF(ident);
++        return ident; /* Don't mangle if class is just underscores */
++    }
++    plen -= ipriv;
++
++    if (plen + nlen >= PY_SSIZE_T_MAX - 1) {
++        PyErr_SetString(PyExc_OverflowError,
++                        "private identifier too large to be mangled");
++        return NULL;
++    }
++
++    maxchar = PyUnicode_MAX_CHAR_VALUE(ident);
++    if (PyUnicode_MAX_CHAR_VALUE(privateobj) > maxchar)
++        maxchar = PyUnicode_MAX_CHAR_VALUE(privateobj);
++
++    result = PyUnicode_New(1 + nlen + plen, maxchar);
++    if (!result)
++        return 0;
++    /* ident = "_" + priv[ipriv:] + ident # i.e. 1+plen+nlen bytes */
++    PyUnicode_WRITE(PyUnicode_KIND(result), PyUnicode_DATA(result), 0, '_');
++    if (PyUnicode_CopyCharacters(result, 1, privateobj, ipriv, plen) < 0) {
++        Py_DECREF(result);
++        return NULL;
++    }
++    if (PyUnicode_CopyCharacters(result, plen+1, ident, 0, nlen) < 0) {
++        Py_DECREF(result);
++        return NULL;
++    }
++    assert(_PyUnicode_CheckConsistency(result, 1));
++    return result;
++}
++#endif
++
++
+ #ifdef Py_LIMITED_API
+ // We keep these definitions local, because they don't work in Python 2.
+ #define PyUnicode_GET_LENGTH(op)    PyUnicode_GetLength((PyObject *)(op))
+diff --git a/sources/shiboken2/libshiboken/qapp_macro.cpp b/sources/shiboken2/libshiboken/qapp_macro.cpp
+index 306f53b..c3de897 100644
+--- a/sources/shiboken2/libshiboken/qapp_macro.cpp
++++ b/sources/shiboken2/libshiboken/qapp_macro.cpp
+@@ -143,7 +143,7 @@ MakeSingletonQAppWrapper(PyTypeObject *type)
+         Shiboken::AutoDecRef pymain(PyImport_ImportModule("__main__"));
+         if (pymain.object() && PyObject_HasAttrString(pymain.object(), "_"))
+             PyObject_DelAttrString(pymain.object(), "_");
+-        Py_REFCNT(qApp_var) = 1; // fuse is armed...
++        Py_SET_REFCNT(qApp_var, 1); // fuse is armed...
+     }
+     if (type == Py_NONE_TYPE) {
+         // PYSIDE-1093: Ignore None when no instance has ever been created.
+@@ -158,8 +158,8 @@ MakeSingletonQAppWrapper(PyTypeObject *type)
+         // PYSIDE-585: It was crucial to update the refcounts *before*
+         // calling the shutdown.
+         Py_TYPE(qApp_content) = Py_NONE_TYPE;
+-        Py_REFCNT(qApp_var) = qApp_var_ref;
+-        Py_REFCNT(qApp_content) = Py_REFCNT(Py_None);
++        Py_SET_REFCNT(qApp_var, qApp_var_ref);
++        Py_SET_REFCNT(qApp_content, Py_REFCNT(Py_None));
+         if (__moduleShutdown != nullptr)
+             Py_XDECREF(PyObject_CallFunction(__moduleShutdown, const_cast<char *>("()")));
+     } else {
