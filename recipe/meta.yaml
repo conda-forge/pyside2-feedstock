@@ -77,9 +77,9 @@ requirements:
     - libxslt
     - pip
     - setuptools
+    - libclang
   run:
     - python
-    - libclang  # [osx]
 
 test:
   imports:
