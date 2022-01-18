@@ -79,6 +79,7 @@ requirements:
     - setuptools
   run:
     - python
+    - libclang  # [osx]
 
 test:
   imports:
