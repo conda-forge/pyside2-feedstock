@@ -26,7 +26,7 @@ source:
     - 0005-remove-py-version-check.patch
 
 build:
-  number: 5
+  number: 6
   detect_binary_files_with_prefix: true
 
 requirements:
