@@ -1,8 +1,19 @@
+From 87069b7e33826844a05f350392ccc62e97537414 Mon Sep 17 00:00:00 2001
+From: Jan Janssen <jan.janssen@outlook.com>
+Date: Tue, 18 Jan 2022 20:13:01 -0700
+Subject: [PATCH] Updated shiboken
+
+---
+ sources/shiboken2/libshiboken/pep384impl.cpp  | 70 +++++++++++++++++++
+ sources/shiboken2/libshiboken/signature.cpp   |  5 ++
+ .../shibokensupport/signature/parser.py       |  5 +-
+ 3 files changed, 78 insertions(+), 2 deletions(-)
+
 diff --git a/sources/shiboken2/libshiboken/pep384impl.cpp b/sources/shiboken2/libshiboken/pep384impl.cpp
-index b2584fd..df537c4 100644
+index f07cac6..b830a3f 100644
 --- a/sources/shiboken2/libshiboken/pep384impl.cpp
 +++ b/sources/shiboken2/libshiboken/pep384impl.cpp
-@@ -581,6 +581,77 @@ PepType_GetNameStr(PyTypeObject *type)
+@@ -674,6 +674,76 @@ PyImport_GetModule(PyObject *name)
   *
   */
  
@@ -76,31 +87,48 @@ index b2584fd..df537c4 100644
 +}
 +#endif
 +
-+
  #ifdef Py_LIMITED_API
  // We keep these definitions local, because they don't work in Python 2.
- #define PyUnicode_GET_LENGTH(op)    PyUnicode_GetLength((PyObject *)(op))
-diff --git a/sources/shiboken2/libshiboken/qapp_macro.cpp b/sources/shiboken2/libshiboken/qapp_macro.cpp
-index 306f53b..c3de897 100644
---- a/sources/shiboken2/libshiboken/qapp_macro.cpp
-+++ b/sources/shiboken2/libshiboken/qapp_macro.cpp
-@@ -143,7 +143,7 @@ MakeSingletonQAppWrapper(PyTypeObject *type)
-         Shiboken::AutoDecRef pymain(PyImport_ImportModule("__main__"));
-         if (pymain.object() && PyObject_HasAttrString(pymain.object(), "_"))
-             PyObject_DelAttrString(pymain.object(), "_");
--        Py_REFCNT(qApp_var) = 1; // fuse is armed...
-+        Py_SET_REFCNT(qApp_var, 1); // fuse is armed...
-     }
-     if (type == Py_NONE_TYPE) {
-         // PYSIDE-1093: Ignore None when no instance has ever been created.
-@@ -158,8 +158,8 @@ MakeSingletonQAppWrapper(PyTypeObject *type)
-         // PYSIDE-585: It was crucial to update the refcounts *before*
-         // calling the shutdown.
-         Py_TYPE(qApp_content) = Py_NONE_TYPE;
--        Py_REFCNT(qApp_var) = qApp_var_ref;
--        Py_REFCNT(qApp_content) = Py_REFCNT(Py_None);
-+        Py_SET_REFCNT(qApp_var, qApp_var_ref);
-+        Py_SET_REFCNT(qApp_content, Py_REFCNT(Py_None));
-         if (__moduleShutdown != nullptr)
-             Py_XDECREF(PyObject_CallFunction(__moduleShutdown, const_cast<char *>("()")));
-     } else {
+ # define PyUnicode_GET_LENGTH(op)    PyUnicode_GetLength((PyObject *)(op))
+diff --git a/sources/shiboken2/libshiboken/signature.cpp b/sources/shiboken2/libshiboken/signature.cpp
+index ba1fc11..7c8e50c 100644
+--- a/sources/shiboken2/libshiboken/signature.cpp
++++ b/sources/shiboken2/libshiboken/signature.cpp
+@@ -52,6 +52,11 @@ extern "C"
+ #include "signature.h"
+ #include <structmember.h>
+ 
+++#if defined(_MSC_VER)
+++#include <BaseTsd.h>
+++typedef SSIZE_T ssize_t;
+++#endif
++
+ // These constants were needed in former versions of the module:
+ #define PYTHON_HAS_QUALNAME             (PY_VERSION_HEX >= 0x03030000)
+ #define PYTHON_HAS_WEAKREF_PYCFUNCTION  (PY_VERSION_HEX >= 0x030500A0)
+diff --git a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/parser.py b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/parser.py
+index 2053c3e..853f44d 100644
+--- a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/parser.py
++++ b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/parser.py
+@@ -43,10 +43,11 @@
+ import re
+ import warnings
+ import types
++import typing
+ import keyword
+ import functools
+ from shibokensupport.signature.mapping import (type_map, update_mapping,
+-    namespace, typing, _NotCalled, ResultVariable, ArrayLikeVariable)
++    namespace, _NotCalled, ResultVariable, ArrayLikeVariable)
+ from shibokensupport.signature.lib.tool import (SimpleNamespace,
+     build_brace_pattern)
+ 
+@@ -215,7 +216,7 @@ def _resolve_arraytype(thing, line):
+ def to_string(thing):
+     if isinstance(thing, str):
+         return thing
+-    if hasattr(thing, "__name__"):
++    if hasattr(thing, "__name__") and thing.__module__ != "typing":
+         dot = "." in str(thing)
+         name = get_name(thing)
+         return thing.__module__ + "." + name if dot else name
