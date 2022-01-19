@@ -98,10 +98,10 @@ index ba1fc11..7c8e50c 100644
  #include "signature.h"
  #include <structmember.h>
  
-++#if defined(_MSC_VER)
-++#include <BaseTsd.h>
-++typedef SSIZE_T ssize_t;
-++#endif
++#if defined(_MSC_VER)
++#include <BaseTsd.h>
++typedef SSIZE_T ssize_t;
++#endif
 +
  // These constants were needed in former versions of the module:
  #define PYTHON_HAS_QUALNAME             (PY_VERSION_HEX >= 0x03030000)
