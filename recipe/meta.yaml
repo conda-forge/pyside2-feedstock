@@ -1,4 +1,4 @@
-{% set version = "5.13.2" %}
+{% set version = "5.14.2.3" %}
 
 package:
   name: pyside2
@@ -29,7 +29,7 @@ source:
     - python_3_10_shiboken_2.patch  # [py>=310]
 
 build:
-  number: 7
+  number: 0
   detect_binary_files_with_prefix: true
 
 requirements:
