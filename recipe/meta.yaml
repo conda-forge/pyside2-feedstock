@@ -24,9 +24,12 @@ source:
     - 6294578.patch
     # Remove python version check to allow building dist_info
     - 0005-remove-py-version-check.patch
+    - python_3_10_shiboken.patch  # [py>=310]
+    - python_3_10_shiboken_1.patch  # [py>=310]
+    - python_3_10_shiboken_2.patch  # [py>=310]
 
 build:
-  number: 6
+  number: 7
   detect_binary_files_with_prefix: true
 
 requirements:
@@ -74,6 +77,7 @@ requirements:
     - libxslt
     - pip
     - setuptools
+    - libclang
   run:
     - python
 
