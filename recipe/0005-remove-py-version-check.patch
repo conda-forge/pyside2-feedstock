@@ -11,7 +11,7 @@ diff --git a/setup.py b/setup.py
 index aa770d402..59a357376 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -72,7 +72,5 @@ from build_scripts.setup_runner import SetupRunner
+@@ -290,7 +290,5 @@
  # used as a value source. Use get_package_version() instead.
  __version__ = get_package_version()
  
@@ -19,6 +19,3 @@ index aa770d402..59a357376 100644
 -
  setup_runner = SetupRunner(original_argv)
  setup_runner.run_setup()
--- 
-2.34.0
-
