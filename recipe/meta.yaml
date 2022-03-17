@@ -28,6 +28,8 @@ source:
     - python_3_10_shiboken_1.patch  # [py>=310]
     - python_3_10_shiboken_2.patch  # [py>=310]
     - python_3_9.patch  # [py>=39]
+    - fix_genererate_pyi.patch  # [win]
+    - qtoolbutton.patch
 
 build:
   number: 8
