@@ -3,6 +3,7 @@ About pyside2
 
 Home: https://wiki.qt.io/PySide2
 
+
 Package license: LGPL-3.0-only
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/pyside2-feedstock/blob/master/LICENSE.txt)
