@@ -23,7 +23,7 @@ popd
 
 ${PYTHON} setup.py dist_info --build-type=shiboken2
 _pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
-cp -r shiboken2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
+cp -r shiboken2-5.15.3.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
 
 pushd sources/pyside2
 mkdir build && cd build
