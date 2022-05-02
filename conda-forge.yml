@@ -1,6 +1,6 @@
 build_platform:
-  osx_arm64: osx_64
-  linux_aarch64: linux_64
+  osx_arm64: osx_arm64
+  linux_aarch64: linux_aarch64
 os_version:
   linux_64: cos7
 provider:
