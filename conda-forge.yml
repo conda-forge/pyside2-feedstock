@@ -1,8 +1,6 @@
 os_version:
   linux_64: cos7
 provider:
-  osx_arm64: default
-  linux_aarch64: default
   win: azure
 github:
   branch_name: main
