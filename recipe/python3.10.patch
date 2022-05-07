@@ -80,3 +80,19 @@ index 66df0fd..40f3424 100644
  /*****************************************************************************
   *
   * Extra support for name mangling
+diff --git a/sources/shiboken2/libshiboken/signature/signature.cpp b/sources/shiboken2/libshiboken/signature/signature.cpp
+index 4c251af..bed127a 100644
+--- a/sources/shiboken2/libshiboken/signature/signature.cpp
++++ b/sources/shiboken2/libshiboken/signature/signature.cpp
+@@ -58,6 +58,11 @@
+ #include "signature_p.h"
+ #include <structmember.h>
+ 
++#if defined(_MSC_VER)
++#include <BaseTsd.h>
++typedef SSIZE_T ssize_t;
++#endif
++
+ using namespace Shiboken;
+ 
+ extern "C"
