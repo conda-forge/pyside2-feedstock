@@ -12,7 +12,7 @@ source:
     # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
     # - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
     # https://bugreports.qt.io/browse/PYSIDE-1193
-    # - pyi.patch
+    - pyi.patch
     # pyside2 5.13.1 needs a few backports from 5.14 to work with python3.8
     # - 0002-Fix-Python-3.8-problems.patch
     # - 0003-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch
@@ -29,7 +29,7 @@ source:
     # - python_3_10_shiboken_2.patch  # [py>=310]
     - python3.10.patch
     # - python_3_9.patch  # [py>=39]
-    # - fix_genererate_pyi.patch  # [win]
+    - fix_genererate_pyi.patch  # [win]
     # - qtoolbutton.patch
 
 build:
