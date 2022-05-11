@@ -5,7 +5,6 @@ package:
   version: {{ version }}
 
 source:
-  fn: pyside-setup-everywhere-src-{{ version }}.tar.xz
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
   sha256: 7ff5f1cc4291fffb6d5a3098b3090abe4d415da2adec740b4e901893d95d7137
   patches:
@@ -31,12 +30,15 @@ source:
     # - python_3_9.patch  # [py>=39]
     - patches/fix_genererate_pyi.patch  # [win]
     # - qtoolbutton.patch
-    - patches/win_signature_helper.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
 
 build:
   number: 0
   detect_binary_files_with_prefix: true
+  entry_points:
+    - pyside2-designer = PySide2.scripts.pyside_tool:designer
+    - pyside2-rcc = PySide2.scripts.pyside_tool:rcc
+    - pyside2-uic = PySide2.scripts.pyside_tool:uic
 
 requirements:
   build:
@@ -78,6 +80,7 @@ requirements:
 
   host:
     - python
+    - packaging
     - qt-main
     - qt-webengine
     - libxml2
