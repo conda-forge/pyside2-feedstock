@@ -20,7 +20,9 @@ if errorlevel 1 exit 1
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=shiboken2
 FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_python_version; print(get_python_version())"') DO set VARIABLE=%%i
+dir
 ROBOCOPY shiboken2.dist-info "%LIBRARY_PREFIX%"\Lib\python%%i\site-packages\shiboken2.dist-info /e
+if errorlevel 1 exit 1
 
 cd %SRC_DIR%\sources\pyside2
 mkdir build && cd build
