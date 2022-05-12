@@ -57,5 +57,12 @@ cmake \
   ..
 make install -j${CPU_COUNT}
 
+# Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
+mkdir -p "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/PySide2/scripts
+touch "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/PySide2/scripts/__init__.py
+mv ${PREFIX}/bin/pyside_tool.py "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/PySide2/scripts/pyside_tool.py
+# This is just an extra file that doesn't do anything. Shiboken Doesn't have any entry points
+rm ${PREFIX}/bin/shiboken_tool.py
+
 rm -rf ${PREFIX}/include/qt/xcb
 
