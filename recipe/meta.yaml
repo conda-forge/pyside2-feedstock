@@ -31,7 +31,6 @@ source:
     # - python_3_9.patch  # [py>=39]
     - patches/fix_genererate_pyi.patch  # [win]
     # - qtoolbutton.patch
-    - patches/win_signature_helper.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
 
 build:
