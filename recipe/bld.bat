@@ -19,7 +19,7 @@ if errorlevel 1 exit 1
 
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=shiboken2
-ROBOCOPY shiboken2-5.15.3.dist-info "%SP_DIR%\shiboken2.dist-info /e
+ROBOCOPY shiboken2-5.15.3.dist-info "%SP_DIR%\shiboken2-5.15.3.dist-info /e
 
 cd %SRC_DIR%\sources\pyside2
 mkdir build && cd build
@@ -41,7 +41,7 @@ rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=PySide2
-ROBOCOPY PySide2-5.15.3.dist-info "%SP_DIR%\PySide2.dist-info /e
+ROBOCOPY PySide2-5.15.3.dist-info "%SP_DIR%\PySide2-5.15.3.dist-info /e
 
 cd %SRC_DIR%\sources\pyside2-tools
 mkdir build && cd build
