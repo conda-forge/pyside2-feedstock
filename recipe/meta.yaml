@@ -8,29 +8,11 @@ source:
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
   sha256: 3c68ed0def4111ef5d0641370306338d277ae8983a77eaf22f223ddd3a14450b
   patches:
-    # https://codereview.qt-project.org/c/pyside/pyside-tools/+/270008
-    # - 0001-Make-pyside2-uic-executable-by-windows-shell.patch
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi.patch
-    # pyside2 5.13.1 needs a few backports from 5.14 to work with python3.8
-    # - 0002-Fix-Python-3.8-problems.patch
-    # - 0003-Optimize-the-Python-3.8-refcount-fix-a-tiny-bit.patch
-    # - 0004-make-compilation-work-after-backporting.patch
-    # clang 10
-    # - 0001-shiboken-Support-Clang-version-10.patch
-    # Backport of "Fix Python 3.8 warnings about deprecated int conversions of enums/flags"
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/288381
-    # - 6294578.patch
-    # Remove python version check to allow building dist_info
-    # - 0005-remove-py-version-check.patch
-    # - python_3_10_shiboken.patch  # [py>=310]
-    # - python_3_10_shiboken_1.patch  # [py>=310]
-    # - python_3_10_shiboken_2.patch  # [py>=310]
     - patches/python3.10.patch
     - patches/windows_dll_shiboken_fix.patch
-    # - python_3_9.patch  # [py>=39]
     - patches/fix_genererate_pyi.patch  # [win]
-    # - qtoolbutton.patch
     - patches/pyside2-tools-obsolete.patch
 
 build:
