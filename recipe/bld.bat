@@ -19,8 +19,7 @@ if errorlevel 1 exit 1
 
 cd %SRC_DIR%
 "%PYTHON%" setup.py dist_info --build-type=shiboken2
-FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_python_version; print(get_python_version())"') DO set VARIABLE=%%i
-ROBOCOPY shiboken2.dist-info "%LIBRARY_PREFIX%"\Lib\python%%i\site-packages\shiboken2.dist-info /e
+move shiboken2-%PKG_VERSION%.dist-info %SP_DIR%\shiboken2-%PKG_VERSION%.dist-info
 
 cd %SRC_DIR%\sources\pyside2
 mkdir build && cd build
@@ -41,9 +40,8 @@ ctest --output-on-failure --timeout 100 -E QtWebKit || echo "no ok"
 rem if errorlevel 1 exit 1
 
 cd %SRC_DIR%
-"%PYTHON%" setup.py dist_info --build-type=PySide2
-FOR /F %%i IN ('%PYTHON% -c "from sysconfig import get_python_version; print(get_python_version())"') DO set VARIABLE=%%i
-ROBOCOPY PySide2.dist-info "%LIBRARY_PREFIX%"\Lib\python%%i\site-packages\PySide2.dist-info /e
+"%PYTHON%" setup.py dist_info --build-type=pyside2
+move PySide2-%PKG_VERSION%.dist-info %SP_DIR%\PySide2-%PKG_VERSION%.dist-info
 
 cd %SRC_DIR%\sources\pyside2-tools
 mkdir build && cd build
@@ -60,3 +58,7 @@ if errorlevel 1 exit 1
 cmake --build . --config %CMAKE_CONFIG% --target install
 if errorlevel 1 exit 1
 
+REM Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
+mkdir %SP_DIR%\PySide2\scripts
+type null > %SP_DIR%\PySide2\scripts\__init__.py
+move %LIBRARY_PREFIX%\bin\pyside_tool.py %SP_DIR%\PySide2\scripts\pyside_tool.py

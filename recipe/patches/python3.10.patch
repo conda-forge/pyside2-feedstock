@@ -1,0 +1,15 @@
+diff -u pyside-setup-opensource-src-5.15.3/sources/shiboken2/libshiboken/signature/signature_helper.cpp pyside-setup-opensource-src-5.15.4/sources/shiboken2/libshiboken/signature/signature_helper.cpp
+--- a/sources/shiboken2/libshiboken/signature/signature_helper.cpp
++++ b/sources/shiboken2/libshiboken/signature/signature_helper.cpp
+@@ -53,6 +53,11 @@
+
+ #include "signature_p.h"
+
++#if defined(_MSC_VER)
++#include <BaseTsd.h>
++typedef SSIZE_T ssize_t;
++#endif
++
+ using namespace Shiboken;
+
+ extern "C" {

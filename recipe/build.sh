@@ -22,8 +22,7 @@ make install -j${CPU_COUNT}
 popd
 
 ${PYTHON} setup.py dist_info --build-type=shiboken2
-_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
-cp -r shiboken2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
+cp -r shiboken2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 
 pushd sources/pyside2
 mkdir build && cd build
@@ -43,8 +42,7 @@ eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWeb
 popd
 
 ${PYTHON} setup.py dist_info --build-type=pyside2
-_pythonpath=`${PYTHON} -c "from sysconfig import get_python_version; print(get_python_version())"`
-cp -r PySide2.dist-info "${PREFIX}"/lib/python"${_pythonpath}"/site-packages/
+cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 
 pushd sources/pyside2-tools
 mkdir build && cd build
@@ -56,6 +54,11 @@ cmake \
   -DBUILD_TESTS=OFF \
   ..
 make install -j${CPU_COUNT}
+
+# Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
+mkdir -p "${SP_DIR}"/PySide2/scripts
+touch "${SP_DIR}"/PySide2/scripts/__init__.py
+mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide2/scripts/pyside_tool.py
 
 rm -rf ${PREFIX}/include/qt/xcb
 

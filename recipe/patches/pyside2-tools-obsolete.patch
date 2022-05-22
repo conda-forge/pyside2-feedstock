@@ -1,0 +1,48 @@
+diff --git a/sources/pyside2-tools/CMakeLists.txt b/sources/pyside2-tools/CMakeLists.txt
+--- a/sources/pyside2-tools/CMakeLists.txt
++++ b/sources/pyside2-tools/CMakeLists.txt
+@@ -47,28 +47,12 @@ else()
+ endif()
+ 
+ set(TOOLS_PATH "${_qt5Core_install_prefix}/bin")
+-set(UIC_PATH "${TOOLS_PATH}/uic${EXE_EXT}")
+-set(RCC_PATH "${TOOLS_PATH}/rcc${EXE_EXT}")
+ if (APPLE)
+     set(DESIGNER_PATH "${TOOLS_PATH}/Designer.app")
+ else()
+     set(DESIGNER_PATH "${TOOLS_PATH}/designer${EXE_EXT}")
+ endif()
+ 
+-install(FILES "${UIC_PATH}"
+-        DESTINATION bin
+-        PERMISSIONS
+-        OWNER_EXECUTE OWNER_WRITE OWNER_READ
+-        GROUP_EXECUTE GROUP_READ
+-        WORLD_EXECUTE WORLD_READ)
+-
+-install(FILES "${RCC_PATH}"
+-        DESTINATION bin
+-        PERMISSIONS
+-        OWNER_EXECUTE OWNER_WRITE OWNER_READ
+-        GROUP_EXECUTE GROUP_READ
+-        WORLD_EXECUTE WORLD_READ)
+-
+ if (EXISTS ${DESIGNER_PATH})
+     if (APPLE)
+         install(DIRECTORY "${DESIGNER_PATH}"
+
+diff --git a/sources/pyside2-tools/pyside2_tool.py b/sources/pyside2-tools/pyside2_tool.py
+--- a/sources/pyside2-tools/pyside_tool.py        2022-05-15 12:11:46.821478498 -0400
++++ b/sources/pyside2-tools/pyside_tool.py        2022-05-15 12:12:32.533134619 -0400
+@@ -60,10 +60,7 @@
+ def qt_tool_wrapper(qt_tool, args):
+     # Taking care of pyside2-uic, pyside2-rcc, and pyside2-designer
+     # listed as an entrypoint in setup.py
+-    pyside_dir = os.path.dirname(ref_mod.__file__)
+-    exe = os.path.join(pyside_dir, qt_tool)
+-
+-    cmd = [exe] + args
++    cmd = [qt_tool] + args
+     proc = Popen(cmd, stderr=PIPE)
+     out, err = proc.communicate()
+     if err:
