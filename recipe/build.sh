@@ -18,7 +18,8 @@ cmake ${CMAKE_ARGS} \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
-make install -j${CPU_COUNT}
+# make install -j${CPU_COUNT}
+make install -j1 VERBOSE=1
 popd
 
 ${PYTHON} setup.py dist_info --build-type=shiboken2
