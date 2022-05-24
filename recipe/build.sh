@@ -10,6 +10,8 @@ fi
 pushd sources/shiboken2
 mkdir build && cd build
 
+# https://www.qt.io/blog/qt-on-apple-silicon
+
 cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
@@ -17,6 +19,7 @@ cmake ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
+  -DCMAKE_OSX_ARCHITECTURES=arm64 \
   ..
 make install -j${CPU_COUNT}
 popd
