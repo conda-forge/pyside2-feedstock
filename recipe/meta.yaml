@@ -18,6 +18,7 @@ source:
 build:
   number: 0
   skip: true  # [x86_64]
+  skip: true  # [py!=39]
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
