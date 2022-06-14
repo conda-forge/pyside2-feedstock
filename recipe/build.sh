@@ -8,7 +8,7 @@ then
 fi
 
 pushd sources/shiboken2
-mkdir build && cd build
+mkdir -p build && cd build
 
 # https://www.qt.io/blog/qt-on-apple-silicon
 
@@ -16,10 +16,8 @@ cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
-  -DCMAKE_OSX_ARCHITECTURES=arm64 \
   ..
 make install -j${CPU_COUNT}
 popd
@@ -28,14 +26,13 @@ ${PYTHON} setup.py dist_info --build-type=shiboken2
 cp -r shiboken2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 
 pushd sources/pyside2
-mkdir build && cd build
+mkdir -p build && cd build
 
 cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DPYTHON_EXECUTABLE=${PYTHON} \
-  -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   ..
 make install -j${CPU_COUNT} VERBOSE=1
 
@@ -48,7 +45,7 @@ ${PYTHON} setup.py dist_info --build-type=pyside2
 cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 
 pushd sources/pyside2-tools
-mkdir build && cd build
+mkdir -p build && cd build
 
 cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
