@@ -31,7 +31,7 @@ cp -r shiboken2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 pushd sources/pyside2
 mkdir build && cd build
 
-cmake \
+cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
@@ -51,7 +51,7 @@ cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 pushd sources/pyside2-tools
 mkdir build && cd build
 
-cmake \
+cmake ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
