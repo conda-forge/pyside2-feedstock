@@ -7,6 +7,10 @@ then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
+# Remove running without PYTHONPATH
+sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
+sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/libshiboken/CMakeLists.txt
+
 pushd sources/shiboken2
 mkdir -p build && cd build
 
@@ -19,7 +23,7 @@ cmake ${CMAKE_ARGS} \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
-make install -j${CPU_COUNT}
+make install -j${CPU_COUNT} VERBOSE=1
 popd
 
 ${PYTHON} setup.py dist_info --build-type=shiboken2
@@ -38,7 +42,9 @@ make install -j${CPU_COUNT} VERBOSE=1
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
-eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
+  eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
+fi
 popd
 
 ${PYTHON} setup.py dist_info --build-type=pyside2
@@ -61,4 +67,3 @@ touch "${SP_DIR}"/PySide2/scripts/__init__.py
 mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide2/scripts/pyside_tool.py
 
 rm -rf ${PREFIX}/include/qt/xcb
-
