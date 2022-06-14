@@ -11,6 +11,16 @@ fi
 sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
 sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/libshiboken/CMakeLists.txt
 
+# Use build shiboken2
+sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/cmake/Macros/PySideModules.cmake
+
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
+  export RUN_TESTS=yes
+else
+  export RUN_TESTS=no
+  export CMAKE_ARGS="${CMAKE_ARGS} -DBUILD_TESTS=no"
+fi
+
 pushd sources/shiboken2
 mkdir -p build && cd build
 
@@ -42,7 +52,7 @@ make install -j${CPU_COUNT} VERBOSE=1
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
-if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
+if [[ "${RUN_TESTS}" == "yes" ]]; then
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 fi
 popd
