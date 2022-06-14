@@ -16,7 +16,7 @@ source:
     - patches/pyside2-tools-obsolete.patch
 
 build:
-  number: 0
+  number: 2
   skip: true  # [x86_64]
   skip: true  # [py!=39]
   detect_binary_files_with_prefix: true
