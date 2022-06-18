@@ -1,4 +1,4 @@
-{% set version = "5.15.4" %}
+{% set version = "5.15.5" %}
 
 package:
   name: pyside2
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 3c68ed0def4111ef5d0641370306338d277ae8983a77eaf22f223ddd3a14450b
+  sha256: 3920a4fb353300260c9bc46ff70f1fb975c5e7efa22e9d51222588928ce19b33
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi.patch
@@ -16,7 +16,7 @@ source:
     - patches/pyside2-tools-obsolete.patch
 
 build:
-  number: 1
+  number: 0
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
@@ -130,7 +130,7 @@ test:
 
 about:
   home: https://wiki.qt.io/PySide2
-  license:  LGPL-3.0-only
+  license: LGPL-3.0-only
   license_file: LICENSE.LGPLv3
   summary: Python bindings for Qt
 
