@@ -14,6 +14,7 @@ source:
     - patches/windows_dll_shiboken_fix.patch
     - patches/fix_genererate_pyi.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
+    - patches/cross_compile_pyi.patch  # [build_platform != target_platform]
 
 build:
   number: 0
