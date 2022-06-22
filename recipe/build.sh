@@ -13,12 +13,12 @@ sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/
 
 # Use build shiboken2
 sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/cmake/Macros/PySideModules.cmake
+sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/tests/pysidetest/CMakeLists.txt
 
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
   export RUN_TESTS=yes
 else
   export RUN_TESTS=no
-  export CMAKE_ARGS="${CMAKE_ARGS} -DBUILD_TESTS=no"
 fi
 
 pushd sources/shiboken2
@@ -77,4 +77,3 @@ touch "${SP_DIR}"/PySide2/scripts/__init__.py
 mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide2/scripts/pyside_tool.py
 
 rm -rf ${PREFIX}/include/qt/xcb
-
