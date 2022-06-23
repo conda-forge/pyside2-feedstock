@@ -1,9 +1,12 @@
+build_platform:
+  osx_arm64: osx_64
+conda_forge_output_validation: true
+github:
+  branch_name: main
+  tooling_branch_name: main
 os_version:
   linux_64: cos7
 provider:
   win: azure
-github:
-  branch_name: main
-  tooling_branch_name: main
+test: native_and_emulated
 test_on_native_only: true
-conda_forge_output_validation: true
