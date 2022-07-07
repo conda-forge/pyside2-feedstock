@@ -14,9 +14,10 @@ source:
     - patches/windows_dll_shiboken_fix.patch
     - patches/fix_genererate_pyi.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
+    - patches/cross_compile_pyi.patch  # [build_platform != target_platform]
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
@@ -25,6 +26,10 @@ build:
 
 requirements:
   build:
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - pyside2 =5.15.4                        # [build_platform != target_platform]
+    - qt-main                                # [build_platform != target_platform]
     - cmake
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
