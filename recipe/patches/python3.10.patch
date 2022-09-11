@@ -13,3 +13,16 @@ diff -u pyside-setup-opensource-src-5.15.3/sources/shiboken2/libshiboken/signatu
  using namespace Shiboken;
 
  extern "C" {
+
+diff -ru a_pyside-setup-opensource-src-5.15.6/sources/shiboken2/libshiboken/embed/signature_bootstrap.py b_pyside-setup-opensource-src-5.15.6/sources/shiboken2/libshiboken/embed/signature_bootstrap.py
+--- a/sources/shiboken2/libshiboken/embed/signature_bootstrap.py	2022-06-30 03:54:16.000000000 -0400
++++ b/sources/shiboken2/libshiboken/embed/signature_bootstrap.py	2022-09-10 19:55:08.760191988 -0400
+@@ -212,6 +212,8 @@
+
+     def load_module(self, fullname):
+         import importlib
++        import importlib.machinery
++        import importlib.util
+         import sys
+
+         filename = self._mod2path.get(fullname)
