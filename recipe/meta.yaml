@@ -30,6 +30,7 @@ requirements:
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - pyside2 =5.15.4                        # [build_platform != target_platform]
     - qt-main                                # [build_platform != target_platform]
+    - sysroot_linux-64 2.17                  # [linux]
     - cmake
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
