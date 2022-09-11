@@ -17,6 +17,8 @@ source:
     - patches/cross_compile_pyi.patch  # [build_platform != target_platform]
 
 build:
+  skip: true  # [not linux]
+  skip: true  # [not py==39]
   number: 0
   detect_binary_files_with_prefix: true
   entry_points:
