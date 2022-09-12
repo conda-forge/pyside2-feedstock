@@ -18,3 +18,5 @@ alsa-lib-devel
 xcb-util-devel
 xorg-x11-server-Xvfb
 pciutils-devel
+libXdamage
+libXfixes
