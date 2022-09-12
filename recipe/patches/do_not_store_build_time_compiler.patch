@@ -1,0 +1,18 @@
+diff -ur a_pyside-setup-opensource-src-5.15.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp b_pyside-setup-opensource-src-5.15.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp
+--- a_pyside-setup-opensource-src-5.15.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp	2022-09-11 15:46:58.536291467 -0400
++++ b_pyside-setup-opensource-src-5.15.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp	2022-09-11 15:47:31.303995179 -0400
+@@ -293,13 +293,7 @@
+ #if defined(Q_CC_CLANG) || defined(Q_CC_GNU)
+ static QString compilerFromCMake(const QString &defaultCompiler)
+ {
+-// Added !defined(Q_OS_DARWIN) due to PYSIDE-1032
+-#  if defined(CMAKE_CXX_COMPILER) && !defined(Q_OS_DARWIN)
+-    Q_UNUSED(defaultCompiler)
+-    return QString::fromLocal8Bit(CMAKE_CXX_COMPILER);
+-#  else
+-    return defaultCompiler;
+-#  endif
++    return qEnvironmentVariable("CXX", defaultCompiler);
+ }
+ #endif // Q_CC_CLANG, Q_CC_GNU
+ 

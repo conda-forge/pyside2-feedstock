@@ -15,9 +15,12 @@ source:
     - patches/fix_genererate_pyi.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
     - patches/cross_compile_pyi.patch  # [build_platform != target_platform]
+    # https://github.com/conda-forge/pyside2-feedstock/issues/130
+    # https://bugreports.qt.io/browse/PYSIDE-2057
+    - patches/do_not_store_build_time_compiler.patch
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
