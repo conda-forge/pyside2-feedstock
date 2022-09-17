@@ -17,8 +17,15 @@ sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/
 sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/cmake/Macros/PySideModules.cmake
 sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/tests/pysidetest/CMakeLists.txt
 
+extra_cmake_flags=
+
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
   export RUN_TESTS=yes
+
+  # Shiboken6 has better support for cross compilation
+  # But for now, lets just specify the flags manually
+  PYTHON_EXTENSION_SUFFIX=$(${PYTHON} -c "import distutils.sysconfig, os.path; print(os.path.splitext(distutils.sysconfig.get_config_var('EXT_SUFFIX'))[0])")
+  extra_cmake_flags="${extra_cmake_flags} -DPYTHON_EXTENSION_SUFFIX=${PYTHON_EXTENSION_SUFFIX}"
 else
   export RUN_TESTS=no
 fi
@@ -34,6 +41,7 @@ cmake ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=OFF \
   -DPYTHON_EXECUTABLE=${PYTHON} \
+  ${extra_cmake_flags} \
   ..
 make install -j${CPU_COUNT} VERBOSE=1
 popd
@@ -49,6 +57,7 @@ cmake ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DPYTHON_EXECUTABLE=${PYTHON} \
+  ${extra_cmake_flags} \
   ..
 make install -j${CPU_COUNT} VERBOSE=1
 
