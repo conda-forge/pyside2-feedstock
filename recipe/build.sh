@@ -7,6 +7,8 @@ then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
+set -ex
+
 # Remove running without PYTHONPATH
 sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
 sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/libshiboken/CMakeLists.txt
