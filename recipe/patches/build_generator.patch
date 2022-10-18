@@ -1,0 +1,13 @@
+diff --git a/sources/shiboken6/generator/CMakeLists.txt b/sources/shiboken6/generator/CMakeLists.txt
+index bac998ae5..c965d9f3e 100644
+--- a/sources/shiboken6/generator/CMakeLists.txt
++++ b/sources/shiboken6/generator/CMakeLists.txt
+@@ -3,7 +3,7 @@ set(package_name "Shiboken6Tools")
+ 
+ set(CMAKE_AUTOMOC ON)
+ 
+-if(NOT (Qt${QT_MAJOR_VERSION}Core_FOUND AND PYTHONINTERP_FOUND))
++if(NOT (Qt${QT_MAJOR_VERSION}Core_FOUND))
+     message(WARNING "Some dependencies were not found: shiboken6 generator compilation disabled!")
+     return()
+ endif()

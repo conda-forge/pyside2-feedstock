@@ -4,19 +4,17 @@ channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
+clangdev:
+- '14'
 cxx_compiler:
 - vs2019
-libxml2:
-- '2.9'
+llvmdev:
+- '14'
 pin_run_as_build:
-  libxml2:
-    max_pin: x.x
   python:
     min_pin: x.x
     max_pin: x.x
 python:
 - 3.8.* *_cpython
-qt_main:
-- '5.15'
 target_platform:
 - win-64
