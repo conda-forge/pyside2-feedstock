@@ -4,7 +4,6 @@ XVFB_RUN=""
 if test `uname` = "Linux"
 then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
-  #ldd $PREFIX/lib/qt6/plugins/platforms/libqxcb.so
 fi
 
 pushd sources/shiboken6
@@ -28,18 +27,17 @@ then
     cmake -LAH -G "Ninja" \
       -DCMAKE_PREFIX_PATH=${BUILD_PREFIX} \
       -DCMAKE_IGNORE_PREFIX_PATH="${PREFIX}" \
-      -DCMAKE_FIND_FRAMEWORK=LAST \
       -DCMAKE_INSTALL_RPATH:STRING=${BUILD_PREFIX}/lib \
       -DCMAKE_RANLIB=$BUILD_PREFIX/bin/${CONDA_TOOLCHAIN_BUILD}-ranlib \
       -DCMAKE_INSTALL_PREFIX=${BUILD_PREFIX} \
       -DBUILD_TESTS=OFF \
-      -DZPYTHON_EXECUTABLE=${BUILD_PREFIX}/bin/python \
     ..
     cmake --build . --target install
     mv _hidden $BUILD_PREFIX/${HOST}
   )
   rm -r build_native
   CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
+  CMAKE_ARGS="${CMAKE_ARGS} -DDISABLE_QtQuickWidgets=TRUE -DDISABLE_QtQuickControls2=TRUE -DDISABLE_QtQuick=TRUE -DDISABLE_QtQml=TRUE"
 fi
 
 mkdir build && cd build
@@ -47,10 +45,10 @@ mkdir build && cd build
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -DCMAKE_FIND_FRAMEWORK=LAST \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
+  -DSHIBOKEN_BUILD_TOOLS=ON \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
 cmake --build . --target install
@@ -62,7 +60,6 @@ mkdir build && cd build
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -DCMAKE_FIND_FRAMEWORK=LAST \
   -D_qt5Core_install_prefix=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=ON \

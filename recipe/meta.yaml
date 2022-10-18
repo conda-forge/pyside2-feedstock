@@ -160,25 +160,30 @@ test:
     #- PySide6.QtDesigner
     - PySide6.QtGui
     - PySide6.QtHelp
+    #- PySide6.QtHttpServer
     - PySide6.QtMultimedia
     - PySide6.QtMultimediaWidgets
     - PySide6.QtNetwork
     - PySide6.QtNetworkAuth
+    #- PySide6.QtNfc
     - PySide6.QtOpenGL
     - PySide6.QtOpenGLWidgets
+    #- PySide6.QtPdf
+    #- PySide6.QtPdfWidgets
     - PySide6.QtPositioning
     - PySide6.QtPrintSupport
-    - PySide6.QtQml
-    - PySide6.QtQuick
+    #- PySide6.QtQml
+    #- PySide6.QtQuick
     #- PySide6.QtQuick3D
-    - PySide6.QtQuickControls2
-    - PySide6.QtQuickWidgets
+    #- PySide6.QtQuickControls2
+    #- PySide6.QtQuickWidgets
     #- PySide6.QtRemoteObjects
     #- PySide6.QtScript
     #- PySide6.QtScriptTools
     - PySide6.QtScxml
     - PySide6.QtSensors
     - PySide6.QtSerialPort
+    - PySide6.QtSpatialAudio
     - PySide6.QtSql
     - PySide6.QtStateMachine
     - PySide6.QtSvg
