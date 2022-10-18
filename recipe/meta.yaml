@@ -24,6 +24,9 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
 
+    # build generator inconditionally
+    - patches/build_generator.patch
+
 build:
   number: 0
 
