@@ -3,29 +3,27 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '14'
+- '13'
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
+clangdev:
+- '13'
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '14'
-libxml2:
-- '2.9'
+- '13'
+llvmdev:
+- '13'
 macos_machine:
 - arm64-apple-darwin20.0.0
 pin_run_as_build:
-  libxml2:
-    max_pin: x.x
   python:
     min_pin: x.x
     max_pin: x.x
 python:
 - 3.9.* *_cpython
-qt_main:
-- '5.15'
 target_platform:
 - osx-arm64
 zip_keys:
