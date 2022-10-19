@@ -28,7 +28,7 @@ source:
     - patches/build_generator.patch
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -175,11 +175,11 @@ test:
     #- PySide6.QtPdfWidgets
     - PySide6.QtPositioning
     - PySide6.QtPrintSupport
-    #- PySide6.QtQml
-    #- PySide6.QtQuick
+    - PySide6.QtQml
+    - PySide6.QtQuick
     #- PySide6.QtQuick3D
-    #- PySide6.QtQuickControls2
-    #- PySide6.QtQuickWidgets
+    - PySide6.QtQuickControls2
+    - PySide6.QtQuickWidgets
     #- PySide6.QtRemoteObjects
     #- PySide6.QtScript
     #- PySide6.QtScriptTools

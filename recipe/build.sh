@@ -37,7 +37,6 @@ then
   )
   rm -r build_native
   CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
-  CMAKE_ARGS="${CMAKE_ARGS} -DDISABLE_QtQuickWidgets=TRUE -DDISABLE_QtQuickControls2=TRUE -DDISABLE_QtQuick=TRUE -DDISABLE_QtQml=TRUE"
 fi
 
 mkdir build && cd build
