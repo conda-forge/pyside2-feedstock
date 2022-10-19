@@ -15,7 +15,7 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-1012
     - patches/include.patch
 
-    # allow to override PYTHON_SITE_PACKAGES
+    # https://bugreports.qt.io/browse/PYSIDE-2074
     - patches/spdir.patch
 
     # https://bugreports.qt.io/browse/PYSIDE-2087
@@ -24,7 +24,7 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
 
-    # build generator inconditionally
+    # https://bugreports.qt.io/browse/PYSIDE-2090
     - patches/build_generator.patch
 
 build:
@@ -181,8 +181,6 @@ test:
     - PySide6.QtQuickControls2
     - PySide6.QtQuickWidgets
     #- PySide6.QtRemoteObjects
-    #- PySide6.QtScript
-    #- PySide6.QtScriptTools
     - PySide6.QtScxml
     - PySide6.QtSensors
     - PySide6.QtSerialPort
