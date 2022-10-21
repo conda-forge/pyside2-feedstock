@@ -10,7 +10,6 @@ source:
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
-    - patches/disable_pyi.patch  # [win or build_platform != target_platform]
 
     # https://bugreports.qt.io/browse/PYSIDE-1012
     - patches/include.patch
@@ -28,7 +27,7 @@ source:
     - patches/build_generator.patch
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
