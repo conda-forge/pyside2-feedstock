@@ -19,10 +19,8 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 libxml2:
-- '2.9'
+- '2.10'
 pin_run_as_build:
-  libxml2:
-    max_pin: x.x
   python:
     min_pin: x.x
     max_pin: x.x

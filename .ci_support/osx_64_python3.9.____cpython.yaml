@@ -13,12 +13,10 @@ cxx_compiler:
 cxx_compiler_version:
 - '14'
 libxml2:
-- '2.9'
+- '2.10'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 pin_run_as_build:
-  libxml2:
-    max_pin: x.x
   python:
     min_pin: x.x
     max_pin: x.x
