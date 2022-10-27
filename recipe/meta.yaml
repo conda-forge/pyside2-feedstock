@@ -18,7 +18,8 @@ source:
     # https://github.com/conda-forge/pyside2-feedstock/issues/130
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
-    - patches/python3.11.patch
+    # Supports Python 3.9+ but only required for Python 3.11
+    - patches/python3.11.patch  # [py>=311]
 
 build:
   number: 3
