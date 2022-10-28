@@ -59,7 +59,6 @@ mkdir build && cd build
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -D_qt5Core_install_prefix=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=ON \
   -DPYTHON_EXECUTABLE=${PYTHON} \

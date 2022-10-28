@@ -27,7 +27,7 @@ source:
     - patches/build_generator.patch
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
@@ -148,12 +148,12 @@ test:
     - {{ cdt('xcb-util-renderutil-devel') }}  # [linux]
     - {{ cdt('xcb-util-wm-devel') }}          # [linux]
   imports:
-    - PySide6.Qt3DAnimation
-    - PySide6.Qt3DCore
-    - PySide6.Qt3DExtras
-    - PySide6.Qt3DInput
-    - PySide6.Qt3DLogic
-    - PySide6.Qt3DRender
+    #- PySide6.Qt3DAnimation
+    #- PySide6.Qt3DCore
+    #- PySide6.Qt3DExtras
+    #- PySide6.Qt3DInput
+    #- PySide6.Qt3DLogic
+    #- PySide6.Qt3DRender
     #- PySide6.QtBluetooth
     - PySide6.QtCharts
     - PySide6.QtConcurrent
