@@ -1,4 +1,4 @@
-{% set version = "6.4.0" %}
+{% set version = "6.4.1" %}
 
 package:
   name: pyside6
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: dcee166a112a7eb04bb58c1164997e1f720c1e3e2ee199ee8c9a70e82f51e321
+  sha256: 807954ce284e1137475f78faf3bcf0ae9d17ec3690d1a43d09c98e973a3d556b
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -14,20 +14,17 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-1012
     - patches/include.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2074
-    - patches/spdir.patch
-
-    # https://bugreports.qt.io/browse/PYSIDE-2087
-    - patches/uitools.patch
-
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
 
     # https://bugreports.qt.io/browse/PYSIDE-2090
     - patches/build_generator.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2127
+    - patches/pysidebug-2127.patch
+
 build:
-  number: 4
+  number: 0
 
 requirements:
   build:
