@@ -37,6 +37,10 @@ then
   )
   rm -r build_native
   CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
+  if test `uname` = "Darwin"
+  then
+    CMAKE_ARGS="${CMAKE_ARGS} -DPython_SOABI=cpython-${PY_VER//./}-darwin"
+  fi
 fi
 
 mkdir build && cd build
