@@ -37,6 +37,10 @@ then
   )
   rm -r build_native
   CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
+  if test `uname` = "Darwin"
+  then
+    CMAKE_ARGS="${CMAKE_ARGS} -DPython_SOABI=cpython-${PY_VER//./}-darwin"
+  fi
 fi
 
 mkdir build && cd build
@@ -69,7 +73,7 @@ cmake --build . --target install
 if test "$CONDA_BUILD_CROSS_COMPILATION" != "1"
 then
   cp -v ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
-  cp -v ./tests/pysidetest/testbinding.cpython-*.so ${SP_DIR}
+  cp -v ./tests/pysidetest/testbinding.abi3.so ${SP_DIR}
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 30 -V || echo "no ok"
-  rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.cpython-*.so
+  rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.abi3.so
 fi
