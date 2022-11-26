@@ -73,7 +73,7 @@ cmake --build . --target install
 if test "$CONDA_BUILD_CROSS_COMPILATION" != "1"
 then
   cp -v ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
-  cp -v ./tests/pysidetest/testbinding.cpython-*.so ${SP_DIR}
+  cp -v ./tests/pysidetest/testbinding.abi3.so ${SP_DIR}
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 30 -V || echo "no ok"
-  rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.cpython-*.so
+  rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.abi3.so
 fi
