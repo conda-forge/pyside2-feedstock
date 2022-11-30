@@ -29,7 +29,8 @@ build:
     - pyside2-rcc = PySide2.scripts.pyside_tool:rcc
     - pyside2-uic = PySide2.scripts.pyside_tool:uic
   ignore_run_exports:
-    # make it optional
+    # make it optional. Use the constraints on qt-main
+    # and qt to ensure that qt-webengine is correctly installed
     - qt-webengine
 
 requirements:
@@ -87,9 +88,6 @@ requirements:
     - libclang
   run:
     - python
-  run_constrained:
-    # Follow qt-webengine's pinnings
-    - {{ pin_compatible('qt-webengine', max_pin='x.x') }}
 
 test:
   imports:
