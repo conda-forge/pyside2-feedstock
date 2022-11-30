@@ -22,12 +22,15 @@ source:
     - patches/python3.11.patch  # [py>=311]
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
     - pyside2-rcc = PySide2.scripts.pyside_tool:rcc
     - pyside2-uic = PySide2.scripts.pyside_tool:uic
+  ignore_run_exports:
+    # make it optional
+    - qt-webengine
 
 requirements:
   build:
@@ -84,6 +87,9 @@ requirements:
     - libclang
   run:
     - python
+  run_constrained:
+    # Follow qt-webengine's pinnings
+    - {{ pin_compatible('qt-webengine', max_pin='x.x') }}
 
 test:
   imports:
