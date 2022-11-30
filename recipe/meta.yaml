@@ -144,6 +144,7 @@ test:
 
   requires:
     - pip
+    - qt-webengine   # [py==310]
 
 about:
   home: https://wiki.qt.io/PySide2
