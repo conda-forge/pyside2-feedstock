@@ -118,7 +118,7 @@ test:
     - PySide2.QtTextToSpeech
     - PySide2.QtUiTools
     - PySide2.QtWebChannel
-    - PySide2.QtWebEngineCore
+    - PySide2.QtWebEngineCore   # [py==310]
     - PySide2.QtWebEngineWidgets
     - PySide2.QtWebSockets
     - PySide2.QtWidgets
