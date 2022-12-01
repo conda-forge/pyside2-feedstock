@@ -22,12 +22,16 @@ source:
     - patches/python3.11.patch  # [py>=311]
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
     - pyside2-rcc = PySide2.scripts.pyside_tool:rcc
     - pyside2-uic = PySide2.scripts.pyside_tool:uic
+  ignore_run_exports:
+    # make it optional. Use the constraints on qt-main
+    # and qt to ensure that qt-webengine is correctly installed
+    - qt-webengine
 
 requirements:
   build:
@@ -114,8 +118,8 @@ test:
     - PySide2.QtTextToSpeech
     - PySide2.QtUiTools
     - PySide2.QtWebChannel
-    - PySide2.QtWebEngineCore
-    - PySide2.QtWebEngineWidgets
+    - PySide2.QtWebEngineCore     # [py==310]
+    - PySide2.QtWebEngineWidgets  # [py==310]
     - PySide2.QtWebSockets
     - PySide2.QtWidgets
     - PySide2.QtXml
@@ -138,6 +142,7 @@ test:
 
   requires:
     - pip
+    - qt-webengine   # [py==310]
 
 about:
   home: https://wiki.qt.io/PySide2
@@ -149,3 +154,4 @@ extra:
   recipe-maintainers:
     - jan-janssen
     - jschueller
+    - hmaarrfk
