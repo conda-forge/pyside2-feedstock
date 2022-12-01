@@ -22,7 +22,7 @@ source:
     - patches/python3.11.patch  # [py>=311]
 
 build:
-  number: 4
+  number: 5
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
