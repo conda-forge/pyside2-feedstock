@@ -31,7 +31,7 @@ requirements:
   build:
     - cmake
     - ninja
-    - openssl <3
+    - openssl
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
@@ -42,7 +42,6 @@ requirements:
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
     - qt6-main >=6.4.1                   # [build_platform != target_platform]
-    - openssl <3  # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -93,7 +92,6 @@ requirements:
     - libxslt
     - libxml2
     - qt6-main >=6.4.1
-    - openssl <3
     - llvmdev
     - clangdev
     - libclang
