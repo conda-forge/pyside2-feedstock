@@ -43,7 +43,7 @@ requirements:
     - qt6-main                           # [build_platform != target_platform]
     - qt6-main >=6.4.1                   # [build_platform != target_platform]
     # We don't have builds with openssl3 for qt6-main yet
-    - openssl 1
+    - openssl 1.1.*
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -96,7 +96,7 @@ requirements:
     - qt6-main
     - qt6-main >=6.4.1
     # We don't have builds with openssl3 for qt6-main yet
-    - openssl 1
+    - openssl 1.1.*
     - llvmdev
     - clangdev
     - libclang
