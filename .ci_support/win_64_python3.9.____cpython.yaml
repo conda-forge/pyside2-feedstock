@@ -8,6 +8,8 @@ clangdev:
 - '14'
 cxx_compiler:
 - vs2019
+libxml2:
+- '2.10'
 llvmdev:
 - '14'
 pin_run_as_build:

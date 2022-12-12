@@ -16,6 +16,8 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '13'
+libxml2:
+- '2.10'
 llvmdev:
 - '13'
 macos_machine:
