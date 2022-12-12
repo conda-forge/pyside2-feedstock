@@ -154,10 +154,10 @@ test:
     #- PySide6.Qt3DLogic
     #- PySide6.Qt3DRender
     #- PySide6.QtBluetooth
-    - PySide6.QtCharts
+    #- PySide6.QtCharts
     - PySide6.QtConcurrent
     - PySide6.QtCore
-    - PySide6.QtDataVisualization
+    #- PySide6.QtDataVisualization
     #- PySide6.QtDesigner
     - PySide6.QtGui
     - PySide6.QtHelp
