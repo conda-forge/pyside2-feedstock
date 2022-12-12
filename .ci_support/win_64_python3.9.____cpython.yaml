@@ -4,12 +4,10 @@ channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
-clangdev:
-- '14'
 cxx_compiler:
 - vs2019
-llvmdev:
-- '14'
+libxml2:
+- '2.10'
 pin_run_as_build:
   python:
     min_pin: x.x
