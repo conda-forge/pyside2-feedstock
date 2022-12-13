@@ -30,7 +30,6 @@ requirements:
   build:
     - cmake
     - ninja
-    - openssl
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
