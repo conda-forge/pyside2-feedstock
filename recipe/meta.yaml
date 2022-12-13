@@ -25,12 +25,13 @@ source:
 
 build:
   number: 0
+  skip: true  # [osx and arm64]
 
 requirements:
   build:
     - cmake
     - ninja
-    - openssl <3
+    - openssl
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
@@ -39,8 +40,8 @@ requirements:
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
-    - libxml2 2.9.*                      # [build_platform != target_platform]
-    - qt6-main                           # [build_platform != target_platform]
+    - libxml2                            # [build_platform != target_platform]
+    - qt6-main >=6.4.1                   # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -89,8 +90,8 @@ requirements:
   host:
     - python
     - libxslt
-    - libxml2 2.9.*
-    - qt6-main
+    - libxml2
+    - qt6-main >=6.4.1
     - llvmdev
     - clangdev
     - libclang
@@ -152,10 +153,10 @@ test:
     #- PySide6.Qt3DLogic
     #- PySide6.Qt3DRender
     #- PySide6.QtBluetooth
-    - PySide6.QtCharts
+    #- PySide6.QtCharts
     - PySide6.QtConcurrent
     - PySide6.QtCore
-    - PySide6.QtDataVisualization
+    #- PySide6.QtDataVisualization
     #- PySide6.QtDesigner
     - PySide6.QtGui
     - PySide6.QtHelp

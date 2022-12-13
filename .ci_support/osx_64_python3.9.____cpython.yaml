@@ -5,21 +5,21 @@ MACOSX_SDK_VERSION:
 c_compiler:
 - clang
 c_compiler_version:
-- '13'
+- '14'
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
-clangdev:
-- '13'
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '13'
-llvmdev:
-- '13'
+- '14'
+libxml2:
+- '2.10'
 macos_machine:
 - x86_64-apple-darwin13.4.0
+openssl:
+- 1.1.1
 pin_run_as_build:
   python:
     min_pin: x.x
