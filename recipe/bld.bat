@@ -22,6 +22,7 @@ cmake -LAH -G "Ninja"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DCMAKE_BUILD_TYPE=Release                      ^
     -DPYTHON_EXECUTABLE="%PYTHON%"                  ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=16 ^
     .
 if errorlevel 1 exit 1
 
