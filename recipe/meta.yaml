@@ -41,7 +41,7 @@ requirements:
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
-    - qt6-main >=6.4.1                   # [build_platform != target_platform]
+    - qt6-main                           # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -91,7 +91,7 @@ requirements:
     - python
     - libxslt
     - libxml2
-    - qt6-main >=6.4.1
+    - qt6-main
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
