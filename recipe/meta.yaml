@@ -24,7 +24,7 @@ source:
     - patches/pysidebug-2127.patch
 
 build:
-  number: 1
+  number: 2
   # lets retry after openssl3 migration
   skip: true  # [osx and arm64]
   ignore_run_exports:
