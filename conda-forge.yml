@@ -1,6 +1,9 @@
 build_platform:
   linux_aarch64: linux_64
   osx_arm64: osx_64
+bot:
+  abi_migration_branches:
+    - pyside6
 conda_forge_output_validation: true
 github:
   branch_name: main
