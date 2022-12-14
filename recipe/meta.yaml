@@ -24,14 +24,19 @@ source:
     - patches/pysidebug-2127.patch
 
 build:
-  number: 0
+  number: 1
+  # lets retry after openssl3 migration
   skip: true  # [osx and arm64]
+  ignore_run_exports:
+    # make it optional
+    - qt6-3d
+    - qt6-charts
+    - qt6-datavis3d
 
 requirements:
   build:
     - cmake
     - ninja
-    - openssl
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
@@ -41,7 +46,7 @@ requirements:
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
-    - qt6-main >=6.4.1                   # [build_platform != target_platform]
+    - qt6-main                           # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -91,7 +96,10 @@ requirements:
     - python
     - libxslt
     - libxml2
-    - qt6-main >=6.4.1
+    - qt6-main
+    - qt6-3d
+    - qt6-charts
+    - qt6-datavis3d
     - llvmdev
     - clangdev
     - libclang
@@ -101,6 +109,12 @@ requirements:
 
 test:
   requires:
+    # these are optional
+    # test them with one version of python
+    - qt6-3d               # [py==310]
+    - qt6-charts           # [py==310]
+    - qt6-datavis3d        # [py==310]
+
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
@@ -146,17 +160,17 @@ test:
     - {{ cdt('xcb-util-renderutil-devel') }}  # [linux]
     - {{ cdt('xcb-util-wm-devel') }}          # [linux]
   imports:
-    #- PySide6.Qt3DAnimation
-    #- PySide6.Qt3DCore
-    #- PySide6.Qt3DExtras
-    #- PySide6.Qt3DInput
-    #- PySide6.Qt3DLogic
-    #- PySide6.Qt3DRender
+    - PySide6.Qt3DAnimation        # [py==310]
+    - PySide6.Qt3DCore             # [py==310]
+    - PySide6.Qt3DExtras           # [py==310]
+    - PySide6.Qt3DInput            # [py==310]
+    - PySide6.Qt3DLogic            # [py==310]
+    - PySide6.Qt3DRender           # [py==310]
     #- PySide6.QtBluetooth
-    #- PySide6.QtCharts
+    - PySide6.QtCharts             # [py==310]
     - PySide6.QtConcurrent
     - PySide6.QtCore
-    #- PySide6.QtDataVisualization
+    - PySide6.QtDataVisualization  # [py==310]
     #- PySide6.QtDesigner
     - PySide6.QtGui
     - PySide6.QtHelp
