@@ -39,9 +39,9 @@ requirements:
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - libclang 15.0.6                    # [build_platform != target_platform]
-    - llvmdev                            # [build_platform != target_platform]
-    - clangdev                           # [build_platform != target_platform]
+    - libclang 14                        # [build_platform != target_platform]
+    - llvmdev  14                        # [build_platform != target_platform]
+    - clangdev 14                        # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt =1.1.37                    # [build_platform != target_platform]
