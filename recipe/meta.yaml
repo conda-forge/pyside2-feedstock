@@ -39,7 +39,7 @@ requirements:
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - libclang                           # [build_platform != target_platform]
+    - libclang 15.0.6                    # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
     - clangdev                           # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
