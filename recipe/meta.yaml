@@ -99,9 +99,11 @@ requirements:
     - qt6-charts
     - qt6-datavis3d
     - llvmdev
-    - clangdev {{ cxx_compiler_version }}
-    - libclang
-    - libclang {{ cxx_compiler_version }}  # [osx]
+    - llvmdev
+    # for libclang
+    - clangdev
+    - llvmdev  {{ cxx_compiler_version }}  # [osx]
+    - clangdev {{ cxx_compiler_version }}  # [osx]
   run:
     - python
     - {{ pin_compatible("libclang") }}
