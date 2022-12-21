@@ -24,9 +24,7 @@ source:
     - patches/pysidebug-2127.patch
 
 build:
-  number: 1
-  # lets retry after openssl3 migration
-  skip: true  # [osx and arm64]
+  number: 2
   ignore_run_exports:
     # make it optional
     - qt6-3d
@@ -101,8 +99,11 @@ requirements:
     - qt6-charts
     - qt6-datavis3d
     - llvmdev
+    # for libclang
     - clangdev
     - libclang
+    - llvmdev  {{ cxx_compiler_version }}  # [osx]
+    - clangdev {{ cxx_compiler_version }}  # [osx]
   run:
     - python
     - {{ pin_compatible("libclang") }}
