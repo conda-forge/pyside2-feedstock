@@ -21,6 +21,9 @@ source:
     # Supports Python 3.9+ but only required for Python 3.11
     - patches/python3.11.patch  # [py>=311]
 
+    # https://bugreports.qt.io/browse/PYSIDE-1775
+    - patches/pymangle.patch
+
 build:
   number: 0
   detect_binary_files_with_prefix: true
