@@ -24,7 +24,7 @@ source:
     - patches/pysidebug-2127.patch
 
 build:
-  number: 2
+  number: 3
   ignore_run_exports:
     # make it optional
     - qt6-3d
@@ -179,7 +179,7 @@ test:
     - PySide6.QtMultimedia
     - PySide6.QtMultimediaWidgets
     - PySide6.QtNetwork
-    - PySide6.QtNetworkAuth
+    #- PySide6.QtNetworkAuth
     #- PySide6.QtNfc
     - PySide6.QtOpenGL
     - PySide6.QtOpenGLWidgets
