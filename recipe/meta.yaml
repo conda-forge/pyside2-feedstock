@@ -51,6 +51,7 @@ requirements:
     - qt-main                                # [build_platform != target_platform]
     - qt-webengine                           # [build_platform != target_platform]
     - cmake
+    - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - clangdev
@@ -82,8 +83,6 @@ requirements:
     - {{ cdt('libxrandr') }}             # [linux]
     - {{ cdt('alsa-lib') }}              # [linux]
     - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
-    - make                               # [not win]
-    - ninja                              # [win]
     - gxx                                # [linux]
 
   host:

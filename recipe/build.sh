@@ -35,7 +35,7 @@ mkdir -p build && cd build
 
 # https://www.qt.io/blog/qt-on-apple-silicon
 
-cmake ${CMAKE_ARGS} \
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
@@ -43,7 +43,7 @@ cmake ${CMAKE_ARGS} \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ${extra_cmake_flags} \
   ..
-make install -j${CPU_COUNT} VERBOSE=1
+cmake --build . --target install
 popd
 
 ${PYTHON} setup.py dist_info --build-type=shiboken2
@@ -52,14 +52,14 @@ cp -r shiboken2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 pushd sources/pyside2
 mkdir -p build && cd build
 
-cmake ${CMAKE_ARGS} \
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ${extra_cmake_flags} \
   ..
-make install -j${CPU_COUNT} VERBOSE=1
+cmake --build . --target install
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
@@ -74,13 +74,13 @@ cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 pushd sources/pyside2-tools
 mkdir -p build && cd build
 
-cmake ${CMAKE_ARGS} \
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_TESTS=OFF \
   ..
-make install -j${CPU_COUNT} VERBOSE=1
+cmake --build . --target install
 
 # Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
 mkdir -p "${SP_DIR}"/PySide2/scripts
