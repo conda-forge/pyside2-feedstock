@@ -23,6 +23,9 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2127
     - patches/pysidebug-2127.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2183
+    - patches/support.patch
+
 build:
   number: 3
   ignore_run_exports:
