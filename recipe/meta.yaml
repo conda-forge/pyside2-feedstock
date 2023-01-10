@@ -1,4 +1,4 @@
-{% set version = "6.4.1" %}
+{% set version = "6.4.2" %}
 
 package:
   name: pyside6
@@ -6,13 +6,10 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 807954ce284e1137475f78faf3bcf0ae9d17ec3690d1a43d09c98e973a3d556b
+  sha256: 1ec9d0936332efd229650cf10fed36cadddff7a613a2ea6e897de4d504c1b505
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
-
-    # https://bugreports.qt.io/browse/PYSIDE-1012
-    - patches/include.patch
 
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
@@ -20,14 +17,11 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2090
     - patches/build_generator.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2127
-    - patches/pysidebug-2127.patch
-
     # https://bugreports.qt.io/browse/PYSIDE-2183
     - patches/support.patch
 
 build:
-  number: 3
+  number: 0
   ignore_run_exports:
     # make it optional
     - qt6-3d
