@@ -27,6 +27,9 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2183
     - patches/support.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2184
+    - patches/install_pyi.patch
+
 build:
   number: 0
   detect_binary_files_with_prefix: true
