@@ -26,8 +26,11 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2183
     - patches/support.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2183
+    - patches/install_pyi.patch
+
 build:
-  number: 3
+  number: 4
   ignore_run_exports:
     # make it optional
     - qt6-3d
