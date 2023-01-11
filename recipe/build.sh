@@ -61,15 +61,17 @@ cmake --build . --target install
 
 if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
 then
-  # pyi files are not generated in the build dir and hence not installed when cross-compiling
+  # pyi files are generated in the host prefix and hence not installed
   cp -v ${BUILD_PREFIX}/venv/lib/python${PY_VER}/site-packages/PySide2/*.pyi ${SP_DIR}/PySide2
 fi
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
+cp ./tests/pysidetest/testbinding*.so ${SP_DIR}
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
 if [[ "${RUN_TESTS}" == "yes" ]]; then
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 fi
+rm ${SP_DIR}/testbinding*.so
 popd
 
 ${PYTHON} setup.py dist_info --build-type=pyside2
