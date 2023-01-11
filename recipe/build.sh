@@ -61,7 +61,7 @@ cmake --build . --target install
 
 if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
 then
-  # pyi files are not generated in the build dir and hence not installed when cross-compiling
+  # pyi files are generated in the host prefix and hence not installed
   cp -v ${BUILD_PREFIX}/venv/lib/python${PY_VER}/site-packages/PySide2/*.pyi ${SP_DIR}/PySide2
 fi
 
