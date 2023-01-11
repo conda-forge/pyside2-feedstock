@@ -66,10 +66,12 @@ then
 fi
 
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
+cp ./tests/pysidetest/testbinding*.so ${SP_DIR}
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
 if [[ "${RUN_TESTS}" == "yes" ]]; then
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
 fi
+rm ${SP_DIR}/testbinding*.so
 popd
 
 ${PYTHON} setup.py dist_info --build-type=pyside2
