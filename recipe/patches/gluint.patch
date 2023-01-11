@@ -1,0 +1,58 @@
+diff --git a/sources/pyside2/PySide2/QtCore/typesystem_core_common.xml b/sources/pyside2/PySide2/QtCore/typesystem_core_common.xml
+index 89f5069..0ba2f29 100644
+--- a/sources/pyside2/PySide2/QtCore/typesystem_core_common.xml
++++ b/sources/pyside2/PySide2/QtCore/typesystem_core_common.xml
+@@ -211,6 +211,14 @@
+     <!-- FIXME APIExtractor or shiboken do not support multiple includes by primitive type -->
+     <include file-name="signalmanager.h" location="global"/>
+   </primitive-type>
++  <primitive-type name="int8_t"/>
++  <primitive-type name="uint8_t"/>
++  <primitive-type name="int16_t"/>
++  <primitive-type name="uint16_t"/>
++  <primitive-type name="int32_t"/>
++  <primitive-type name="uint32_t"/>
++  <primitive-type name="int64_t"/>
++  <primitive-type name="uint64_t"/>
+ 
+   <primitive-type name="bool" target-lang-api-name="PyBool">
+     <conversion-rule>
+diff --git a/sources/pyside2/PySide2/QtGui/typesystem_gui_common.xml b/sources/pyside2/PySide2/QtGui/typesystem_gui_common.xml
+index 617d643..eb724df 100644
+--- a/sources/pyside2/PySide2/QtGui/typesystem_gui_common.xml
++++ b/sources/pyside2/PySide2/QtGui/typesystem_gui_common.xml
+@@ -96,6 +96,8 @@
+   <rejection class="^QOpenGL.*$" argument-type="^(const )?char ?\*\*$"/>
+   <rejection class="^QOpenGL.*$" argument-type="GLintptr"/>
+   <rejection class="^QOpenGL.*$" argument-type="GLsizeiptr"/>
++  <rejection class="^QOpenGL.*$" argument-type="int64_t*"/>
++  <rejection class="^QOpenGL.*$" argument-type="int32_t*"/>
+   <rejection class="^QOpenGL.*$" argument-type="GLsync"/>
+   <rejection class="^QOpenGL.*$" argument-type="^GLubyte( const)?\*$"/>
+   <rejection class="^QOpenGL.*$" argument-type="^(const )?QMatrix.x. ?\*$"/>
+diff --git a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/mapping.py b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/mapping.py
+index fa6c6c2..f0f6c5e 100644
+--- a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/mapping.py
++++ b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/mapping.py
+@@ -252,6 +252,10 @@ type_map.update({
+     "qint32": int,
+     "qint64": int,
+     "qint8": int,
++    "int16_t": int,
++    "int32_t": int,
++    "int64_t": int,
++    "int8_t": int,
+     "qintptr": int,
+     "QList": ArrayLikeVariable,
+     "qlonglong": int,
+@@ -267,6 +271,10 @@ type_map.update({
+     "quint32": int,
+     "quint64": int,
+     "quint8": int,
++    "uint16_t": int,
++    "uint32_t": int,
++    "uint64_t": int,
++    "uint8_t": int,
+     "quintptr": int,
+     "qulonglong": int,
+     "QVariant": Variant,
