@@ -31,7 +31,7 @@ source:
     - patches/install_pyi.patch
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer

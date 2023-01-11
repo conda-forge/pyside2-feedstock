@@ -61,6 +61,12 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   ..
 cmake --build . --target install
 
+if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
+then
+  # pyi files are not generated in the build dir and hence not installed when cross-compiling
+  cp -v ${BUILD_PREFIX}/venv/lib/python${PY_VER}/site-packages/PySide2/*.pyi ${SP_DIR}/PySide2
+fi
+
 cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
 # create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
 if [[ "${RUN_TESTS}" == "yes" ]]; then
