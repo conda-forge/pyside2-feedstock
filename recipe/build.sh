@@ -57,6 +57,9 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
 cmake --build . --target install
 popd
 
+mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
+touch ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
+
 pushd sources/pyside6
 mkdir build && cd build
 
@@ -70,6 +73,9 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   ..
 cmake --build . --target install
+
+mkdir ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info
+touch ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info/METADATA
 
 if test "$CONDA_BUILD_CROSS_COMPILATION" != "1"
 then
