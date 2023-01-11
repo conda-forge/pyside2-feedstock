@@ -33,8 +33,6 @@ fi
 pushd sources/shiboken2
 mkdir -p build && cd build
 
-# https://www.qt.io/blog/qt-on-apple-silicon
-
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
