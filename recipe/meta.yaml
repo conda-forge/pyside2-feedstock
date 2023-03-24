@@ -1,12 +1,12 @@
-{% set version = "6.4.2" %}
+{% set version = "6.4.3" %}
 
 package:
   name: pyside6
   version: {{ version }}
 
 source:
-  url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 1ec9d0936332efd229650cf10fed36cadddff7a613a2ea6e897de4d504c1b505
+  url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
+  sha256: ab344f369eb949354f1069ce24962be5a5f03b93b27da081e3a01e5bc3581d4e
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -16,9 +16,6 @@ source:
 
     # https://bugreports.qt.io/browse/PYSIDE-2090
     - patches/build_generator.patch
-
-    # https://bugreports.qt.io/browse/PYSIDE-2183
-    - patches/support.patch
 
     # https://bugreports.qt.io/browse/PYSIDE-2184
     - patches/install_pyi.patch
@@ -39,7 +36,7 @@ requirements:
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
-    - clangdev                           # [build_platform != target_platform]
+    - clangdev >=9                       # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
@@ -100,7 +97,7 @@ requirements:
     - qt6-datavis3d
     - llvmdev
     # for libclang
-    - clangdev
+    - clangdev >=9
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
@@ -185,7 +182,7 @@ test:
     - PySide6.QtOpenGLWidgets
     #- PySide6.QtPdf
     #- PySide6.QtPdfWidgets
-    - PySide6.QtPositioning
+    # - PySide6.QtPositioning
     - PySide6.QtPrintSupport
     - PySide6.QtQml
     - PySide6.QtQuick
@@ -193,12 +190,12 @@ test:
     - PySide6.QtQuickControls2
     - PySide6.QtQuickWidgets
     #- PySide6.QtRemoteObjects
-    - PySide6.QtScxml
-    - PySide6.QtSensors
-    - PySide6.QtSerialPort
+    # - PySide6.QtScxml
+    # - PySide6.QtSensors
+    # - PySide6.QtSerialPort
     - PySide6.QtSpatialAudio
     - PySide6.QtSql
-    - PySide6.QtStateMachine
+    #- PySide6.QtStateMachine
     - PySide6.QtSvg
     - PySide6.QtSvgWidgets
     - PySide6.QtTest
