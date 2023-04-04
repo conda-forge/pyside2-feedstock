@@ -22,6 +22,9 @@ source:
 
 build:
   number: 1
+  entry_points:
+    - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
+    - pyside6-uic = PySide6.scripts.pyside_tool:uic
   ignore_run_exports:
     # make it optional
     - qt6-3d
@@ -210,6 +213,8 @@ test:
     - PySide6.QtXml
   commands:
     - shiboken6 --help
+    - pyside6-rcc -help
+    - pyside6-uic -help
 
 about:
   home: https://wiki.qt.io/PySide2
