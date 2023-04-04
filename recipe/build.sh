@@ -84,6 +84,7 @@ then
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 30 -V || echo "no ok"
   rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.abi3.so
 fi
+popd
 
 pushd sources/pyside-tools
 mkdir build && cd build
