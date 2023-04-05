@@ -19,6 +19,8 @@ source:
 
     # https://bugreports.qt.io/browse/PYSIDE-2184
     - patches/install_pyi.patch
+    
+    - patches/pyside-tools.patch
 
 build:
   number: 2

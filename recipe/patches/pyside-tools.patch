@@ -1,0 +1,45 @@
+diff --git a/sources/pyside-tools/CMakeLists.txt b/sources/pyside-tools/CMakeLists.txt
+index 87c33926c..aee77e572 100644
+--- a/sources/pyside-tools/CMakeLists.txt
++++ b/sources/pyside-tools/CMakeLists.txt
+@@ -21,20 +21,14 @@ if(NOT NO_QT_TOOLS STREQUAL "yes")
+                       "${LIBEXEC_PATH}/rcc${CMAKE_EXECUTABLE_SUFFIX}"
+                       "${LIBEXEC_PATH}/qmltyperegistrar${CMAKE_EXECUTABLE_SUFFIX}"
+                       "${LIBEXEC_PATH}/qmlimportscanner${CMAKE_EXECUTABLE_SUFFIX}"
+-                      "${TOOLS_PATH}/lrelease${CMAKE_EXECUTABLE_SUFFIX}"
+-                      "${TOOLS_PATH}/lupdate${CMAKE_EXECUTABLE_SUFFIX}"
+                       "${TOOLS_PATH}/qmllint${CMAKE_EXECUTABLE_SUFFIX}"
+                       "${TOOLS_PATH}/qmlformat${CMAKE_EXECUTABLE_SUFFIX}"
+                       "${TOOLS_PATH}/qmlls${CMAKE_EXECUTABLE_SUFFIX}")
+ 
+     if (APPLE)
+-        list(APPEND directories "${TOOLS_PATH}/Assistant.app"
+-                                "${TOOLS_PATH}/Designer.app"
+-                                "${TOOLS_PATH}/Linguist.app")
++        list(APPEND directories "${TOOLS_PATH}/Assistant.app")
+     else()
+-        list(APPEND files "${TOOLS_PATH}/assistant${CMAKE_EXECUTABLE_SUFFIX}"
+-                          "${TOOLS_PATH}/designer${CMAKE_EXECUTABLE_SUFFIX}"
+-                          "${TOOLS_PATH}/linguist${CMAKE_EXECUTABLE_SUFFIX}")
++        list(APPEND files "${TOOLS_PATH}/assistant${CMAKE_EXECUTABLE_SUFFIX}")
+     endif()
+ endif()
+ 
+diff --git a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
+index 7c1bf1c26..2ae86431c 100644
+--- a/sources/pyside-tools/pyside_tool.py
++++ b/sources/pyside-tools/pyside_tool.py
+@@ -39,12 +39,7 @@ def main():
+ def qt_tool_wrapper(qt_tool, args, libexec=False):
+     # Taking care of pyside6-uic, pyside6-rcc, and pyside6-designer
+     # listed as an entrypoint in setup.py
+-    pyside_dir = Path(ref_mod.__file__).resolve().parent
+-    if libexec and sys.platform != "win32":
+-        exe = pyside_dir / 'Qt' / 'libexec' / qt_tool
+-    else:
+-        exe = pyside_dir / qt_tool
+-    cmd = [os.fspath(exe)] + args
++    cmd = [os.fspath(qt_tool)] + args
+     proc = Popen(cmd, stderr=PIPE)
+     out, err = proc.communicate()
+     if err:
