@@ -21,7 +21,7 @@ source:
     - patches/install_pyi.patch
 
 build:
-  number: 1
+  number: 2
   ignore_run_exports:
     # make it optional
     - qt6-3d
