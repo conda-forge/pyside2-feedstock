@@ -46,7 +46,7 @@ cmake -LAH -G"NMake Makefiles"                               ^
     ..
 if errorlevel 1 exit 1
 
-cmake --build . --config %CMAKE_CONFIG% --target install
+cmake --build . --target install --config Release
 if errorlevel 1 exit 1
 
 REM Move the entry point for pyside6-rcc pyside6-uic and pyside6-designer to the right location
