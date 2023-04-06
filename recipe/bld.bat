@@ -4,6 +4,7 @@ cd %SRC_DIR%\sources\shiboken6
 cmake -LAH -G "Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DCMAKE_BUILD_TYPE=Release                      ^
     -DBUILD_TESTS=OFF                               ^
@@ -22,6 +23,7 @@ cd %SRC_DIR%\sources\pyside6
 cmake -LAH -G "Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DCMAKE_BUILD_TYPE=Release                      ^
     -DPYTHON_EXECUTABLE="%PYTHON%"                  ^
