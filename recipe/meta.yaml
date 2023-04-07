@@ -56,7 +56,7 @@ requirements:
     - python
     - libxslt
     - libxml2
-    - qt6-main
+    - qt6-main {{ version }}
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
