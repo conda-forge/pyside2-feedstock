@@ -20,6 +20,8 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2184
     - patches/install_pyi.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2286
+    - patches/permission.patch
 build:
   number: 0
   ignore_run_exports:
