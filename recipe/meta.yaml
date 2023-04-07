@@ -36,7 +36,7 @@ requirements:
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
-    - clangdev >=9                       # [build_platform != target_platform]
+    - clangdev >=9, <16                  # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
@@ -96,8 +96,8 @@ requirements:
     - qt6-charts
     - qt6-datavis3d
     - llvmdev
-    # for libclang
-    - clangdev >=9
+    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
+    - clangdev >=9, <16
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
