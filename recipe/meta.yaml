@@ -1,4 +1,4 @@
-{% set version = "6.4.3" %}
+{% set version = "6.5.0" %}
 
 package:
   name: pyside6
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: ab344f369eb949354f1069ce24962be5a5f03b93b27da081e3a01e5bc3581d4e
+  sha256: 6ef53b29127267e381917e6f9399ce760edc0644cd5831988b1de72c9d583ab4
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -20,8 +20,10 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2184
     - patches/install_pyi.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2286
+    - patches/permission.patch
 build:
-  number: 1
+  number: 0
   ignore_run_exports:
     # make it optional
     - qt6-3d
@@ -36,68 +38,31 @@ requirements:
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
-    - clangdev >=9                       # [build_platform != target_platform]
+    - clangdev >=9, <16                  # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
     - qt6-main                           # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libxext') }}               # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl') }}           # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('gtk2-devel') }}            # [linux]
-    - {{ cdt('gtkmm24-devel') }}         # [linux]
     - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libxcomposite-devel') }}   # [linux]
-    - {{ cdt('libxcursor-devel') }}      # [linux]
-    - {{ cdt('libxi-devel') }}           # [linux]
-    - {{ cdt('libxrandr-devel') }}       # [linux]
-    - {{ cdt('pciutils-devel') }}        # [linux]
-    - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-    - {{ cdt('libxtst-devel') }}         # [linux]
-    - {{ cdt('libselinux') }}            # [linux]
-    - {{ cdt('libselinux-devel') }}      # [linux]
-    - {{ cdt('libxdamage') }}            # [linux]
-    - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('libxfixes') }}             # [linux]
-    - {{ cdt('libxfixes-devel') }}       # [linux]
-    - {{ cdt('libxxf86vm') }}            # [linux]
-    - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('libsm-devel') }}           # [linux]
-    - {{ cdt('libice-devel') }}          # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
-    - {{ cdt('libxcb-devel') }}          # [linux]
-    - {{ cdt('expat-devel') }}           # [linux]
-    - {{ cdt('pcre') }}                  # [linux]
     - {{ cdt('libglvnd-glx') }}          # [linux]
     - {{ cdt('libglvnd-egl') }}          # [linux]
-    - {{ cdt('libxkbcommon-devel') }}    # [linux]
-    - {{ cdt('xcb-util-devel') }}        # [linux]
-    - {{ cdt('xcb-util-image-devel') }}  # [linux]
-    - {{ cdt('xcb-util-keysyms-devel') }}     # [linux]
-    - {{ cdt('xcb-util-renderutil-devel') }}  # [linux]
-    - {{ cdt('xcb-util-wm-devel') }}          # [linux]
 
   host:
     - python
     - libxslt
     - libxml2
-    - qt6-main
+    - qt6-main {{ version }}
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
     - llvmdev
-    # for libclang
-    - clangdev >=9
+    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
+    - clangdev >=9, <16
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
@@ -114,49 +79,12 @@ test:
     - qt6-datavis3d        # [py==310]
 
     - sysroot_linux-64 2.17              # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libxext') }}               # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl') }}           # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('gtk2-devel') }}            # [linux]
-    - {{ cdt('gtkmm24-devel') }}         # [linux]
     - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libxcomposite-devel') }}   # [linux]
-    - {{ cdt('libxcursor-devel') }}      # [linux]
-    - {{ cdt('libxi-devel') }}           # [linux]
-    - {{ cdt('libxrandr-devel') }}       # [linux]
-    - {{ cdt('pciutils-devel') }}        # [linux]
-    - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-    - {{ cdt('libxtst-devel') }}         # [linux]
-    - {{ cdt('libselinux') }}            # [linux]
-    - {{ cdt('libselinux-devel') }}      # [linux]
-    - {{ cdt('libxdamage') }}            # [linux]
-    - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('libxfixes') }}             # [linux]
-    - {{ cdt('libxfixes-devel') }}       # [linux]
-    - {{ cdt('libxxf86vm') }}            # [linux]
-    - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('libsm-devel') }}           # [linux]
-    - {{ cdt('libice-devel') }}          # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
-    - {{ cdt('libxcb-devel') }}          # [linux]
-    - {{ cdt('expat-devel') }}           # [linux]
-    - {{ cdt('pcre') }}                  # [linux]
     - {{ cdt('libglvnd-glx') }}          # [linux]
     - {{ cdt('libglvnd-egl') }}          # [linux]
-    - {{ cdt('libxkbcommon-devel') }}    # [linux]
-    - {{ cdt('xcb-util-devel') }}        # [linux]
-    - {{ cdt('xcb-util-image-devel') }}  # [linux]
-    - {{ cdt('xcb-util-keysyms-devel') }}     # [linux]
-    - {{ cdt('xcb-util-renderutil-devel') }}  # [linux]
-    - {{ cdt('xcb-util-wm-devel') }}          # [linux]
   imports:
     - PySide6.Qt3DAnimation        # [py==310]
     - PySide6.Qt3DCore             # [py==310]
@@ -169,7 +97,7 @@ test:
     - PySide6.QtConcurrent
     - PySide6.QtCore
     - PySide6.QtDataVisualization  # [py==310]
-    #- PySide6.QtDesigner
+    - PySide6.QtDesigner
     - PySide6.QtGui
     - PySide6.QtHelp
     #- PySide6.QtHttpServer
