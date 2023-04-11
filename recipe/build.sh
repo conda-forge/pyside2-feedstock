@@ -87,3 +87,21 @@ then
   eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 30 -V || echo "no ok"
   rm ${PREFIX}/lib/libpysidetest${SHLIB_EXT} ${SP_DIR}/testbinding.abi3.so
 fi
+
+popd
+
+pushd sources/pyside-tools
+mkdir build && cd build
+
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DBUILD_TESTS=OFF \
+  ..
+cmake --build . --target install
+
+# Move pyside_tool.py to the right location
+mkdir -p "${SP_DIR}"/PySide6/scripts
+touch "${SP_DIR}"/PySide6/scripts/__init__.py
+mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide6/scripts/pyside_tool.py
