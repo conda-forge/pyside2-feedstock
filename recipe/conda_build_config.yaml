@@ -1,0 +1,9 @@
+# c_compiler_version:     # [linux]
+#   - 11                  # [linux]
+# cxx_compiler_version:   # [linux]
+#   - 11                  # [linux]
+# 
+clangdev:               # [not osx]
+  - 15                  # [not osx]
+libclang:               # [not osx]
+  - 15                  # [not osx]
