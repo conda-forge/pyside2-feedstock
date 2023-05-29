@@ -1,11 +1,11 @@
-About pyside2
-=============
+About pyside2-feedstock
+=======================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/pyside2-feedstock/blob/main/LICENSE.txt)
 
 Home: https://wiki.qt.io/PySide2
 
 Package license: LGPL-3.0-only
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/pyside2-feedstock/blob/main/LICENSE.txt)
 
 Summary: Python bindings for Qt
 
@@ -298,7 +298,4 @@ Feedstock Maintainers
 * [@hmaarrfk](https://github.com/hmaarrfk/)
 * [@jan-janssen](https://github.com/jan-janssen/)
 * [@jschueller](https://github.com/jschueller/)
-
-
-<!-- dummy commit to enable rerendering -->
 
