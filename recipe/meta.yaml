@@ -33,6 +33,11 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2187
     - patches/gluint.patch
 
+    # https://bugreports.qt.io/browse/PYSIDE-2288
+    # Backport by hmaarrfk
+    # https://code.qt.io/cgit/pyside/pyside-setup.git/commit/?h=dd863857436bbeeba4c0a1077f5ad16653296277
+    # - patches/backport_fix_2288.patch
+
 build:
   number: 3
   detect_binary_files_with_prefix: true
@@ -50,14 +55,15 @@ requirements:
     - sysroot_linux-64 2.17                  # [linux64]
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - pyside2  {{ qt_main }}                 # [build_platform != target_platform]
-    - qt-main                                # [build_platform != target_platform]
-    - qt-webengine                           # [build_platform != target_platform]
+    - pyside2  {{ version }}                 # [build_platform != target_platform]
+    - qt-main  {{ version }}                 # [build_platform != target_platform]
+    - qt-webengine  {{ version }}            # [build_platform != target_platform]
     - cmake
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - clangdev
+    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
+    - clangdev >=9, <16
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
@@ -90,13 +96,17 @@ requirements:
   host:
     - python
     - packaging
-    - qt-main
-    - qt-webengine
+    - qt-main       {{ version }}
+    - qt-webengine  {{ version }}
     - libxml2
     - libxslt
     - pip
     - setuptools
+    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
+    - clangdev >=9, <16
     - libclang
+    - llvmdev  {{ cxx_compiler_version }}  # [osx]
+    - clangdev {{ cxx_compiler_version }}  # [osx]
   run:
     - python
 
