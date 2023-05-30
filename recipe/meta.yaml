@@ -79,6 +79,7 @@ requirements:
     - libxslt
     - pip
     - setuptools
+    # Make sure that this matches with the build of qt-main
     # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
     - clangdev >=9, <16
     - libclang
