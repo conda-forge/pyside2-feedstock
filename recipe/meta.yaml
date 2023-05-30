@@ -1,4 +1,4 @@
-{% set version = "6.5.0" %}
+{% set version = "6.5.1" %}
 
 package:
   name: pyside6
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: 6ef53b29127267e381917e6f9399ce760edc0644cd5831988b1de72c9d583ab4
+  sha256: bc9153cbcc0cd234f3955c5eb90fe1191060b026adc7ea348fd6a6a9868bb8fe
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -23,7 +23,7 @@ source:
     # change tools module location
     - patches/tools.patch
 build:
-  number: 2
+  number: 0
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
@@ -41,7 +41,7 @@ requirements:
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
-    - clangdev >=9, <16                  # [build_platform != target_platform]
+    - clangdev >=9                       # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
@@ -64,8 +64,7 @@ requirements:
     - qt6-charts
     - qt6-datavis3d
     - llvmdev
-    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
-    - clangdev >=9, <16
+    - clangdev >=9
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
