@@ -33,9 +33,9 @@ CONDARC
 
 
 mamba install --update-specs --yes --quiet --channel conda-forge \
-    conda-build pip boa conda-forge-ci-setup=3 "py-lief<0.12"
+    conda-build pip boa conda-forge-ci-setup=3
 mamba update --update-specs --yes --quiet --channel conda-forge \
-    conda-build pip boa conda-forge-ci-setup=3 "py-lief<0.12"
+    conda-build pip boa conda-forge-ci-setup=3
 
 # set up the condarc
 setup_conda_rc "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
@@ -47,7 +47,7 @@ source run_conda_forge_build_setup
 # "recipe/yum_requirements.txt" file. After updating that file,
 # run "conda smithy rerender" and this line will be updated
 # automatically.
-/usr/bin/sudo -n yum install -y mesa-libGL-devel mesa-libGLU-devel mesa-libEGL-devel libX11-devel libXt-devel libXtst-devel libXrender-devel libXext-devel libXdmcp-devel libXcomposite-devel libXcursor-devel libxcb-devel libXau-devel libXi-devel libXScrnSaver-devel libXrandr-devel alsa-lib-devel xcb-util-devel xorg-x11-server-Xvfb pciutils-devel libXdamage libXfixes
+/usr/bin/sudo -n yum install -y mesa-libGL mesa-libGL-devel mesa-libEGL-devel mesa-dri-drivers libX11-devel libglvnd-glx
 
 
 # make the build number clobber
