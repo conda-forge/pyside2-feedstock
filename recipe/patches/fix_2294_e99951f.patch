@@ -1,0 +1,91 @@
+From e99951fc69c9f74001d577b291a48f3fd582427f Mon Sep 17 00:00:00 2001
+From: Christian Tismer <tismer@stackless.com>
+Date: Wed, 12 Apr 2023 00:20:11 +0200
+Subject: [PATCH] Implement multiple inheritance correctly, amended
+
+In multiple inheritance, it makes no sense to pass positional
+arguments into a mixin class. This was correctly implemented
+but later "corrected" because of wrong user input.
+
+Correct and compatible to the competitor's implementation
+is passing keyword arguments, only.
+
+This is rarely a problem since people should use keyword arguments
+only in multiple inheritance.
+
+Change-Id: If5eb19368a50ee2a5534f10081d84511453993e5
+Fixes: PYSIDE-2294
+Pick-to: 6.5
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Reviewed-by: Shyamnath Premnadh <Shyamnath.Premnadh@qt.io>
+---
+
+diff --git a/sources/pyside6/tests/pysidetest/multiple_inheritance_test.py b/sources/pyside6/tests/pysidetest/multiple_inheritance_test.py
+index 6e48ac7..033a065 100644
+--- a/sources/pyside6/tests/pysidetest/multiple_inheritance_test.py
++++ b/sources/pyside6/tests/pysidetest/multiple_inheritance_test.py
+@@ -12,6 +12,7 @@
+ 
+ from helper.usesqapplication import UsesQApplication
+ from PySide6 import QtCore, QtGui, QtWidgets
++from PySide6.QtWidgets import QMainWindow, QLabel
+ 
+ 
+ def xprint(*args, **kw):
+@@ -100,6 +101,19 @@
+     pass
+ 
+ 
++# PYSIDE-2294: Friedemann's test adapted.
++#              We need to ignore positional args in mixin classes.
++class Ui_X_MainWindow(object):  # Emulating uic
++    def setupUi(self, MainWindow):
++        MainWindow.resize(400, 300)
++        self.lbl = QLabel(self)
++
++class MainWindow(QMainWindow, Ui_X_MainWindow):
++    def __init__(self, parent=None):
++        super().__init__(parent)
++        self.setupUi(self)
++
++
+ class AdditionalMultipleInheritanceTest(UsesQApplication):
+ 
+     def testABC(self):
+@@ -123,5 +137,11 @@
+         self.assertEqual(res.age, 7)
+         xprint()
+ 
++    def testParentDoesNotCrash(self):
++        # This crashed with
++        # TypeError: object.__init__() takes exactly one argument (the instance to initialize)
++        MainWindow()
++
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/sources/shiboken6/libshiboken/bindingmanager.cpp b/sources/shiboken6/libshiboken/bindingmanager.cpp
+index 25eea4e..c56d7cb 100644
+--- a/sources/shiboken6/libshiboken/bindingmanager.cpp
++++ b/sources/shiboken6/libshiboken/bindingmanager.cpp
+@@ -425,17 +425,13 @@
+     auto *subType = reinterpret_cast<PyTypeObject *>(obSubType);
+     if (subType == &PyBaseObject_Type)
+         return false;
+-    const Py_ssize_t nargs = PyTuple_GET_SIZE(args);
+     AutoDecRef func(PyObject_GetAttr(obSubType, _init));
+-    AutoDecRef newArgs(PyTuple_New(1 + nargs));
++    // PYSIDE-2294: We need to explicitly ignore positional args in a mixin class.
++    SBK_UNUSED(args);
++    AutoDecRef newArgs(PyTuple_New(1));
+     auto *newArgsOb = newArgs.object();
+     Py_INCREF(self);
+     PyTuple_SET_ITEM(newArgsOb, 0, self);
+-    for (idx = 0; idx < nargs; ++idx) {
+-        auto *ob = PyTuple_GET_ITEM(args, idx);
+-        Py_INCREF(ob);
+-        PyTuple_SET_ITEM(newArgsOb, 1 + idx, ob);
+-    }
+     // Note: This can fail, so please always check the error status.
+     AutoDecRef result(PyObject_Call(func, newArgs, kwds));
+     return true;
