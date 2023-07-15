@@ -1,4 +1,5 @@
-{% set version = "6.5.1" %}
+{% set version = "6.5.1.1" %}
+{% set version_major_minor_match = '.'.join(version.split('.')[0:3]) %}
 
 package:
   name: pyside6
@@ -6,7 +7,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: bc9153cbcc0cd234f3955c5eb90fe1191060b026adc7ea348fd6a6a9868bb8fe
+  sha256: 9741a06f0b7d4b2168818448134bc7e96ddb5efb846a3915b4177ba4159b5b78
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -22,6 +23,11 @@ source:
 
     # change tools module location
     - patches/tools.patch
+
+    # Install the plugin in the right directory
+    # https://github.com/conda-forge/pyside2-feedstock/issues/194
+    # https://bugreports.qt.io/browse/PYSIDE-2399
+    - patches/install_designer_plugin_path.patch
 build:
   number: 0
   entry_points:
@@ -46,7 +52,7 @@ requirements:
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
-    - qt6-main                           # [build_platform != target_platform]
+    - qt6-main {{ version_major_minor_match }}  # [build_platform != target_platform]
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
@@ -59,7 +65,7 @@ requirements:
     - python
     - libxslt
     - libxml2
-    - qt6-main {{ version }}
+    - qt6-main {{ version_major_minor_match }}
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
