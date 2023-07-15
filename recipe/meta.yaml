@@ -23,6 +23,11 @@ source:
 
     # change tools module location
     - patches/tools.patch
+
+    # Install the plugin in the right directory
+    # https://github.com/conda-forge/pyside2-feedstock/issues/194
+    # https://bugreports.qt.io/browse/PYSIDE-2399
+    - patches/install_designer_plugin_path.patch
 build:
   number: 0
   entry_points:
