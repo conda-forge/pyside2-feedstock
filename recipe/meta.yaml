@@ -15,9 +15,6 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2090
-    - patches/build_generator.patch
-
     # https://bugreports.qt.io/browse/PYSIDE-2184
     - patches/install_pyi.patch
 

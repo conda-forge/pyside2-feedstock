@@ -53,7 +53,6 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
-  -DSHIBOKEN_BUILD_TOOLS=ON \
   -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
 cmake --build . --target install
