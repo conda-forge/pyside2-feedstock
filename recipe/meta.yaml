@@ -57,6 +57,7 @@ requirements:
 
   host:
     - python
+    - setuptools
     - libxslt
     - libxml2
     - qt6-main {{ version_major_minor_match }}
