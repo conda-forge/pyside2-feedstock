@@ -1,0 +1,23 @@
+diff -ur a/build_scripts/config.py b/build_scripts/config.py
+--- a/build_scripts/config.py	2023-09-25 05:13:44.815116477 -0400
++++ b/build_scripts/config.py	2023-09-25 05:13:55.371137498 -0400
+@@ -95,6 +95,7 @@
+             'Programming Language :: Python :: 3.9',
+             'Programming Language :: Python :: 3.10',
+             'Programming Language :: Python :: 3.11',
++            'Programming Language :: Python :: 3.12',
+         ]
+ 
+         self.setup_script_dir = None
+diff -ur a/sources/pyside2/PySide2/glue/qtcore.cpp b/sources/pyside2/PySide2/glue/qtcore.cpp
+--- a/sources/pyside2/PySide2/glue/qtcore.cpp	2023-01-04 02:07:17.000000000 -0500
++++ b/sources/pyside2/PySide2/glue/qtcore.cpp	2023-09-25 04:22:03.842389953 -0400
+@@ -1752,7 +1752,7 @@
+ 
+ // @snippet conversion-pyunicode
+ #ifndef Py_LIMITED_API
+-Py_UNICODE *unicode = PyUnicode_AS_UNICODE(%in);
++Py_UCS4 *unicode = PyUnicode_4BYTE_DATA(%in);
+ #  if defined(Py_UNICODE_WIDE)
+ // cast as Py_UNICODE can be a different type
+ #    if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
