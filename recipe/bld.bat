@@ -12,7 +12,7 @@ cmake -LAH -G "Ninja"                               ^
     .
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
@@ -31,7 +31,7 @@ cmake -LAH -G "Ninja"                               ^
     .
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\PySide6-%PKG_VERSION%.dist-info
@@ -45,13 +45,11 @@ mkdir build && cd build
 cmake -LAH -G"Ninja"                                ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
-    -DSITE_PACKAGE="%SP_DIR:\=/%"                   ^
     -DCMAKE_BUILD_TYPE=Release                      ^
-    -DBUILD_TESTS=OFF                               ^
     ..
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 :: Move pyside_tool.py to the right location
