@@ -16,7 +16,8 @@ cmake --build . --target install --config Release
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
-type nul > %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+copy %RECIPE_DIR%\METADATA.shiboken6.in %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
 
 cd %SRC_DIR%\sources\pyside6
 
@@ -34,7 +35,9 @@ cmake --build . --target install --config Release
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\PySide6-%PKG_VERSION%.dist-info
-type nul > %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+copy %RECIPE_DIR%\METADATA.pyside6.in %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+type %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
 
 cd %SRC_DIR%\sources\pyside-tools
 mkdir build && cd build
