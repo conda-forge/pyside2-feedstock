@@ -43,6 +43,7 @@ requirements:
     - llvmdev                            # [build_platform != target_platform]
     - clangdev >=9                       # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
+    - setuptools                         # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
@@ -57,6 +58,7 @@ requirements:
 
   host:
     - python
+    - setuptools
     - libxslt
     - libxml2
     - qt6-main {{ version_major_minor_match }}
