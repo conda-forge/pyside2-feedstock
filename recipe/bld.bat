@@ -12,11 +12,12 @@ cmake -LAH -G "Ninja"                               ^
     .
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
-type nul > %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+copy %RECIPE_DIR%\METADATA.shiboken6.in %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
 
 cd %SRC_DIR%\sources\pyside6
 
@@ -30,11 +31,13 @@ cmake -LAH -G "Ninja"                               ^
     .
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 mkdir %SP_DIR%\PySide6-%PKG_VERSION%.dist-info
-type nul > %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+copy %RECIPE_DIR%\METADATA.pyside6.in %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+type %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
 
 cd %SRC_DIR%\sources\pyside-tools
 mkdir build && cd build
@@ -42,13 +45,11 @@ mkdir build && cd build
 cmake -LAH -G"Ninja"                                ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
-    -DSITE_PACKAGE="%SP_DIR:\=/%"                   ^
     -DCMAKE_BUILD_TYPE=Release                      ^
-    -DBUILD_TESTS=OFF                               ^
     ..
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+cmake --build . --target install
 if errorlevel 1 exit 1
 
 :: Move pyside_tool.py to the right location
