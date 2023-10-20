@@ -1,4 +1,4 @@
-{% set version = "6.5.3" %}
+{% set version = "6.6.0" %}
 {% set version_major_minor_match = '.'.join(version.split('.')[0:3]) %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: 6606b1634fb2981f9ca7ce2e206cc92c252401de328df4ce23f63e8c998de8d3
+  sha256: 2dd002db8851a87173354f38aa8c6ec42d0ff1fac99ea422b29e2dfce52d1638
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -23,7 +23,7 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2399
     - patches/install_designer_plugin_path.patch
 build:
-  number: 1
+  number: 0
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
