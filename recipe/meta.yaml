@@ -11,6 +11,7 @@ source:
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
+    - patches/qfp_osx.patch
 
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
