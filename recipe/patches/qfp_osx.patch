@@ -1,0 +1,13 @@
+diff --git a/sources/shiboken6/cmake/ShibokenHelpers.cmake b/sources/shiboken6/cmake/ShibokenHelpers.cmake
+index 4fdfe3648..8a60054fe 100644
+--- a/sources/shiboken6/cmake/ShibokenHelpers.cmake
++++ b/sources/shiboken6/cmake/ShibokenHelpers.cmake
+@@ -767,7 +767,7 @@ set PATH=${path_dirs_native};%PATH%
+     elseif(CMAKE_HOST_APPLE)
+         string(REPLACE ";" ":" path_dirs_native "${path_dirs_native}")
+         file(WRITE "${wrapper_path}" "#!/bin/bash
+-export DYLD_LIBRARY_PATH=${path_dirs_native}:$DYLD_LIBRARY_PATH
++export DYLD_FALLBACK_LIBRARY_PATH=${path_dirs_native}:$DYLD_FALLBACK_LIBRARY_PATH
+ export DYLD_FRAMEWORK_PATH=${path_dirs_native}:$DYLD_FRAMEWORK_PATH
+ $@")
+     else()

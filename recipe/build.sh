@@ -36,8 +36,14 @@ then
     cmake --build . --target install
     mv _hidden $BUILD_PREFIX/${HOST}
   )
+  # wrapper path is hardcoded in sources/shiboken6/cmake/ShibokenHelpers.cmake:
+  mkdir -p ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin
+  echo -e '#!/bin/bash\n$@' > ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin/shiboken_wrapper.sh
+  chmod +x ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin/shiboken_wrapper.sh
+
   rm -r build_native
   CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
+
   if test `uname` = "Darwin"
   then
     CMAKE_ARGS="${CMAKE_ARGS} -DPython_SOABI=cpython-${PY_VER//./}-darwin"
