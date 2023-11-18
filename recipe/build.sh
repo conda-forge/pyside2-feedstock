@@ -6,6 +6,10 @@ then
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
+# hmaarrfk -- 2023/11/17
+# Qt seems to look for the VULKAN_SDK environment variable when detecting vulkan support
+export VULKAN_SDK=${PREFIX}
+
 pushd sources/shiboken6
 
 if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
