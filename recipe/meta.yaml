@@ -68,7 +68,7 @@ requirements:
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
-    - qt6-wayland
+    - qt6-wayland  # [linux]
     - llvmdev
     - clangdev >=9, <16
     - libclang
