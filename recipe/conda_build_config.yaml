@@ -1,0 +1,5 @@
+# pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
+c_compiler_version:        # [osx]
+  - 15                     # [osx]
+cxx_compiler_version:      # [osx]
+  - 15                     # [osx]
