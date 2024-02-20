@@ -40,7 +40,7 @@ requirements:
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
-    - clangdev >=9, <16                  # [build_platform != target_platform]
+    - clangdev >=9                       # [build_platform != target_platform]
     - python                             # [build_platform != target_platform]
     - setuptools                         # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
@@ -69,7 +69,7 @@ requirements:
     - qt6-graphs
     - qt6-wayland  # [linux]
     - llvmdev
-    - clangdev >=9, <16
+    - clangdev >=9
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
