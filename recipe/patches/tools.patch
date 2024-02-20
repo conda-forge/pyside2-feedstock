@@ -1,13 +1,13 @@
 diff --git a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
-index cbb2e98f1..fef9737a3 100644
+index 7daacc22d..b3911e23e 100644
 --- a/sources/pyside-tools/pyside_tool.py
 +++ b/sources/pyside-tools/pyside_tool.py
-@@ -45,7 +45,7 @@ def qt_tool_wrapper(qt_tool, args, libexec=False):
+@@ -55,7 +55,7 @@ def qt_tool_wrapper(qt_tool, args, libexec=False):
      else:
          exe = pyside_dir / qt_tool
  
 -    cmd = [os.fspath(exe)] + args
 +    cmd = [os.fspath(qt_tool)] + args
-     proc = Popen(cmd, stderr=PIPE)
-     out, err = proc.communicate()
-     if err:
+     returncode = subprocess.call(cmd)
+     if returncode != 0:
+         command = ' '.join(cmd)
