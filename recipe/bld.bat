@@ -5,6 +5,7 @@ cmake -LAH -G "Ninja"                               ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
     -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
+    -DFORCE_LIMITED_API=OFF                         ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DCMAKE_BUILD_TYPE=Release                      ^
     -DBUILD_TESTS=OFF                               ^
