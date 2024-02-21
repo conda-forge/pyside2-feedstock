@@ -63,7 +63,6 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
-  -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
 cmake --build . --target install
 popd
@@ -83,7 +82,6 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -D_qt5Core_install_prefix=${PREFIX} \
   -DBUILD_TESTS=ON \
-  -DPYTHON_EXECUTABLE=${PYTHON} \
   ..
 cmake --build . --target install
 
