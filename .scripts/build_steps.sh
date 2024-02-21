@@ -48,7 +48,7 @@ source run_conda_forge_build_setup
 # "recipe/yum_requirements.txt" file. After updating that file,
 # run "conda smithy rerender" and this line will be updated
 # automatically.
-/usr/bin/sudo -n yum install -y mesa-libGL mesa-libGL-devel mesa-libEGL-devel mesa-dri-drivers libX11-devel libglvnd-glx
+/usr/bin/sudo -n yum install -y mesa-libGL mesa-libGL-devel mesa-libEGL-devel mesa-dri-drivers libX11-devel libglvnd-glx xorg-x11-server-Xvfb
 
 
 # make the build number clobber
@@ -62,12 +62,6 @@ fi
 
 if [[ -f "${FEEDSTOCK_ROOT}/LICENSE.txt" ]]; then
   cp "${FEEDSTOCK_ROOT}/LICENSE.txt" "${RECIPE_ROOT}/recipe-scripts-license.txt"
-fi
-
-if [[ "${sha:-}" == "" ]]; then
-  pushd ${FEEDSTOCK_ROOT}
-  sha=$(git rev-parse HEAD)
-  popd
 fi
 
 if [[ "${BUILD_WITH_CONDA_DEBUG:-0}" == 1 ]]; then
