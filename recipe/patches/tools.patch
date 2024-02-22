@@ -1,16 +1,8 @@
 diff --git a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
-index 7daacc22d..73b6bd67e 100644
+index 7daacc22d..38b01ea2e 100644
 --- a/sources/pyside-tools/pyside_tool.py
 +++ b/sources/pyside-tools/pyside_tool.py
-@@ -8,6 +8,7 @@ import subprocess
- import sys
- import sysconfig
- from pathlib import Path
-+from subprocess import PIPE, Popen
- 
- import PySide6 as ref_mod
- 
-@@ -55,12 +56,14 @@ def qt_tool_wrapper(qt_tool, args, libexec=False):
+@@ -55,12 +55,12 @@ def qt_tool_wrapper(qt_tool, args, libexec=False):
      else:
          exe = pyside_dir / qt_tool
  
@@ -18,15 +10,13 @@ index 7daacc22d..73b6bd67e 100644
 -    returncode = subprocess.call(cmd)
 -    if returncode != 0:
 +    cmd = [os.fspath(qt_tool)] + args
-+    proc = Popen(cmd, stderr=PIPE)
-+    out, err = proc.communicate()
-+    if err:
-+        msg = err.decode("utf-8")
++    cp = subprocess.run(cmd, stderr=subprocess.PIPE, text=True, errors='replace')
++    if cp.returncode != 0:
          command = ' '.join(cmd)
 -        print(f"'{command}' returned {returncode}", file=sys.stderr)
 -    sys.exit(returncode)
-+        print(f"Error: {msg}\nwhile executing '{command}'")
-+    sys.exit(proc.returncode)
++        print(f"'{command}' returned {cp.returncode}: {cp.stderr}", file=sys.stderr)
++    sys.exit(cp.returncode)
  
  
  def pyside_script_wrapper(script_name):
