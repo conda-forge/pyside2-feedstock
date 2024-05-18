@@ -39,6 +39,7 @@ requirements:
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - {{ stdlib("c") }}
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
     - clangdev >=9                       # [build_platform != target_platform]
@@ -48,7 +49,6 @@ requirements:
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
     - qt6-main {{ version }}             # [build_platform != target_platform]
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -87,7 +87,6 @@ test:
     - qt6-datavis3d        # [py==310]
     - qt6-graphs           # [py==310]
 
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]

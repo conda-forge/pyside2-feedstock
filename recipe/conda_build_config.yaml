@@ -1,5 +1,8 @@
 # https://doc.qt.io/qt-6/macos.html
-MACOSX_DEPLOYMENT_TARGET:  # [osx]
-  - '11.0'                 # [osx]
+c_stdlib_version:          # [osx]
+  - 11.0                   # [osx]
 MACOSX_SDK_VERSION:        # [osx]
   - '12.3'                 # [osx]
+  
+c_stdlib_version:          # [linux]
+  - 2.17                   # [linux]
