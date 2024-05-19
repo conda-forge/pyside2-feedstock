@@ -37,6 +37,7 @@ requirements:
   build:
     - cmake
     - ninja
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - libclang                           # [build_platform != target_platform]
@@ -48,7 +49,6 @@ requirements:
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
     - qt6-main {{ version }}             # [build_platform != target_platform]
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
