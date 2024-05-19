@@ -23,7 +23,7 @@ diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_too
 +    # we specify the original tools used by PySide6.
 +    exec_prefix = sys.exec_prefix
 +    if sys.platform == "win32":
-+        exec_prefix - os.path.join(exec_prefix, "Library")
++        exec_prefix = os.path.join(exec_prefix, "Library")
 +    exe = os.path.join(exec_prefix, "lib", "qt6", qt_tool)
  
      cmd = [os.fspath(exe)] + args
