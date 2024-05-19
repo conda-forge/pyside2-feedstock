@@ -29,7 +29,7 @@ diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_too
      cmd = [os.fspath(exe)] + args
 -    returncode = subprocess.call(cmd)
 -    if returncode != 0:
-+    proc = Poen(cmd, stderr=PIPE)
++    proc = Popen(cmd, stderr=PIPE)
 +    out, err = proc.communicate()
 +    if err:
 +        msg = err.decode("utf-8")
@@ -37,7 +37,7 @@ diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_too
 -        print(f"'{command}' returned {returncode}", file=sys.stderr)
 -    sys.exit(returncode)
 +        print(f"Error: {msg}\nwhile executing '{command}'")
-+    sys.exit(prof.returncode)
++    sys.exit(proc.returncode)
  
  
  def pyside_script_wrapper(script_name):
