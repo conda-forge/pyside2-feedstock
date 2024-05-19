@@ -5,7 +5,7 @@
 jobs:
 - job: osx
   pool:
-    vmImage: macOS-11
+    vmImage: macOS-12
   strategy:
     matrix:
       osx_64_python3.10.____cpython:
@@ -13,6 +13,9 @@ jobs:
         UPLOAD_PACKAGES: 'True'
       osx_64_python3.11.____cpython:
         CONFIG: osx_64_python3.11.____cpython
+        UPLOAD_PACKAGES: 'True'
+      osx_64_python3.12.____cpython:
+        CONFIG: osx_64_python3.12.____cpython
         UPLOAD_PACKAGES: 'True'
       osx_64_python3.8.____cpython:
         CONFIG: osx_64_python3.8.____cpython
@@ -26,6 +29,9 @@ jobs:
       osx_arm64_python3.11.____cpython:
         CONFIG: osx_arm64_python3.11.____cpython
         UPLOAD_PACKAGES: 'True'
+      osx_arm64_python3.12.____cpython:
+        CONFIG: osx_arm64_python3.12.____cpython
+        UPLOAD_PACKAGES: 'True'
       osx_arm64_python3.8.____cpython:
         CONFIG: osx_arm64_python3.8.____cpython
         UPLOAD_PACKAGES: 'True'
@@ -33,6 +39,7 @@ jobs:
         CONFIG: osx_arm64_python3.9.____cpython
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
+  variables: {}
 
   steps:
   # TODO: Fast finish on azure pipelines?
