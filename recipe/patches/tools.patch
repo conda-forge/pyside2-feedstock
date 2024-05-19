@@ -1,8 +1,7 @@
-diff --git a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
-index 7daacc22d..73b6bd67e 100644
---- a/sources/pyside-tools/pyside_tool.py
-+++ b/sources/pyside-tools/pyside_tool.py
-@@ -8,6 +8,7 @@ import subprocess
+diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
+--- a/sources/pyside-tools/pyside_tool.py	2024-04-05 12:14:14.000000000 -0400
++++ b/sources/pyside-tools/pyside_tool.py	2024-05-19 13:27:02.060234068 -0400
+@@ -8,6 +8,7 @@
  import sys
  import sysconfig
  from pathlib import Path
@@ -10,14 +9,23 @@ index 7daacc22d..73b6bd67e 100644
  
  import PySide6 as ref_mod
  
-@@ -55,12 +56,14 @@ def qt_tool_wrapper(qt_tool, args, libexec=False):
-     else:
-         exe = pyside_dir / qt_tool
+@@ -49,18 +50,19 @@
+ def qt_tool_wrapper(qt_tool, args, libexec=False):
+     # Taking care of pyside6-uic, pyside6-rcc, and pyside6-designer
+     # listed as an entrypoint in setup.py
+-    pyside_dir = Path(ref_mod.__file__).resolve().parent
+-    if libexec and sys.platform != "win32":
+-        exe = pyside_dir / 'Qt' / 'libexec' / qt_tool
+-    else:
+-        exe = pyside_dir / qt_tool
++    # On conda-forge, the command rcc and uic may get clobbered
++    # by the user's qt-main (qt5) installation, and as such,
++    # we specify the original tools used by PySide6.
++    exe = os.path.join(sys.exec_prefix, "lib", "qt6", qt_tool)
  
--    cmd = [os.fspath(exe)] + args
+     cmd = [os.fspath(exe)] + args
 -    returncode = subprocess.call(cmd)
 -    if returncode != 0:
-+    cmd = [os.fspath(qt_tool)] + args
 +    proc = Popen(cmd, stderr=PIPE)
 +    out, err = proc.communicate()
 +    if err:
