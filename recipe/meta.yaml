@@ -32,6 +32,7 @@ build:
     - qt6-datavis3d
     - qt6-graphs
     - qt6-wayland
+    - qt6-multimedia
 
 requirements:
   build:
@@ -69,6 +70,7 @@ requirements:
     - qt6-datavis3d
     - qt6-graphs
     - qt6-wayland  # [linux]
+    - qt6-multimedia
     - llvmdev
     - clangdev >=9
     - libclang
@@ -111,7 +113,7 @@ test:
     - PySide6.QtGui
     - PySide6.QtHelp
     #- PySide6.QtHttpServer
-    - PySide6.QtMultimedia
+    - PySide6.QtMultimedia         # [py==310]
     - PySide6.QtMultimediaWidgets
     - PySide6.QtNetwork
     #- PySide6.QtNetworkAuth
