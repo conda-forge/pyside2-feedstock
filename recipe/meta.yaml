@@ -127,7 +127,7 @@ test:
     - PySide6.QtPrintSupport
     - PySide6.QtQml
     - PySide6.QtQuick
-    #- PySide6.QtQuick3D
+    - PySide6.QtQuick3D
     - PySide6.QtQuickControls2
     - PySide6.QtQuickWidgets
     #- PySide6.QtRemoteObjects
