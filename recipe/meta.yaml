@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: 82eae370737df5ecf539c165d09d7c81d5fc6153a541b8d3d37b11275f9e3e8f
+  sha256: 6f33de37f4121e547064023edb344b95e2ab454234fa8fce27ea73df96f933cd
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -20,7 +20,7 @@ source:
     - patches/tools.patch
 
 build:
-  number: 2
+  number: 0
   skip: true  # [py<39]
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
