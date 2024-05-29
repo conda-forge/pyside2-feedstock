@@ -90,7 +90,6 @@ test:
     - qt6-graphs           # [py==310]
     - qt6-multimedia       # [py==310]
 
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -115,7 +114,7 @@ test:
     - PySide6.QtHelp
     #- PySide6.QtHttpServer
     - PySide6.QtMultimedia         # [py==310]
-    - PySide6.QtMultimediaWidgets
+    - PySide6.QtMultimediaWidgets  # [py==310]
     - PySide6.QtNetwork
     #- PySide6.QtNetworkAuth
     #- PySide6.QtNfc
