@@ -20,7 +20,7 @@ source:
     - patches/tools.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<39]
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
@@ -88,6 +88,7 @@ test:
     - qt6-charts           # [py==310]
     - qt6-datavis3d        # [py==310]
     - qt6-graphs           # [py==310]
+    - qt6-multimedia       # [py==310]
 
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
