@@ -70,6 +70,7 @@ requirements:
     - qt6-datavis3d
     - qt6-graphs
     - qt6-wayland  # [linux]
+    # Provides QtMultimediaWidgets and QtSpatialAudio
     - qt6-multimedia
     - llvmdev
     - clangdev >=9
