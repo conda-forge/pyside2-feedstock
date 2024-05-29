@@ -133,7 +133,7 @@ test:
     # - PySide6.QtScxml
     # - PySide6.QtSensors
     # - PySide6.QtSerialPort
-    - PySide6.QtSpatialAudio
+    - PySide6.QtSpatialAudio       # [py==310]
     - PySide6.QtSql
     #- PySide6.QtStateMachine
     - PySide6.QtSvg
