@@ -1,4 +1,4 @@
-{% set version = "6.7.0" %}
+{% set version = "6.7.1" %}
 {% set version_major_minor_match = '.'.join(version.split('.')[0:3]) %}
 
 package:
