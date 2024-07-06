@@ -1,0 +1,81 @@
+From 1864c79821515f36cf1ce7d478ea9bf6436602b0 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Mon, 16 Jan 2023 11:31:18 +0100
+Subject: [PATCH] Fix Qt Gui applications running in interactive mode
+
+Set a hook calling QCoreApplication::processEvents() unless a key is
+pressed to PyOS_InputHook.
+
+Fixes: PYSIDE-2192
+Pick-to: 6.7
+Change-Id: Ibaa16fb7e605c21c67b74609de3264ef5e4fc523
+Reviewed-by: Shyamnath Premnadh <Shyamnath.Premnadh@qt.io>
+---
+
+diff --git a/sources/pyside6/libpyside/pyside.cpp b/sources/pyside6/libpyside/pyside.cpp
+index e4938d4..0bad05e 100644
+--- a/sources/pyside6/libpyside/pyside.cpp
++++ b/sources/pyside6/libpyside/pyside.cpp
+@@ -52,6 +52,13 @@
+ #include <optional>
+ #include <typeinfo>
+ 
++#ifdef Q_OS_WIN
++#  include <conio.h>
++#else
++#  include <QtCore/QDeadlineTimer>
++#  include <QtCore/private/qcore_unix_p.h>
++#endif
++
+ using namespace Qt::StringLiterals;
+ 
+ static QStack<PySide::CleanupFunction> cleanupFunctionList;
+@@ -518,6 +525,36 @@
+     PySide::Feature::Enable(true);
+ }
+ 
++extern "C" {
++static int qAppInputHook()
++{
++    auto *app = QCoreApplication::instance();
++    if (app == nullptr || app->thread() != QThread::currentThread())
++        return 0;
++#ifndef Q_OS_WIN
++    // Check for press on stdin (file descriptor 0)
++    pollfd stdinPfd =  qt_make_pollfd(0, POLLIN);
++    while (qt_safe_poll(&stdinPfd, 1, QDeadlineTimer{1}) == 0)
++        QCoreApplication::processEvents({}, 50000);
++#else
++    while (_kbhit() == 0)
++        QCoreApplication::processEvents({}, 50000);
++#endif
++    return 0;
++}
++} // extern "C"
++
++static void unregisterQAppInputHook()
++{
++    PyOS_InputHook = nullptr;
++}
++
++static void registerQAppInputHook()
++{
++    PyOS_InputHook = qAppInputHook;
++    qAddPostRoutine(unregisterQAppInputHook);
++}
++
+ void initQApp()
+ {
+     /*
+@@ -531,8 +568,10 @@
+      * I would appreciate very much if someone could explain or even fix
+      * this issue. It exists only when a pre-existing application exists.
+      */
+-    if (!qApp)
++    if (qApp == nullptr) {
++        registerQAppInputHook();
+         Py_DECREF(MakeQAppWrapper(nullptr));
++    }
+ 
+     // PYSIDE-1470: Register a function to destroy an application from shiboken.
+     setDestroyQApplication(destroyQCoreApplication);
