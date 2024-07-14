@@ -24,6 +24,10 @@ source:
     # change tools module location
     - patches/tools.patch
 
+    # Expose wayland native interface
+    # https://bugreports.qt.io/browse/PYSIDE-2787
+    # - patches/0001-Add-patch-to-expose-wayland-features-to-pyside6.patch
+
 build:
   number: 1
   skip: true  # [py<39]
@@ -75,7 +79,7 @@ requirements:
     - setuptools
     - libxslt
     - libxml2
-    - qt6-main {{ version }}
+    - qt6-main {{ maj_min_patch }}
     # - qt6-3d
     # - qt6-charts
     # - qt6-datavis3d
@@ -84,8 +88,6 @@ requirements:
     # - qt6-quick3d
     - qt6-wayland  # [linux]
     # Provides QtMultimediaWidgets and QtSpatialAudio
-    - qt6-multimedia
-    - qt6-quick3d
     - llvmdev
     - clangdev >=9
     - libclang

@@ -1,0 +1,92 @@
+From c2d7c71533cfa4c5f9a6c301ef8a9a29182f5657 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 13 Jul 2024 20:33:59 -0400
+Subject: [PATCH] Add patch to expose wayland features to pyside6
+
+---
+ sources/pyside6/PySide6/QtGui/CMakeLists.txt   |  9 ++++++++-
+ .../PySide6/QtGui/typesystem_gui_common.xml    | 18 ++++++++++++++++++
+ sources/pyside6/PySide6/glue/qtgui.cpp         | 11 +++++++++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/sources/pyside6/PySide6/QtGui/CMakeLists.txt b/sources/pyside6/PySide6/QtGui/CMakeLists.txt
+index 7cd7871..57f318a 100644
+--- a/sources/pyside6/PySide6/QtGui/CMakeLists.txt
++++ b/sources/pyside6/PySide6/QtGui/CMakeLists.txt
+@@ -287,7 +287,14 @@ get_property(QtGui_enabled_features TARGET Qt${QT_MAJOR_VERSION}::Gui
+ if("xcb" IN_LIST QtGui_enabled_features)
+     list(APPEND QtGui_SRC
+          ${QtGui_GEN_DIR}/qnativeinterface_qx11application_wrapper.cpp)
+-elseif(WIN32)
++endif()
++
++if("wayland" IN_LIST QtGui_enabled_features)
++    list(APPEND QtGui_SRC
++         ${QtGui_GEN_DIR}/qnativeinterface_qwaylandapplication_wrapper.cpp)
++endif()
++
++if(WIN32)
+     list(APPEND QtGui_SRC
+          ${QtGui_GEN_DIR}/qnativeinterface_qwindowsscreen_wrapper.cpp)
+ endif()
+diff --git a/sources/pyside6/PySide6/QtGui/typesystem_gui_common.xml b/sources/pyside6/PySide6/QtGui/typesystem_gui_common.xml
+index dd17952..5b36d41 100644
+--- a/sources/pyside6/PySide6/QtGui/typesystem_gui_common.xml
++++ b/sources/pyside6/PySide6/QtGui/typesystem_gui_common.xml
+@@ -2667,6 +2667,24 @@
+                            snippet="qx11application-resource-ptr"/>
+           </modify-function>
+       </object-type>
++      <object-type name="QWaylandApplication" private="yes" disable-wrapper="yes"
++                   force-abstract="yes">
++          <configuration condition="QT_CONFIG(wayland)"/>
++          <modify-function signature="display()const">
++              <modify-argument index="return">
++                  <replace-type modified-type="int"/>
++              </modify-argument>
++              <inject-code class="target" position="end" file="../glue/qtgui.cpp"
++                           snippet="qwaylandapplication-resource-ptr"/>
++          </modify-function>
++          <modify-function signature="connection()const">
++              <modify-argument index="return">
++                  <replace-type modified-type="int"/>
++              </modify-argument>
++              <inject-code class="target" position="end" file="../glue/qtgui.cpp"
++                           snippet="qwaylandapplication-resource-ptr"/>
++          </modify-function>
++      </object-type>
+       <object-type name="QWindowsScreen" private="yes" disable-wrapper="yes"
+                    force-abstract="yes">
+           <configuration condition="#ifdef Q_OS_WIN"/>
+diff --git a/sources/pyside6/PySide6/glue/qtgui.cpp b/sources/pyside6/PySide6/glue/qtgui.cpp
+index 130de11..02d52a2 100644
+--- a/sources/pyside6/PySide6/glue/qtgui.cpp
++++ b/sources/pyside6/PySide6/glue/qtgui.cpp
+@@ -791,6 +791,12 @@ if (auto *x11App = %CPPSELF.nativeInterface<QNativeInterface::QX11Application>()
+     %PYARG_0 = %CONVERTTOPYTHON[QNativeInterface::QX11Application*](x11App);
+ }
+ #endif
++#if QT_CONFIG(wayland)
++if (auto *waylandApp = %CPPSELF.nativeInterface<QNativeInterface::QWaylandApplication>()) {
++    hasNativeApp = true;
++    %PYARG_0 = %CONVERTTOPYTHON[QNativeInterface::QWaylandApplication*](waylandApp);
++}
++#endif
+ if (!hasNativeApp) {
+     Py_INCREF(Py_None);
+     %PYARG_0 = Py_None;
+@@ -821,6 +827,11 @@ if (!hasNativeScreen) {
+  auto *resource = %CPPSELF.%FUNCTION_NAME();
+ %PYARG_0 = PyLong_FromVoidPtr(resource);
+ // @snippet qx11application-resource-ptr
++//
++// @snippet qwaylandapplication-resource-ptr
++auto *waylandResource = %CPPSELF.%FUNCTION_NAME();
++%PYARG_0 = PyLong_FromVoidPtr(waylandResource);
++// @snippet qwaylandapplication-resource-ptr
+ 
+ // @snippet qwindow-fromWinId
+ WId id = %1;
+-- 
+2.43.2
+
