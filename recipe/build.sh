@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ex
+
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
@@ -54,7 +56,7 @@ then
   fi
 fi
 
-mkdir build && cd build
+rm -rf build && mkdir build && cd build
 
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
@@ -67,12 +69,12 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
 cmake --build . --target install
 popd
 
-mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
+rm -rf ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info && mkdir -p ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
 cp ${RECIPE_DIR}/METADATA.shiboken6.in ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 echo "Version: ${PKG_VERSION}" >> ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 
 pushd sources/pyside6
-mkdir build && cd build
+rm -rf build && mkdir build && cd build
 
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
