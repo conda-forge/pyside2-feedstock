@@ -2,6 +2,12 @@
 
 set -ex
 
+XVFB_RUN=""
+if test `uname` = "Linux"
+then
+  XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
+fi
+
 # hmaarrfk -- 2023/11/17
 # Qt seems to look for the VULKAN_SDK environment variable when detecting vulkan support
 export VULKAN_SDK=${PREFIX}
@@ -56,7 +62,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -B build_shiboken -S sources/shiboken6
 cmake --build build_shiboken --target install
 
-mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
+rm -rf ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info && mkdir -p ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
 cp ${RECIPE_DIR}/METADATA.shiboken6.in ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 echo "Version: ${PKG_VERSION}" >> ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 

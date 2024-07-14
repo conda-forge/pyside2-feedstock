@@ -25,7 +25,12 @@ source:
     - patches/tools.patch
 
 build:
-  number: 0
+  number: 1
+  skip: true  # [py<39]
+  skip: true  # [py!=312]
+  skip: true  # [not linux]
+  skip: true  # [aarch64]
+  skip: true  # [ppc64le]
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
@@ -70,11 +75,13 @@ requirements:
     - setuptools
     - libxslt
     - libxml2
-    - qt6-main {{ maj_min_patch }}
-    - qt6-3d
-    - qt6-charts
-    - qt6-datavis3d
-    - qt6-graphs
+    - qt6-main {{ version }}
+    # - qt6-3d
+    # - qt6-charts
+    # - qt6-datavis3d
+    # - qt6-graphs
+    # - qt6-multimedia
+    # - qt6-quick3d
     - qt6-wayland  # [linux]
     # Provides QtMultimediaWidgets and QtSpatialAudio
     - qt6-multimedia
