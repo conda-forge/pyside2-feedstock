@@ -114,3 +114,6 @@ cmake --build . --target install
 mkdir -p "${SP_DIR}"/PySide6/scripts
 touch "${SP_DIR}"/PySide6/scripts/__init__.py
 mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide6/scripts/pyside_tool.py
+
+# remove Py_LIMITED_API propagation
+sed -i 's/Py_LIMITED_API=0x03060000;//g' ${PREFIX}/lib/cmake/Shiboken6/Shiboken6Targets.cmake
