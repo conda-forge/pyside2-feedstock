@@ -47,6 +47,7 @@ cmake -LAH -G"Ninja"                                ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
     -DCMAKE_BUILD_TYPE=Release                      ^
+    -DNO_QT_TOOLS=yes                               ^
     ..
 if errorlevel 1 exit 1
 
