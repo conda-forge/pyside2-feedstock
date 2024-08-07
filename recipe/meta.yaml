@@ -163,7 +163,7 @@ test:
     - test -f ${PREFIX}/lib/qt6/plugins/designer/libPySidePlugin${SHLIB_EXT}  # [unix]
     # Regression to avoid clobber with qt-main package
     - test ! -f $PREFIX/bin/uic  # [unix]
-    - if exist %LIBRARY_BIN%\uic exit 1  # [win]
+    - if exist %LIBRARY_BIN%\uic.exe exit 1  # [win]
 
 about:
   home: https://wiki.qt.io/PySide2
