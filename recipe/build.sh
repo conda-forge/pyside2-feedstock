@@ -107,6 +107,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
+  -DNO_QT_TOOLS=yes \
   ..
 cmake --build . --target install
 
