@@ -3,3 +3,6 @@ c_compiler_version:        # [osx]
   - 15                     # [osx]
 cxx_compiler_version:      # [osx]
   - 15                     # [osx]
+
+c_stdlib_version:   # [linux]
+  - "2.17"          # [linux]
