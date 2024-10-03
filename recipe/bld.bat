@@ -9,6 +9,7 @@ cmake -LAH -G "Ninja"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DCMAKE_BUILD_TYPE=Release                      ^
     -DBUILD_TESTS=OFF                               ^
+    -DFORCE_LIMITED_API=OFF                         ^
     -DPython_EXECUTABLE="%PYTHON%"                  ^
     .
 if errorlevel 1 exit 1
