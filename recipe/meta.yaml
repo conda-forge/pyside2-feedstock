@@ -40,6 +40,9 @@ source:
 
 build:
   number: 5
+  # pyside2 does not support greater than python 3.11
+  # transition your code 
+  skip: true  # [py>=312]
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
