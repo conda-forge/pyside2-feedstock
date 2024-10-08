@@ -84,7 +84,7 @@ test:
     # these are optional
     # test them with one version of python
     - qt6-3d               # [py==310]
-    - qt6-charts           # [py==310]
+    - qt6-charts
     - qt6-datavis3d        # [py==310]
     - qt6-graphs           # [py==310]
     - qt6-multimedia       # [py==310]
