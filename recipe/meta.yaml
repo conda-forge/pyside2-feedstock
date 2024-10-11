@@ -1,13 +1,13 @@
-{% set version = "6.7.3" %}
-{% set version_major_minor_match = '.'.join(version.split('.')[0:3]) %}
+{% set version = "6.8.0" %}
+{% set maj_min = ".".join(version.split(".")[:2]) %}
 
 package:
   name: pyside6
   version: {{ version }}
 
 source:
-  url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ version }}.tar.xz
-  sha256: a4c414be013d5051a2d10a9a1151e686488a3172c08a57461ea04b0a0ab74e09
+  url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ maj_min }}.tar.xz
+  sha256: 5c05ad3ae7e7279d6db9dc94a46eb0a05fd093537309f7439c38671bd7255190
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -20,7 +20,7 @@ source:
     - patches/tools.patch
 
 build:
-  number: 1
+  number: 0
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
@@ -108,7 +108,7 @@ test:
     - PySide6.QtMultimedia         # [py==310]
     - PySide6.QtMultimediaWidgets  # [py==310]
     - PySide6.QtNetwork
-    #- PySide6.QtNetworkAuth
+    #- PySide6.QtNetworkAuth        # [py==310]
     #- PySide6.QtNfc
     - PySide6.QtOpenGL
     - PySide6.QtOpenGLWidgets

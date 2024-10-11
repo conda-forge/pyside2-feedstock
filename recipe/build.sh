@@ -66,7 +66,6 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-  -D_qt5Core_install_prefix=${PREFIX} \
   -DBUILD_TESTS=OFF \
   -B build_pyside -S sources/pyside6
 cmake --build build_pyside --target install
