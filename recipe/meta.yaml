@@ -24,7 +24,7 @@ source:
     # https://github.com/conda-forge/pyside2-feedstock/issues/247
     # https://codereview.qt-project.org/c/pyside/pyside-setup/+/597328
     # https://bugreports.qt.io/browse/PYSIDE-2888
-    - patches/c632d48.diff
+    - patches/try_to_fix_star_import_crash.diff
 
 build:
   number: 0
