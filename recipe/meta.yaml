@@ -81,6 +81,8 @@ requirements:
 
 test:
   requires:
+    # Add some qtpy tests to ensure we don't fully break things
+    - qtpy                 # [py==311]
     # these are optional
     # test them with one version of python
     - qt6-3d               # [py==310]
@@ -148,6 +150,8 @@ test:
     # Regression to avoid clobber with qt-main package
     - test ! -f $PREFIX/bin/uic  # [unix]
     - if exist %LIBRARY_BIN%\uic.exe exit 1  # [win]
+    # Ensure we can still import things
+    - python -c "from qtpy.QtCore import Qt"   # [py==311]
 
 about:
   home: https://wiki.qt.io/PySide2
