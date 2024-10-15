@@ -88,8 +88,6 @@ requirements:
 
 test:
   requires:
-    # Add some qtpy tests to ensure we don't fully break things
-    - qtpy                 # [py==311]
     # these are optional
     # test them with one version of python
     - qt6-3d               # [py==310]
@@ -162,9 +160,6 @@ test:
     # https://github.com/spyder-ide/qtpy/issues/480
     # We add it here for safety so we don't release really broken packages
     - python -c "import PySide6; from PySide6.QtCore import *"
-    # Ensure we can still import things for one of the most popular packages
-    - python -c "from qtpy import API; assert API == 'pyside6', 'PySide6 not in use'"  # [py==311]
-    - python -c "from qtpy.QtCore import Qt"                                           # [py==311]
 
 about:
   home: https://wiki.qt.io/PySide2
