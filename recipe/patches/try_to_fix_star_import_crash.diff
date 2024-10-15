@@ -1,0 +1,29 @@
+diff --git a/sources/shiboken6/libshiboken/sbkmodule.cpp b/sources/shiboken6/libshiboken/sbkmodule.cpp
+index acadc60..1800f8d 100644
+--- a/sources/shiboken6/libshiboken/sbkmodule.cpp
++++ b/sources/shiboken6/libshiboken/sbkmodule.cpp
+@@ -93,8 +93,10 @@ static void incarnateHelper(PyObject *module, const std::string_view names,
+         startPos = dotPos + 1;
+         dotPos = names.find('.', startPos);
+     }
+-    // now we have the type to create.
++    // now we have the type to create. (May be done already)
+     auto funcIter = nameToFunc.find(std::string(names));
++    if (funcIter == nameToFunc.end())
++        return;
+     // - call this function that returns a PyTypeObject
+     auto tcStruct = funcIter->second;
+     auto initFunc = tcStruct.func;
+@@ -178,7 +180,11 @@ void resolveLazyClasses(PyObject *module)
+     while (!nameToFunc.empty()) {
+         auto it = nameToFunc.begin();
+         auto attrNameStr = it->first;
+-        incarnateType(module, attrNameStr.c_str(), nameToFunc);
++        if (attrNameStr.find('.') == std::string::npos) {
++            incarnateType(module, attrNameStr.c_str(), nameToFunc);
++        } else {
++            nameToFunc.erase(it);
++        }
+     }
+ }
+ 
