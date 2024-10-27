@@ -1,0 +1,38 @@
+--- a/sources/shiboken2/libshiboken/signature/signature_helper.cpp	2024-10-26 19:33:07.043959935 -0300
++++ b/sources/shiboken2/libshiboken/signature/signature_helper.cpp	2024-08-28 05:49:26.000000000 -0400
+@@ -106,6 +106,7 @@
+     assert(PyType_Check(type));
+     PyType_Ready(type);
+     PyObject *dict = type->tp_dict;
++    if (dict == NULL) dict = PyType_GetDict(type);
+     for (; gsp->name != nullptr; gsp++) {
+         PyObject *have_descr = PyDict_GetItemString(dict, gsp->name);
+         if (have_descr != nullptr) {
+@@ -348,6 +347,7 @@
+      */
+     auto *type = reinterpret_cast<PyTypeObject *>(obtype);
+     PyObject *dict = type->tp_dict;
++    if (dict == NULL) dict = PyType_GetDict(type);
+     PyMethodDef *meth = type->tp_methods;
+ 
+     if (meth == nullptr)
+--- a/sources/pyside2/PySide2/support/generate_pyi.py	2024-10-26 19:33:54.387494023 -0300
++++ b/sources/pyside2/PySide2/support/generate_pyi.py	2024-08-28 05:49:26.000000000 -0400
+@@ -116,7 +116,6 @@
+         """
+         def _typevar__repr__(self):
+             return "typing." + self.__name__
+-        typing.TypeVar.__repr__ = _typevar__repr__
+ 
+         # Adding a pattern to substitute "Union[T, NoneType]" by "Optional[T]"
+         # I tried hard to replace typing.Optional by a simple override, but
+--- a/setup.py	2024-10-26 19:34:34.527662945 -0300
++++ b/setup.py	2024-08-28 05:49:26.000000000 -0400
+@@ -290,7 +290,6 @@
+ # used as a value source. Use get_package_version() instead.
+ __version__ = get_package_version()
+ 
+-check_allowed_python_version()
+ 
+ setup_runner = SetupRunner(original_argv)
+ setup_runner.run_setup()
