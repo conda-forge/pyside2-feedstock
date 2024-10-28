@@ -3,6 +3,7 @@
 # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
 # and revealed that this number can contain a 3rd number under the right circumstances
 {% set maj_min = ".".join(version.split(".")[:-1]) %}
+{% set maj_min_patch = ".".join(version.split(".")[:3]) %}
 
 package:
   name: pyside6
@@ -59,7 +60,7 @@ requirements:
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
-    - qt6-main {{ version }}             # [build_platform != target_platform]
+    - qt6-main {{ maj_min_patch }}       # [build_platform != target_platform]
 
   host:
     - libgl-devel                        # [linux]
@@ -71,7 +72,7 @@ requirements:
     - setuptools
     - libxslt
     - libxml2
-    - qt6-main {{ version }}
+    - qt6-main {{ maj_min_patch }}
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
@@ -87,7 +88,7 @@ requirements:
     - clangdev {{ cxx_compiler_version }}  # [osx]
   run:
     - python
-    - qt6-main {{ version }}
+    - qt6-main {{ maj_min_patch }}
 
 test:
   requires:
