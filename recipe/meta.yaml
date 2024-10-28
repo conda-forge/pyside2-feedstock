@@ -23,13 +23,6 @@ source:
     # change tools module location
     - patches/tools.patch
 
-    # Fix major regression in 6.8.0
-    # https://github.com/spyder-ide/qtpy/issues/494
-    # https://github.com/conda-forge/pyside2-feedstock/issues/247
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/597328
-    # https://bugreports.qt.io/browse/PYSIDE-2888
-    - patches/try_to_fix_star_import_crash.diff
-
 build:
   number: 0
   entry_points:
