@@ -29,7 +29,7 @@ build:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
   ignore_run_exports:
-    # make it optional
+    # make these optional for slimmer downloads and licensing choice
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
