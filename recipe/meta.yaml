@@ -1,5 +1,9 @@
-{% set version = "6.8.0" %}
-{% set maj_min = ".".join(version.split(".")[:2]) %}
+{% set version = "6.8.0.2" %}
+# While this is typically "major and minor" on PySide 6.8.0
+# There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
+# and revealed that this number can contain a 3rd number under the right circumstances
+{% set maj_min = ".".join(version.split(".")[:-1]) %}
+{% set maj_min_patch = ".".join(version.split(".")[:3]) %}
 
 package:
   name: pyside6
@@ -7,7 +11,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ maj_min }}.tar.xz
-  sha256: 5c05ad3ae7e7279d6db9dc94a46eb0a05fd093537309f7439c38671bd7255190
+  sha256: 1a1a219a8f327e340d258275fad3a9f261b8f04bc57041747e73dd6ad252b4e1
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -19,20 +23,13 @@ source:
     # change tools module location
     - patches/tools.patch
 
-    # Fix major regression in 6.8.0
-    # https://github.com/spyder-ide/qtpy/issues/494
-    # https://github.com/conda-forge/pyside2-feedstock/issues/247
-    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/597328
-    # https://bugreports.qt.io/browse/PYSIDE-2888
-    - patches/try_to_fix_star_import_crash.diff
-
 build:
-  number: 1
+  number: 0
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
   ignore_run_exports:
-    # make it optional
+    # make these optional for slimmer downloads and licensing choice
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
@@ -56,7 +53,7 @@ requirements:
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - libxslt                            # [build_platform != target_platform]
     - libxml2                            # [build_platform != target_platform]
-    - qt6-main {{ version }}             # [build_platform != target_platform]
+    - qt6-main {{ maj_min_patch }}       # [build_platform != target_platform]
 
   host:
     - libgl-devel                        # [linux]
@@ -68,7 +65,7 @@ requirements:
     - setuptools
     - libxslt
     - libxml2
-    - qt6-main {{ version }}
+    - qt6-main {{ maj_min_patch }}
     - qt6-3d
     - qt6-charts
     - qt6-datavis3d
@@ -84,7 +81,7 @@ requirements:
     - clangdev {{ cxx_compiler_version }}  # [osx]
   run:
     - python
-    - qt6-main {{ version }}
+    - qt6-main {{ maj_min_patch }}
 
 test:
   requires:
