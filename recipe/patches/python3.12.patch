@@ -1,3 +1,4 @@
+# patch generated with sed commands from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pyside2&id=ecbb7fcc980ff0425a59f615b78f2554a7f2fa59#n39
 --- a/sources/shiboken2/libshiboken/signature/signature_helper.cpp	2024-10-26 19:33:07.043959935 -0300
 +++ b/sources/shiboken2/libshiboken/signature/signature_helper.cpp	2024-08-28 05:49:26.000000000 -0400
 @@ -106,6 +106,7 @@
