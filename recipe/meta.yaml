@@ -52,13 +52,11 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
     - clangdev >=9
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
   host:
+    - libgl-devel                        # [linux]
+    - libegl-devel                       # [linux]
+    - libopengl-devel                    # [linux]
+    - libdrm                             # [linux]
     - python
     - packaging
     - qt-main       {{ version }}
