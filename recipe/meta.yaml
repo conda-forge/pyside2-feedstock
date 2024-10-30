@@ -1,4 +1,4 @@
-{% set version = "5.15.8" %}
+{% set version = "5.15.15" %}
 
 package:
   name: pyside2
@@ -6,11 +6,11 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 23436302c8deb5b4cbc769b205d09604e38ba83b40708efccb7bd8c9af6f6b5d
+  sha256: 21d6818b064834b08501180e48890e5fd87df2fb3769f80c58143457f548c408
   patches:
+    - patches/python3.12.patch  # [py == 312]
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi.patch
-    - patches/python3.10.patch
     - patches/windows_dll_shiboken_fix.patch
     - patches/fix_genererate_pyi.patch  # [win]
     - patches/pyside2-tools-obsolete.patch
@@ -18,12 +18,6 @@ source:
     # https://github.com/conda-forge/pyside2-feedstock/issues/130
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
-    # Supports Python 3.9+ but only required for Python 3.11
-    - patches/python3.11.patch  # [py>=311]
-
-    # https://bugreports.qt.io/browse/PYSIDE-1775
-    - patches/pymangle.patch
-
     # https://bugreports.qt.io/browse/PYSIDE-2183
     - patches/support.patch
 
@@ -33,13 +27,8 @@ source:
     # https://bugreports.qt.io/browse/PYSIDE-2187
     - patches/gluint.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2288
-    # Backport by hmaarrfk
-    # https://code.qt.io/cgit/pyside/pyside-setup.git/commit/?h=dd863857436bbeeba4c0a1077f5ad16653296277
-    # - patches/backport_fix_2288.patch
-
 build:
-  number: 4
+  number: 0
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
@@ -52,7 +41,6 @@ build:
 
 requirements:
   build:
-    - sysroot_linux-64 2.17                  # [linux64]
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - pyside2  {{ version }}                 # [build_platform != target_platform]
@@ -62,15 +50,13 @@ requirements:
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
-    - clangdev >=9, <16
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
+    - {{ stdlib('c') }}
+    - clangdev >=9
   host:
+    - libgl-devel                        # [linux]
+    - libegl-devel                       # [linux]
+    - libopengl-devel                    # [linux]
+    - libdrm                             # [linux]
     - python
     - packaging
     - qt-main       {{ version }}
@@ -79,8 +65,7 @@ requirements:
     - libxslt
     - pip
     - setuptools
-    # pin llvm<16 because of: https://bugreports.qt.io/browse/PYSIDE-2288
-    - clangdev >=9, <16
+    - clangdev >=9
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]

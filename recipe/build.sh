@@ -4,6 +4,7 @@ XVFB_RUN=""
 if test `uname` = "Linux"
 then
   cp -r /usr/include/xcb ${PREFIX}/include/qt
+  cp -r ${PREFIX}/include/GL ${PREFIX}/include/qt
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
@@ -94,3 +95,4 @@ touch "${SP_DIR}"/PySide2/scripts/__init__.py
 mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide2/scripts/pyside_tool.py
 
 rm -rf ${PREFIX}/include/qt/xcb
+rm -rf ${PREFIX}/include/qt/GL
