@@ -49,6 +49,10 @@ requirements:
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
     - clangdev                           # [build_platform != target_platform]
+    - llvmdev  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - clangdev {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libcxx  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libclang  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
     - python                             # [build_platform != target_platform]
     - setuptools                         # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
@@ -80,6 +84,8 @@ requirements:
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
+    - libcxx  {{ cxx_compiler_version }}  # [osx]
+    - libclang  {{ cxx_compiler_version }}  # [osx]
   run:
     - python
     - qt6-main {{ maj_min_patch }}
