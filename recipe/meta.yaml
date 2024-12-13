@@ -1,4 +1,4 @@
-{% set version = "6.8.0.2" %}
+{% set version = "6.8.1" %}
 # While this is typically "major and minor" on PySide 6.8.0
 # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
 # and revealed that this number can contain a 3rd number under the right circumstances
@@ -10,8 +10,9 @@ package:
   version: {{ version }}
 
 source:
-  url: https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-{{ version }}-src/pyside-setup-everywhere-src-{{ maj_min }}.tar.xz
-  sha256: 1a1a219a8f327e340d258275fad3a9f261b8f04bc57041747e73dd6ad252b4e1
+  git_url: https://github.com/qtproject/pyside-pyside-setup.git
+  git_tag: v{{ version }}
+
   patches:
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi_osx.patch
@@ -48,6 +49,10 @@ requirements:
     - libclang                           # [build_platform != target_platform]
     - llvmdev                            # [build_platform != target_platform]
     - clangdev                           # [build_platform != target_platform]
+    - llvmdev  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - clangdev {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libcxx  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libclang  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
     - python                             # [build_platform != target_platform]
     - setuptools                         # [build_platform != target_platform]
     #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
@@ -79,6 +84,8 @@ requirements:
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
+    - libcxx  {{ cxx_compiler_version }}  # [osx]
+    - libclang  {{ cxx_compiler_version }}  # [osx]
   run:
     - python
     - qt6-main {{ maj_min_patch }}
