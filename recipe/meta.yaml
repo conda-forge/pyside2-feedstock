@@ -26,7 +26,7 @@ source:
 
     # Expose wayland native interface
     # https://bugreports.qt.io/browse/PYSIDE-2787
-    # - patches/0001-Add-patch-to-expose-wayland-features-to-pyside6.patch
+    - patches/0001-Try-to-add-qt-wayland-shims.patch
 
 build:
   number: 1
