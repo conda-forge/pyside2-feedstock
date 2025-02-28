@@ -1,0 +1,26 @@
+From 4da546552760153e8439da6fd8f1d2c327afe19a Mon Sep 17 00:00:00 2001
+From: Jindrich Makovicka <jindrich.makovicka@qminers.com>
+Date: Fri, 28 Feb 2025 08:21:32 -0500
+Subject: [PATCH] Fix memory leak
+
+Change-Id: Icbbcee9d33fcefaea19d0d4883131ed50fe70e34
+---
+ sources/pyside6/PySide6/glue/qtcore.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/sources/pyside6/PySide6/glue/qtcore.cpp b/sources/pyside6/PySide6/glue/qtcore.cpp
+index da8442d14..1e8488d81 100644
+--- a/sources/pyside6/PySide6/glue/qtcore.cpp
++++ b/sources/pyside6/PySide6/glue/qtcore.cpp
+@@ -821,8 +821,6 @@ static int SbkQByteArray_getbufferproc(PyObject *obj, Py_buffer *view, int flags
+ #else // Py_LIMITED_API
+     const int result = PyBuffer_FillInfo(view, obj, reinterpret_cast<void *>(cppSelf->data()),
+                                          cppSelf->size(), 0, flags);
+-    if (result == 0)
+-        Py_XINCREF(obj);
+     return result;
+ #endif
+ }
+-- 
+2.48.1
+
