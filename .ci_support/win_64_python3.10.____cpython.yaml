@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2019
 libxml2:
-- '2'
+- '2.13'
 pin_run_as_build:
   python:
     min_pin: x.x
