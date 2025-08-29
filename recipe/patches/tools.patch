@@ -1,0 +1,43 @@
+diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
+--- a/sources/pyside-tools/pyside_tool.py	2024-04-05 12:14:14.000000000 -0400
++++ b/sources/pyside-tools/pyside_tool.py	2024-05-19 16:27:51.368920401 -0400
+@@ -8,6 +8,7 @@
+ import sys
+ import sysconfig
+ from pathlib import Path
++from subprocess import PIPE, Popen
+ 
+ import PySide6 as ref_mod
+ 
+@@ -49,18 +50,22 @@
+ def qt_tool_wrapper(qt_tool, args, libexec=False):
+     # Taking care of pyside6-uic, pyside6-rcc, and pyside6-designer
+     # listed as an entrypoint in setup.py
+-    pyside_dir = Path(ref_mod.__file__).resolve().parent
+-    if libexec and sys.platform != "win32":
+-        exe = pyside_dir / 'Qt' / 'libexec' / qt_tool
+-    else:
+-        exe = pyside_dir / qt_tool
++    # On conda-forge, the command rcc and uic may get clobbered
++    # by the user's qt-main (qt5) installation, and as such,
++    # we specify the original tools used by PySide6.
++    exec_prefix = sys.exec_prefix
++    if sys.platform == "win32":
++        exec_prefix = os.path.join(exec_prefix, "Library")
++    exe = os.path.join(exec_prefix, "lib", "qt6", qt_tool)
+ 
+     cmd = [os.fspath(exe)] + args
+-    returncode = subprocess.call(cmd)
+-    if returncode != 0:
++    proc = Popen(cmd, stderr=PIPE)
++    out, err = proc.communicate()
++    if err:
++        msg = err.decode("utf-8")
+         command = ' '.join(cmd)
+-        print(f"'{command}' returned {returncode}", file=sys.stderr)
+-    sys.exit(returncode)
++        print(f"Error: {msg}\nwhile executing '{command}'")
++    sys.exit(proc.returncode)
+ 
+ 
+ def pyside_script_wrapper(script_name):

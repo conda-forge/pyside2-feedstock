@@ -1,98 +1,89 @@
 #!/bin/sh
 
-XVFB_RUN=""
-if test `uname` = "Linux"
-then
-  cp -r /usr/include/xcb ${PREFIX}/include/qt
-  cp -r ${PREFIX}/include/GL ${PREFIX}/include/qt
-  XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
-fi
-
 set -ex
 
-# Remove running without PYTHONPATH
-sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
-sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/libshiboken/CMakeLists.txt
-
-# Use build shiboken2
-sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/cmake/Macros/PySideModules.cmake
-sed -i.bak "s/COMMAND Shiboken2::shiboken2/COMMAND shiboken2/g" sources/pyside2/tests/pysidetest/CMakeLists.txt
-
-extra_cmake_flags=
-
-if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
-  export RUN_TESTS=yes
-
-  # Shiboken6 has better support for cross compilation
-  # But for now, lets just specify the flags manually
-  PYTHON_EXTENSION_SUFFIX=$(${PYTHON} -c "import distutils.sysconfig, os.path; print(os.path.splitext(distutils.sysconfig.get_config_var('EXT_SUFFIX'))[0])")
-  extra_cmake_flags="${extra_cmake_flags} -DPYTHON_EXTENSION_SUFFIX=${PYTHON_EXTENSION_SUFFIX}"
-else
-  export RUN_TESTS=no
-fi
-
-pushd sources/shiboken2
-mkdir -p build && cd build
-
-cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
-  -DCMAKE_PREFIX_PATH=${PREFIX} \
-  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DBUILD_TESTS=OFF \
-  -DPYTHON_EXECUTABLE=${PYTHON} \
-  ${extra_cmake_flags} \
-  ..
-cmake --build . --target install
-popd
-
-${PYTHON} setup.py dist_info --build-type=shiboken2
-cp -r shiboken2-${PKG_VERSION}.dist-info "${SP_DIR}"/
-
-pushd sources/pyside2
-mkdir -p build && cd build
-
-cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
-  -DCMAKE_PREFIX_PATH=${PREFIX} \
-  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DPYTHON_EXECUTABLE=${PYTHON} \
-  ${extra_cmake_flags} \
-  ..
-cmake --build . --target install
+# hmaarrfk -- 2023/11/17
+# Qt seems to look for the VULKAN_SDK environment variable when detecting vulkan support
+export VULKAN_SDK=${PREFIX}
 
 if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
 then
-  # pyi files are generated in the host prefix and hence not installed
-  cp -v ${BUILD_PREFIX}/venv/lib/python${PY_VER}/site-packages/PySide2/*.pyi ${SP_DIR}/PySide2
+  (
+    export CC=$CC_FOR_BUILD
+    export CXX=$CXX_FOR_BUILD
+    export LDFLAGS=${LDFLAGS//$PREFIX/$BUILD_PREFIX}
+    export PKG_CONFIG_PATH=${PKG_CONFIG_PATH//$PREFIX/$BUILD_PREFIX}
+    export CFLAGS=${CFLAGS//$PREFIX/$BUILD_PREFIX}
+    export CXXFLAGS=${CXXFLAGS//$PREFIX/$BUILD_PREFIX}
+
+    # hide host libs
+    mkdir -p $BUILD_PREFIX/${HOST}
+    mv $BUILD_PREFIX/${HOST} _hidden
+
+    cmake -LAH -G "Ninja" \
+      -DCMAKE_PREFIX_PATH=${BUILD_PREFIX} \
+      -DCMAKE_IGNORE_PREFIX_PATH="${PREFIX}" \
+      -DCMAKE_INSTALL_RPATH:STRING=${BUILD_PREFIX}/lib \
+      -DCMAKE_RANLIB=$BUILD_PREFIX/bin/${CONDA_TOOLCHAIN_BUILD}-ranlib \
+      -DCMAKE_INSTALL_PREFIX=${BUILD_PREFIX} \
+      -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
+      -DBUILD_TESTS=OFF \
+      -B build_shiboken_native -S sources/shiboken6
+    cmake --build build_shiboken_native --target install
+    mv _hidden $BUILD_PREFIX/${HOST}
+  )
+  # wrapper path is hardcoded in sources/shiboken6/cmake/ShibokenHelpers.cmake:
+  mkdir -p ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin
+  echo -e '#!/bin/bash\n$@' > ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin/shiboken_wrapper.sh
+  chmod +x ${BUILD_PREFIX}/../build/shiboken6/.qfp/bin/shiboken_wrapper.sh
+
+  CMAKE_ARGS="${CMAKE_ARGS} -DQFP_SHIBOKEN_HOST_PATH=${BUILD_PREFIX} -DQT_HOST_PATH=${BUILD_PREFIX} -DQFP_PYTHON_HOST_PATH=${BUILD_PREFIX}/bin/python"
+
+  if test `uname` = "Darwin"
+  then
+    CMAKE_ARGS="${CMAKE_ARGS} -DPython_SOABI=cpython-${PY_VER//./}-darwin"
+  fi
 fi
 
-cp ./tests/pysidetest/libpysidetest${SHLIB_EXT} ${PREFIX}/lib
-cp ./tests/pysidetest/testbinding*.so ${SP_DIR}
-# create a single X server connection rather than one for each test using the PySide USE_XVFB cmake option
-if [[ "${RUN_TESTS}" == "yes" ]]; then
-  eval ${XVFB_RUN} ctest -j${CPU_COUNT} --output-on-failure --timeout 200 -E QtWebKit || echo "no ok"
-fi
-rm ${SP_DIR}/testbinding*.so
-popd
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
+  -DBUILD_TESTS=OFF \
+  -DFORCE_LIMITED_API=OFF \
+  -B build_shiboken -S sources/shiboken6
+cmake --build build_shiboken --target install
 
-${PYTHON} setup.py dist_info --build-type=pyside2
-cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
-
-pushd sources/pyside2-tools
-mkdir -p build && cd build
+mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
+cp ${RECIPE_DIR}/METADATA.shiboken6.in ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
+echo "Version: ${PKG_VERSION}" >> ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DBUILD_TESTS=OFF \
-  ..
-cmake --build . --target install
+  -B build_pyside -S sources/pyside6
+cmake --build build_pyside --target install
 
-# Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
-mkdir -p "${SP_DIR}"/PySide2/scripts
-touch "${SP_DIR}"/PySide2/scripts/__init__.py
-mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide2/scripts/pyside_tool.py
+mkdir ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info
+cp ${RECIPE_DIR}/METADATA.pyside6.in ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info/METADATA
+echo "Version: ${PKG_VERSION}" >> ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info/METADATA
+cat ${SP_DIR}/PySide6-${PKG_VERSION}.dist-info/METADATA
 
-rm -rf ${PREFIX}/include/qt/xcb
-rm -rf ${PREFIX}/include/qt/GL
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DNO_QT_TOOLS=yes \
+  -B build_tools -S sources/pyside-tools
+cmake --build build_tools --target install
+
+# Move pyside_tool.py to the right location
+mkdir -p "${SP_DIR}"/PySide6/scripts
+touch "${SP_DIR}"/PySide6/scripts/__init__.py
+mv ${PREFIX}/bin/pyside_tool.py "${SP_DIR}"/PySide6/scripts/pyside_tool.py

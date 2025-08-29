@@ -1,11 +1,11 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '11.0'
 MACOSX_SDK_VERSION:
-- '11.0'
+- '12.3'
 c_compiler:
 - clang
 c_compiler_version:
-- '17'
+- '18'
 c_stdlib:
 - macosx_deployment_target
 c_stdlib_version:
@@ -17,9 +17,9 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '17'
+- '18'
 libxml2:
-- '2'
+- '2.13'
 macos_machine:
 - arm64-apple-darwin20.0.0
 pin_run_as_build:

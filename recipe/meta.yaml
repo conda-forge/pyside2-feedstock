@@ -1,153 +1,180 @@
-{% set version = "5.15.15" %}
+{% set version = "6.9.1" %}
+# While this is typically "major and minor" on PySide 6.8.0
+# There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
+# and revealed that this number can contain a 3rd number under the right circumstances
+{% set maj_min = ".".join(version.split(".")[:-1]) %}
+{% set maj_min_patch = ".".join(version.split(".")[:3]) %}
 
 package:
-  name: pyside2
+  name: pyside6
   version: {{ version }}
 
 source:
-  url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
-  sha256: 21d6818b064834b08501180e48890e5fd87df2fb3769f80c58143457f548c408
+  git_url: https://github.com/qtproject/pyside-pyside-setup.git
+  git_tag: v{{ version }}
+
   patches:
-    - patches/python3.12.patch  # [py == 312]
     # https://bugreports.qt.io/browse/PYSIDE-1193
-    - patches/pyi.patch
-    - patches/windows_dll_shiboken_fix.patch
-    - patches/fix_genererate_pyi.patch  # [win]
-    - patches/pyside2-tools-obsolete.patch
-    - patches/cross_compile_pyi.patch  # [build_platform != target_platform]
-    # https://github.com/conda-forge/pyside2-feedstock/issues/130
+    - patches/pyi_osx.patch
+    - patches/qfp_osx.patch
+
     # https://bugreports.qt.io/browse/PYSIDE-2057
     - patches/do_not_store_build_time_compiler.patch
-    # https://bugreports.qt.io/browse/PYSIDE-2183
-    - patches/support.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2184
-    - patches/install_pyi.patch
+    # change tools module location
+    - patches/tools.patch
 
-    # https://bugreports.qt.io/browse/PYSIDE-2187
-    - patches/gluint.patch
+    # https://github.com/pyqtgraph/pyqtgraph/issues/3265
+    - patches/0001-Fix-memory-leak.patch
 
 build:
   number: 0
-  detect_binary_files_with_prefix: true
   entry_points:
-    - pyside2-designer = PySide2.scripts.pyside_tool:designer
-    - pyside2-rcc = PySide2.scripts.pyside_tool:rcc
-    - pyside2-uic = PySide2.scripts.pyside_tool:uic
+    - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
+    - pyside6-uic = PySide6.scripts.pyside_tool:uic
   ignore_run_exports:
-    # make it optional. Use the constraints on qt-main
-    # and qt to ensure that qt-webengine is correctly installed
-    - qt-webengine
+    # make these optional for slimmer downloads and licensing choice
+    - qt6-3d
+    - qt6-charts
+    - qt6-datavis3d
+    - qt6-graphs
+    - qt6-wayland
+    - qt6-multimedia
+    - qt6-quick3d
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - pyside2  {{ version }}                 # [build_platform != target_platform]
-    - qt-main  {{ version }}                 # [build_platform != target_platform]
-    - qt-webengine  {{ version }}            # [build_platform != target_platform]
     - cmake
     - ninja
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ stdlib('c') }}
-    - clangdev >=9
+    - libclang                           # [build_platform != target_platform]
+    - llvmdev                            # [build_platform != target_platform]
+    - clangdev                           # [build_platform != target_platform]
+    - llvmdev  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - clangdev {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libcxx  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - libclang  {{ cxx_compiler_version }}  # [build_platform != target_platform and osx]
+    - python                             # [build_platform != target_platform]
+    - setuptools                         # [build_platform != target_platform]
+    #- cross-python_{{ target_platform }}  # [build_platform != target_platform]
+    - libxslt                            # [build_platform != target_platform]
+    - libxml2                            # [build_platform != target_platform]
+    - qt6-main {{ maj_min_patch }}       # [build_platform != target_platform]
+
   host:
     - libgl-devel                        # [linux]
     - libegl-devel                       # [linux]
     - libopengl-devel                    # [linux]
-    - libdrm                             # [linux]
+    - libvulkan-headers                  # [not osx]
+    - libvulkan-loader                   # [not osx]
     - python
-    - packaging
-    - qt-main       {{ version }}
-    - qt-webengine  {{ version }}
-    - libxml2
-    - libxslt
-    - pip
     - setuptools
+    - libxslt
+    - libxml2
+    - qt6-main {{ maj_min_patch }}
+    - qt6-3d
+    - qt6-charts
+    - qt6-datavis3d
+    - qt6-graphs
+    - qt6-wayland  # [linux]
+    # Provides QtMultimediaWidgets and QtSpatialAudio
+    - qt6-multimedia
+    - qt6-quick3d
+    - llvmdev
     - clangdev >=9
     - libclang
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
-    - xcb-util                           # [linux]
-    - xcb-util-wm                        # [linux]
-    - xcb-util-keysyms                   # [linux]
-    - xcb-util-image                     # [linux]
-    - xcb-util-renderutil                # [linux]
-    - xorg-libx11                        # [linux]
-    - xorg-libxext                       # [linux]
-    - xorg-libxdamage                    # [linux]
-    - xorg-libsm                         # [linux]
-    - xorg-libice                        # [linux]
-    - xorg-libxcomposite                 # [linux]
-    - xorg-libxxf86vm                    # [linux]
-    - xorg-xf86vidmodeproto              # [linux]
+    - libcxx  {{ cxx_compiler_version }}  # [osx]
+    - libclang  {{ cxx_compiler_version }}  # [osx]
   run:
     - python
+    - qt6-main {{ maj_min_patch }}
 
 test:
-  imports:
-    - PySide2.QtCharts
-    - PySide2.QtConcurrent
-    - PySide2.QtCore
-    - PySide2.QtDataVisualization
-    - PySide2.QtGui
-    - PySide2.QtHelp
-    - PySide2.QtLocation
-    - PySide2.QtMultimedia
-    - PySide2.QtMultimediaWidgets
-    - PySide2.QtNetwork
-    - PySide2.QtOpenGL
-    - PySide2.QtPositioning
-    - PySide2.QtPrintSupport
-    - PySide2.QtQml
-    - PySide2.QtQuick
-    - PySide2.QtQuickWidgets
-    - PySide2.QtRemoteObjects
-    - PySide2.QtScript
-    - PySide2.QtScriptTools
-    - PySide2.QtScxml
-    - PySide2.QtSensors
-    - PySide2.QtSql
-    - PySide2.QtSvg
-    - PySide2.QtTest
-    - PySide2.QtTextToSpeech
-    - PySide2.QtUiTools
-    - PySide2.QtWebChannel
-    - PySide2.QtWebEngineCore     # [py==310]
-    - PySide2.QtWebEngineWidgets  # [py==310]
-    - PySide2.QtWebSockets
-    - PySide2.QtWidgets
-    - PySide2.QtXml
-    - PySide2.QtXmlPatterns
-    - PySide2.Qt3DAnimation
-    - PySide2.Qt3DCore
-    - PySide2.Qt3DExtras
-    - PySide2.Qt3DInput
-    - PySide2.Qt3DLogic
-    - PySide2.Qt3DRender
-
-  commands:
-    - shiboken2 --help
-    - pyside2-lupdate -help
-    - pyside2-rcc -help
-    - pyside2-uic -help
-    # Ensure installs are registered properly with pip
-    - pip show PySide2
-    - pip show shiboken2
-
   requires:
-    - pip
-    - qt-webengine   # [py==310]
+    # these are optional
+    # test them with one version of python
+    - qt6-3d               # [py==310]
+    - qt6-charts           # [py==310]
+    - qt6-datavis3d        # [py==310]
+    - qt6-graphs           # [py==310]
+    - qt6-multimedia       # [py==310]
+  imports:
+    - PySide6.Qt3DAnimation        # [py==310]
+    - PySide6.Qt3DCore             # [py==310]
+    - PySide6.Qt3DExtras           # [py==310]
+    - PySide6.Qt3DInput            # [py==310]
+    - PySide6.Qt3DLogic            # [py==310]
+    - PySide6.Qt3DRender           # [py==310]
+    #- PySide6.QtBluetooth
+    - PySide6.QtCharts             # [py==310]
+    - PySide6.QtConcurrent
+    - PySide6.QtCore
+    - PySide6.QtDataVisualization  # [py==310]
+    - PySide6.QtDesigner
+    - PySide6.QtGraphs             # [py==310]
+    - PySide6.QtGui
+    - PySide6.QtHelp
+    #- PySide6.QtHttpServer
+    - PySide6.QtMultimedia         # [py==310]
+    - PySide6.QtMultimediaWidgets  # [py==310]
+    - PySide6.QtNetwork
+    #- PySide6.QtNetworkAuth        # [py==310]
+    #- PySide6.QtNfc
+    - PySide6.QtOpenGL
+    - PySide6.QtOpenGLWidgets
+    #- PySide6.QtPdf
+    #- PySide6.QtPdfWidgets
+    # - PySide6.QtPositioning
+    - PySide6.QtPrintSupport
+    - PySide6.QtQml
+    - PySide6.QtQuick
+    - PySide6.QtQuick3D            # [py==310]
+    - PySide6.QtQuickControls2
+    - PySide6.QtQuickWidgets
+    #- PySide6.QtRemoteObjects
+    # - PySide6.QtScxml
+    # - PySide6.QtSensors
+    # - PySide6.QtSerialPort
+    - PySide6.QtSpatialAudio       # [py==310]
+    - PySide6.QtSql
+    #- PySide6.QtStateMachine
+    - PySide6.QtSvg
+    - PySide6.QtSvgWidgets
+    - PySide6.QtTest
+    #- PySide6.QtTextToSpeech
+    - PySide6.QtUiTools
+    - PySide6.QtWebChannel
+    #- PySide6.QtWebEngineCore
+    #- PySide6.QtWebEngineQuick
+    #- PySide6.QtWebEngineWidgets
+    - PySide6.QtWebSockets
+    - PySide6.QtWidgets
+    - PySide6.QtXml
+  commands:
+    - shiboken6 --help
+    - pyside6-rcc -help
+    - pyside6-uic -help
+    - test -f ${PREFIX}/lib/qt6/plugins/designer/libPySidePlugin${SHLIB_EXT}  # [unix]
+    # Regression to avoid clobber with qt-main package
+    - test ! -f $PREFIX/bin/uic  # [unix]
+    - if exist %LIBRARY_BIN%\uic.exe exit 1  # [win]
+    # Star imports have broken many times on PySide6
+    # https://github.com/spyder-ide/qtpy/issues/494
+    # https://github.com/spyder-ide/qtpy/issues/480
+    # We add it here for safety so we don't release really broken packages
+    - python -c "import PySide6; from PySide6.QtCore import *"
 
 about:
   home: https://wiki.qt.io/PySide2
   license: LGPL-3.0-only
-  license_file: LICENSE.LGPLv3
+  license_file: LICENSES/LGPL-3.0-only.txt
   summary: Python bindings for Qt
 
 extra:
   recipe-maintainers:
     - jan-janssen
     - jschueller
-    - hmaarrfk

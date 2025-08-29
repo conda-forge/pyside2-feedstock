@@ -1,64 +1,61 @@
 
-set CMAKE_CONFIG="Release"
+cd %SRC_DIR%\sources\shiboken6
 
-cd %SRC_DIR%\sources\shiboken2
+cmake -LAH -G "Ninja"                               ^
+    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
+    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
+    -DFORCE_LIMITED_API=OFF                         ^
+    -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
+    -DCMAKE_BUILD_TYPE=Release                      ^
+    -DBUILD_TESTS=OFF                               ^
+    -DFORCE_LIMITED_API=OFF                         ^
+    -DPython_EXECUTABLE="%PYTHON%"                  ^
+    .
+if errorlevel 1 exit 1
+
+cmake --build . --target install
+if errorlevel 1 exit 1
+
+mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
+copy %RECIPE_DIR%\METADATA.shiboken6.in %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
+
+cd %SRC_DIR%\sources\pyside6
+
+cmake -LAH -G "Ninja"                               ^
+    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
+    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
+    -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
+    -DCMAKE_BUILD_TYPE=Release                      ^
+    -DPython_EXECUTABLE="%PYTHON%"                  ^
+    .
+if errorlevel 1 exit 1
+
+cmake --build . --target install
+if errorlevel 1 exit 1
+
+mkdir %SP_DIR%\PySide6-%PKG_VERSION%.dist-info
+copy %RECIPE_DIR%\METADATA.pyside6.in %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+echo Version: %PKG_VERSION% >> %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+type %SP_DIR%\PySide6-%PKG_VERSION%.dist-info\METADATA
+
+cd %SRC_DIR%\sources\pyside-tools
 mkdir build && cd build
 
-cmake -LAH -G"NMake Makefiles"                               ^
-    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
-    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
-    -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
-    -DCMAKE_BUILD_TYPE=Release                               ^
-    -DBUILD_TESTS=OFF                                        ^
-    -DPYTHON_EXECUTABLE="%PYTHON%"                           ^
+cmake -LAH -G"Ninja"                                ^
+    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
+    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+    -DCMAKE_BUILD_TYPE=Release                      ^
+    -DNO_QT_TOOLS=yes                               ^
     ..
 if errorlevel 1 exit 1
 
-cmake --build . --config %CMAKE_CONFIG% --target install
+cmake --build . --target install
 if errorlevel 1 exit 1
 
-cd %SRC_DIR%
-"%PYTHON%" setup.py dist_info --build-type=shiboken2
-move shiboken2-%PKG_VERSION%.dist-info %SP_DIR%\shiboken2-%PKG_VERSION%.dist-info
-
-cd %SRC_DIR%\sources\pyside2
-mkdir build && cd build
-
-cmake -LAH -G"NMake Makefiles"                               ^
-    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
-    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
-    -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"                    ^
-    -DCMAKE_BUILD_TYPE=Release                               ^
-    -DPYTHON_EXECUTABLE="%PYTHON%"                           ^
-    ..
-if errorlevel 1 exit 1
-
-cmake --build . --config %CMAKE_CONFIG% --target install
-if errorlevel 1 exit 1
-
-ctest --output-on-failure --timeout 100 -E QtWebKit || echo "no ok"
-rem if errorlevel 1 exit 1
-
-cd %SRC_DIR%
-"%PYTHON%" setup.py dist_info --build-type=pyside2
-move PySide2-%PKG_VERSION%.dist-info %SP_DIR%\PySide2-%PKG_VERSION%.dist-info
-
-cd %SRC_DIR%\sources\pyside2-tools
-mkdir build && cd build
-
-cmake -LAH -G"NMake Makefiles"                               ^
-    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"                   ^
-    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                ^
-    -DSITE_PACKAGE="%SP_DIR:\=/%"                            ^
-    -DCMAKE_BUILD_TYPE=Release                               ^
-    -DBUILD_TESTS=OFF                                        ^
-    ..
-if errorlevel 1 exit 1
-
-cmake --build . --config %CMAKE_CONFIG% --target install
-if errorlevel 1 exit 1
-
-REM Move the entry point for pyside2-rcc pyside2-uic and pyside2-designer to the right location
-mkdir %SP_DIR%\PySide2\scripts
-type null > %SP_DIR%\PySide2\scripts\__init__.py
-move %LIBRARY_PREFIX%\bin\pyside_tool.py %SP_DIR%\PySide2\scripts\pyside_tool.py
+:: Move pyside_tool.py to the right location
+mkdir %SP_DIR%\PySide6\scripts
+type nul > %SP_DIR%\PySide6\scripts\__init__.py
+move %LIBRARY_PREFIX%\bin\pyside_tool.py %SP_DIR%\PySide6\scripts\pyside_tool.py
