@@ -10,3 +10,6 @@ github:
 provider:
   linux_aarch64: azure
 test: native
+bot:
+  abi_migration_branches:
+  - pyside2
