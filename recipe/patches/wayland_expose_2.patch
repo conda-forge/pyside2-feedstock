@@ -1,0 +1,133 @@
+From b7577f699a45da2564f9b9df37fad7ff60805bd9 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Fri, 01 Aug 2025 08:16:19 +0200
+Subject: [PATCH] Expose QNativeInterface::QWaylandApplication
+
+[ChangeLog][PySide6] Bindings for QNativeInterface.QWaylandApplication
+have been added.
+
+Initial-patch-by: Mark Harfouche <mark.harfouche@gmail.com>
+Fixes: PYSIDE-2787
+Change-Id: I3484fbd37cb4cd0ae70fde770eb9195a78f4b061
+Reviewed-by: Shyamnath Premnadh <Shyamnath.Premnadh@qt.io>
+---
+
+diff --git a/build_scripts/wheel_files.py b/build_scripts/wheel_files.py
+index 0fffc8a..187fcac 100644
+--- a/build_scripts/wheel_files.py
++++ b/build_scripts/wheel_files.py
+@@ -334,7 +334,8 @@
+         "typesystem_gui_mac.xml",
+         "typesystem_gui_win.xml",
+         "typesystem_gui_x11.xml",
+-        "typesystem_gui_rhi.xml"
++        "typesystem_gui_rhi.xml",
++        "typesystem_gui_wayland.xml"
+     ]
+ 
+     _metatypes = [
+diff --git a/sources/pyside6/PySide6/QtGui/CMakeLists.txt b/sources/pyside6/PySide6/QtGui/CMakeLists.txt
+index 7b4097e..64e5f1f 100644
+--- a/sources/pyside6/PySide6/QtGui/CMakeLists.txt
++++ b/sources/pyside6/PySide6/QtGui/CMakeLists.txt
+@@ -294,7 +294,14 @@
+ if("xcb" IN_LIST QtGui_enabled_features)
+     list(APPEND QtGui_SRC
+          ${QtGui_GEN_DIR}/qnativeinterface_qx11application_wrapper.cpp)
+-elseif(WIN32)
++endif()
++
++if("wayland" IN_LIST QtGui_enabled_features)
++    list(APPEND QtGui_SRC
++         ${QtGui_GEN_DIR}/qnativeinterface_qwaylandapplication_wrapper.cpp)
++endif()
++
++if(WIN32)
+     list(APPEND QtGui_SRC
+          ${QtGui_GEN_DIR}/qnativeinterface_qwindowsscreen_wrapper.cpp)
+ endif()
+diff --git a/sources/pyside6/PySide6/QtGui/typesystem_gui.xml b/sources/pyside6/PySide6/QtGui/typesystem_gui.xml
+index 2038f96..74f298c 100644
+--- a/sources/pyside6/PySide6/QtGui/typesystem_gui.xml
++++ b/sources/pyside6/PySide6/QtGui/typesystem_gui.xml
+@@ -14,6 +14,7 @@
+     <?endif?>
+     <?if unix !darwin?>
+     <load-typesystem name="QtGui/typesystem_gui_x11.xml" generate="yes"/>
++    <load-typesystem name="QtGui/typesystem_gui_wayland.xml" generate="yes"/>
+     <?endif?>
+     <load-typesystem name="QtGui/typesystem_gui_nativeinterface.xml" generate="yes"/>
+     <load-typesystem name="QtGui/typesystem_gui_common.xml" generate="yes"/>
+diff --git a/sources/pyside6/PySide6/QtGui/typesystem_gui_nativeinterface.xml b/sources/pyside6/PySide6/QtGui/typesystem_gui_nativeinterface.xml
+index 3965c72..ba83d0f 100644
+--- a/sources/pyside6/PySide6/QtGui/typesystem_gui_nativeinterface.xml
++++ b/sources/pyside6/PySide6/QtGui/typesystem_gui_nativeinterface.xml
+@@ -9,6 +9,16 @@
+ 
+ <typesystem package="PySide6.QtGui">
+     <namespace-type name="QNativeInterface" private="yes" since="6.7">
++        <object-type name="QWaylandApplication" private="yes" disable-wrapper="yes">
++            <configuration condition="QT_CONFIG(wayland)"/>
++            <modify-function signature="^(compositor|display|keyboard|pointer|seat|touch|lastInputSeat)\(\)const$">
++                <modify-argument index="return">
++                    <replace-type modified-type="int"/>
++                </modify-argument>
++                <inject-code class="target" position="end" file="../glue/qtgui.cpp"
++                             snippet="native-resource-ptr"/>
++            </modify-function>
++        </object-type>
+         <object-type name="QX11Application" private="yes" disable-wrapper="yes"
+                      force-abstract="yes">
+             <configuration condition="QT_CONFIG(xcb)"/>
+diff --git a/sources/pyside6/PySide6/QtGui/typesystem_gui_wayland.xml b/sources/pyside6/PySide6/QtGui/typesystem_gui_wayland.xml
+new file mode 100644
+index 0000000..5b822d4
+--- /dev/null
++++ b/sources/pyside6/PySide6/QtGui/typesystem_gui_wayland.xml
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++// Copyright (C) 2025 The Qt Company Ltd.
++// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
++-->
++<typesystem package="PySide6.QtGui">
++    <custom-type name="wl_compositor"/>
++    <custom-type name="wl_display"/>
++    <custom-type name="wl_keyboard"/>
++    <custom-type name="wl_pointer"/>
++    <custom-type name="wl_seat"/>
++    <custom-type name="wl_touch"/>
++</typesystem>
+diff --git a/sources/pyside6/PySide6/glue/qtgui.cpp b/sources/pyside6/PySide6/glue/qtgui.cpp
+index b394c4a..71b102d 100644
+--- a/sources/pyside6/PySide6/glue/qtgui.cpp
++++ b/sources/pyside6/PySide6/glue/qtgui.cpp
+@@ -907,7 +907,13 @@
+     hasNativeApp = true;
+     %PYARG_0 = %CONVERTTOPYTHON[QNativeInterface::QX11Application*](x11App);
+ }
+-#endif
++#endif // xcb
++#if QT_CONFIG(wayland)
++if (auto *waylandApp = %CPPSELF.nativeInterface<QNativeInterface::QWaylandApplication>()) {
++    hasNativeApp = true;
++    %PYARG_0 = %CONVERTTOPYTHON[QNativeInterface::QWaylandApplication*](waylandApp);
++}
++#endif // wayland
+ if (!hasNativeApp) {
+     Py_INCREF(Py_None);
+     %PYARG_0 = Py_None;
+diff --git a/sources/pyside6/tests/QtGui/nativeinterface_test.py b/sources/pyside6/tests/QtGui/nativeinterface_test.py
+index 612422a..6822544 100644
+--- a/sources/pyside6/tests/QtGui/nativeinterface_test.py
++++ b/sources/pyside6/tests/QtGui/nativeinterface_test.py
+@@ -23,6 +23,9 @@
+         if native_app:
+             if issubclass(type(native_app), QNativeInterface.QX11Application):
+                 self.assertTrue(native_app.display() != 0)
++            elif issubclass(type(native_app), QNativeInterface.QWaylandApplication):
++                self.assertTrue(native_app.display() != 0)
++                self.assertTrue(native_app.seat() is not None)
+ 
+ 
+ if __name__ == '__main__':
