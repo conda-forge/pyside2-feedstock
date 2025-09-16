@@ -18,8 +18,8 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '17'
-libxml2:
-- '2'
+libxml2_devel:
+- '2.14'
 macos_machine:
 - arm64-apple-darwin20.0.0
 pin_run_as_build:
