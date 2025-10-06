@@ -46,7 +46,7 @@ requirements:
     - pyside2  {{ version }}                 # [build_platform != target_platform]
     - qt-main  {{ version }}                 # [build_platform != target_platform]
     - qt-webengine  {{ version }}            # [build_platform != target_platform]
-    - cmake
+    - cmake 3.*
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
