@@ -1,4 +1,4 @@
-{% set version = "6.9.3" %}
+{% set version = "6.10.1" %}
 # While this is typically "major and minor" on PySide 6.8.0
 # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
 # and revealed that this number can contain a 3rd number under the right circumstances
