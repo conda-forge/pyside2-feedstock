@@ -27,6 +27,8 @@ source:
     # https://github.com/pyqtgraph/pyqtgraph/issues/3265
     - patches/0001-Fix-memory-leak.patch
 
+    - patches/no_abi3.patch
+
 build:
   number: 0
   entry_points:
