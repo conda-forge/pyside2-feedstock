@@ -27,15 +27,6 @@ source:
     # https://github.com/pyqtgraph/pyqtgraph/issues/3265
     - patches/0001-Fix-memory-leak.patch
 
-    # Patches for python 3.14 compatibility taken from fedora
-    # https://src.fedoraproject.org/rpms/python-pyside6/tree/rawhide
-    - patches/python314_8d7b4f0.patch
-    - patches/python314_ec06c75.patch
-
-    # https://bugreports.qt.io/browse/PYSIDE-2787
-    - patches/wayland_expose_1.patch
-    - patches/wayland_expose_2.patch
-
 build:
   number: 0
   entry_points:
