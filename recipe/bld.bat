@@ -18,7 +18,21 @@ if errorlevel 1 exit 1
 echo "shiboken6..."
 shiboken6 --help
 echo "shiboken done"
+
+mkdir dependencies
+cd dependencies
+curl -LO https://github.com/lucasg/Dependencies/releases/download/v1.11.1/Dependencies_x64_Release.zip
+7za x Dependencies_x64_Release.zip
+cd ..
+echo "dependencies..."
+dir /p dependencies
+set PATH=%CD%\dependencies;%PATH%
+.\dependencies\Dependencies.exe -modules %LIBRARY_BIN%\shiboken6.exe -depth=1
+echo "depth=2..." 
+.\dependencies\Dependencies.exe -modules %LIBRARY_BIN%\shiboken6.exe -depth=2
+
 exit 1
+
 
 :: write dummy shiboken metadata
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info

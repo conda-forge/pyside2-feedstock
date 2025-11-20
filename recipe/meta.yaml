@@ -64,6 +64,7 @@ requirements:
     - libxslt                            # [build_platform != target_platform]
     - libxml2-devel                            # [build_platform != target_platform]
     - qt6-main {{ maj_min_patch }}       # [build_platform != target_platform]
+    - 7za  # [win]
 
   host:
     - libgl-devel                        # [linux]
