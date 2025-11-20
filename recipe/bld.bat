@@ -15,6 +15,11 @@ if errorlevel 1 exit 1
 cmake --build build_shiboken --target install
 if errorlevel 1 exit 1
 
+echo "shiboken6..."
+shiboken6 --help
+echo "shiboken done"
+exit 1
+
 :: write dummy shiboken metadata
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
 copy %RECIPE_DIR%\METADATA.shiboken6.in %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
