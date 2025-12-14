@@ -1,11 +1,8 @@
 :: build shiboken only
-cmake -LAH -G "Ninja"                               ^
-    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
-    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
     -DFORCE_LIMITED_API=OFF                         ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
-    -DCMAKE_BUILD_TYPE=Release                      ^
     -DBUILD_TESTS=OFF                               ^
     -DFORCE_LIMITED_API=OFF                         ^
     -DPython_EXECUTABLE="%PYTHON%"                  ^
@@ -22,14 +19,11 @@ echo Version: %PKG_VERSION% >> %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADA
 type %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
 
 :: build all
-cmake -LAH -G "Ninja"                               ^
-    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"          ^
-    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"       ^
+cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DCMAKE_UNITY_BUILD=ON                          ^
     -DCMAKE_UNITY_BUILD_BATCH_SIZE=32               ^
     -DFORCE_LIMITED_API=OFF                         ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
-    -DCMAKE_BUILD_TYPE=Release                      ^
     -DBUILD_TESTS=OFF                               ^
     -DFORCE_LIMITED_API=OFF                         ^
     -DPython_EXECUTABLE="%PYTHON%"                  ^
