@@ -1,4 +1,4 @@
-{% set version = "6.9.3" %}
+{% set version = "6.10.1" %}
 # While this is typically "major and minor" on PySide 6.8.0
 # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
 # and revealed that this number can contain a 3rd number under the right circumstances
@@ -27,17 +27,10 @@ source:
     # https://github.com/pyqtgraph/pyqtgraph/issues/3265
     - patches/0001-Fix-memory-leak.patch
 
-    # Patches for python 3.14 compatibility taken from fedora
-    # https://src.fedoraproject.org/rpms/python-pyside6/tree/rawhide
-    - patches/python314_8d7b4f0.patch
-    - patches/python314_ec06c75.patch
-
-    # https://bugreports.qt.io/browse/PYSIDE-2787
-    - patches/wayland_expose_1.patch
-    - patches/wayland_expose_2.patch
+    - patches/no_abi3.patch
 
 build:
-  number: 2
+  number: 0
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic
