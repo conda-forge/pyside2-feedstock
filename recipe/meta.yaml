@@ -29,8 +29,13 @@ source:
 
     - patches/no_abi3.patch
 
+    # Backport of serious flaw in 6.10
+    # https://qt-project.atlassian.net/browse/PYSIDE-3256
+    # https://codereview.qt-project.org/c/pyside/pyside-setup/+/700491
+    - patches/backport_of_fix_silent_conversion_from_list_to_tuple_73b36dd.diff
+
 build:
-  number: 0
+  number: 1
   entry_points:
     - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
     - pyside6-uic = PySide6.scripts.pyside_tool:uic

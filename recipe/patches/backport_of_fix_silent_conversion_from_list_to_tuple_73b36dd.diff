@@ -1,0 +1,27 @@
+From 0a9ed923e569f901b74495c15e66010d48d112f2 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 10 Jan 2026 21:44:09 -0500
+Subject: [PATCH] Bacport of revert of Tuple->List conversion
+
+Backport of serious flaw in 6.10
+https://qt-project.atlassian.net/browse/PYSIDE-3256
+https://codereview.qt-project.org/c/pyside/pyside-setup/+/700491
+---
+ sources/pyside6/PySide6/QtCore/typesystem_core_common.xml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml b/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
+index f1cb1cda8..f4354f814 100644
+--- a/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
++++ b/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
+@@ -336,7 +336,6 @@
+             <add-conversion type="SbkObject" file="../glue/qtcore.cpp" snippet="conversion-sbkobject"/>
+             <add-conversion type="PyDict" check="PyDict_CheckExact(%in)" file="../glue/qtcore.cpp" snippet="conversion-pydict"/>
+             <add-conversion type="PyList" check="PyList_Check(%in)" file="../glue/qtcore.cpp" snippet="conversion-pylist"/>
+-            <add-conversion type="PyTuple" check="PyTuple_Check(%in)" file="../glue/qtcore.cpp" snippet="conversion-pylist"/>
+             <add-conversion type="PyObject" file="../glue/qtcore.cpp" snippet="conversion-pyobject"/>
+         </target-to-native>
+     </conversion-rule>
+-- 
+2.51.0
+
