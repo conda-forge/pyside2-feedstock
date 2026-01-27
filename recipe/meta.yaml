@@ -75,6 +75,7 @@ requirements:
     - xcb-util-image                     # [linux]
     - xcb-util-renderutil                # [linux]
     - xorg-libx11                        # [linux]
+    - xorg-libxcb                        # [linux]
     - xorg-libxext                       # [linux]
     - xorg-libxdamage                    # [linux]
     - xorg-libsm                         # [linux]
