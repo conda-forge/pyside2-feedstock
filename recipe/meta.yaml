@@ -46,7 +46,7 @@ requirements:
     - pyside2  {{ version }}                 # [build_platform != target_platform]
     - qt-main  {{ version }}                 # [build_platform != target_platform]
     - qt-webengine  {{ version }}            # [build_platform != target_platform]
-    - cmake
+    - cmake <4
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
@@ -61,7 +61,7 @@ requirements:
     - packaging
     - qt-main       {{ version }}
     - qt-webengine  {{ version }}
-    - libxml2
+    - libxml2 >=2.14.7
     - libxslt
     - pip
     - setuptools
