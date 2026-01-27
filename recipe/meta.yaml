@@ -57,6 +57,7 @@ requirements:
     - libegl-devel                       # [linux]
     - libopengl-devel                    # [linux]
     - libdrm                             # [linux]
+    - mesalib                            # [linux]
     - python
     - packaging
     - qt-main       {{ version }}
