@@ -62,6 +62,7 @@ requirements:
     - packaging
     - qt-main       {{ version }}
     - qt-webengine  {{ version }}
+    - libxcb                             # [linux]
     - libxml2 >=2.14.7
     - libxslt
     - pip
@@ -76,7 +77,6 @@ requirements:
     - xcb-util-image                     # [linux]
     - xcb-util-renderutil                # [linux]
     - xorg-libx11                        # [linux]
-    - xorg-libxcb                        # [linux]
     - xorg-libxext                       # [linux]
     - xorg-libxdamage                    # [linux]
     - xorg-libsm                         # [linux]
