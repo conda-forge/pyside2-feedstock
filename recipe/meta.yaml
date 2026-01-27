@@ -82,7 +82,6 @@ requirements:
     - xorg-libxcomposite                 # [linux]
     - xorg-libxxf86vm                    # [linux]
     - xorg-xf86vidmodeproto              # [linux]
-    - xorg-x11-server-xvfb-conda         # [linux]
   run:
     - python
 
