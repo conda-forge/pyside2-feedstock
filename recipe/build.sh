@@ -10,6 +10,11 @@ fi
 
 set -ex
 
+pushd ${PREFIX}/include/qt
+ln -s ../GL .
+ln -s ../xcb .
+popd
+
 # Remove running without PYTHONPATH
 sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
 sed -i.bak 's/${PYTHON_EXECUTABLE} -E/${PYTHON_EXECUTABLE}/g' sources/shiboken2/libshiboken/CMakeLists.txt
