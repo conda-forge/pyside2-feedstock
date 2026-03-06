@@ -70,7 +70,6 @@ requirements:
     - setuptools
     - clangdev >=9
     - libclang
-    - icu
     - llvmdev  {{ cxx_compiler_version }}  # [osx]
     - clangdev {{ cxx_compiler_version }}  # [osx]
     - xcb-util                           # [linux]
