@@ -8,7 +8,7 @@ source:
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
   sha256: 21d6818b064834b08501180e48890e5fd87df2fb3769f80c58143457f548c408
   patches:
-    - patches/python3.12.patch  # [py == 312]
+    - patches/python3.12.patch  # [py >= 312]
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi.patch
     - patches/windows_dll_shiboken_fix.patch
