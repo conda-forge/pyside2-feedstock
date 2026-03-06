@@ -1,0 +1,13 @@
+diff --git a/sources/shiboken2/libshiboken/pep384impl.h b/sources/shiboken2/libshiboken/pep384impl.h
+index a870d6b..ae80123 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.h
++++ b/sources/shiboken2/libshiboken/pep384impl.h
+@@ -184,7 +184,7 @@ LIBSHIBOKEN_API const char *PepType_GetNameStr(PyTypeObject *type);
+ #ifdef Py_LIMITED_API
+ LIBSHIBOKEN_API int _PepLong_AsInt(PyObject *);
+ #else
+-#define _PepLong_AsInt _PyLong_AsInt
++#define _PepLong_AsInt PyLong_AsInt
+ #endif
+ 
+ /*****************************************************************************
