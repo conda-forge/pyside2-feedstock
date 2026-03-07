@@ -64,7 +64,7 @@ requirements:
     - qt-main       {{ version }}
     - qt-webengine  {{ version }}
     - libxcb                             # [linux]
-    - libxml2 2.14
+    - libxml2
     - libxslt
     - pip
     - setuptools
