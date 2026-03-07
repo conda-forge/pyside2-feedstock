@@ -18,6 +18,8 @@ docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:alma9
 libxcb:
 - '1'
+libxml2:
+- '2.14'
 pin_run_as_build:
   python:
     min_pin: x.x
