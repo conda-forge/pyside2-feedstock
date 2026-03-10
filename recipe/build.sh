@@ -3,12 +3,17 @@
 XVFB_RUN=""
 if test `uname` = "Linux"
 then
-  cp -r /usr/include/xcb ${PREFIX}/include/qt
-  cp -r ${PREFIX}/include/GL ${PREFIX}/include/qt
+  # cp -r /usr/include/xcb ${PREFIX}/include/qt
+  # cp -r ${PREFIX}/include/GL ${PREFIX}/include/qt
   XVFB_RUN="xvfb-run -s '-screen 0 640x480x24'"
 fi
 
 set -ex
+
+pushd ${PREFIX}/include/qt
+ln -s ../GL .
+ln -s ../xcb .
+popd
 
 # Remove running without PYTHONPATH
 sed -i.bak "s/, '-E'//g" sources/shiboken2/libshiboken/embed/embedding_generator.py
@@ -76,7 +81,7 @@ rm ${SP_DIR}/testbinding*.so
 popd
 
 ${PYTHON} setup.py dist_info --build-type=pyside2
-cp -r PySide2-${PKG_VERSION}.dist-info "${SP_DIR}"/
+cp -r ${SRC_DIR}/pyside2-${PKG_VERSION}.dist-info "${SP_DIR}"/
 
 pushd sources/pyside2-tools
 mkdir -p build && cd build

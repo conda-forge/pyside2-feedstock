@@ -8,7 +8,8 @@ source:
   url: https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-{{ version }}-src/pyside-setup-opensource-src-{{ version }}.tar.xz
   sha256: 21d6818b064834b08501180e48890e5fd87df2fb3769f80c58143457f548c408
   patches:
-    - patches/python3.12.patch  # [py == 312]
+    - patches/python3.12.patch  # [py >= 312]
+    - patches/python3.13.patch  # [py >= 313]
     # https://bugreports.qt.io/browse/PYSIDE-1193
     - patches/pyi.patch
     - patches/windows_dll_shiboken_fix.patch
@@ -28,7 +29,7 @@ source:
     - patches/gluint.patch
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   entry_points:
     - pyside2-designer = PySide2.scripts.pyside_tool:designer
@@ -46,7 +47,7 @@ requirements:
     - pyside2  {{ version }}                 # [build_platform != target_platform]
     - qt-main  {{ version }}                 # [build_platform != target_platform]
     - qt-webengine  {{ version }}            # [build_platform != target_platform]
-    - cmake
+    - cmake <4
     - ninja
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
@@ -57,10 +58,12 @@ requirements:
     - libegl-devel                       # [linux]
     - libopengl-devel                    # [linux]
     - libdrm                             # [linux]
+    - mesalib                            # [linux]
     - python
     - packaging
     - qt-main       {{ version }}
     - qt-webengine  {{ version }}
+    - libxcb                             # [linux]
     - libxml2
     - libxslt
     - pip

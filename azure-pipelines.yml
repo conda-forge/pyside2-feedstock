@@ -7,7 +7,7 @@ stages:
   jobs:
     - job: Skip
       pool:
-        vmImage: 'ubuntu-22.04'
+        vmImage: 'ubuntu-latest'
       variables:
         DECODE_PERCENTS: 'false'
         RET: 'true'
@@ -19,7 +19,7 @@ stages:
           echo "##vso[task.setvariable variable=log]$git_log"
         displayName: Obtain commit message
       - bash: echo "##vso[task.setvariable variable=RET]false"
-        condition: or(contains(variables.log, '[skip azp]'), contains(variables.log, '[azp skip]'), contains(variables.log, '[skip ci]'), contains(variables.log, '[ci skip]'))
+        condition: and(eq(variables['Build.Reason'], 'PullRequest'), or(contains(variables.log, '[skip azp]'), contains(variables.log, '[azp skip]'), contains(variables.log, '[skip ci]'), contains(variables.log, '[ci skip]')))
         displayName: Skip build?
       - bash: echo "##vso[task.setvariable variable=start_main;isOutput=true]$RET"
         name: result
