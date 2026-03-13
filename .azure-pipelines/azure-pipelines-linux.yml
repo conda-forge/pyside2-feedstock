@@ -28,6 +28,10 @@ jobs:
         CONFIG: linux_64_python3.14.____cp314
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_64_python3.14.____cp314t:
+        CONFIG: linux_64_python3.14.____cp314t
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_aarch64_python3.10.____cpython:
         CONFIG: linux_aarch64_python3.10.____cpython
         UPLOAD_PACKAGES: 'True'
@@ -46,6 +50,10 @@ jobs:
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_aarch64_python3.14.____cp314:
         CONFIG: linux_aarch64_python3.14.____cp314
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_aarch64_python3.14.____cp314t:
+        CONFIG: linux_aarch64_python3.14.____cp314t
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
   timeoutInMinutes: 360
