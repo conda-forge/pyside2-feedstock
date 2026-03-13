@@ -4,7 +4,7 @@ cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DBUILD_TESTS=OFF                               ^
     -DFORCE_LIMITED_API=OFF                         ^
-    -DPython_EXECUTABLE="%PYTHON%"                  ^
+    -DPython_EXECUTABLE="%PYTHON:\=/%"              ^
     -B build_shiboken %SRC_DIR:\=/%/sources/shiboken6
 if errorlevel 1 exit 1
 
@@ -24,7 +24,7 @@ cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DBUILD_TESTS=OFF                               ^
     -DFORCE_LIMITED_API=OFF                         ^
-    -DPython_EXECUTABLE="%PYTHON%"                  ^
+    -DPython_EXECUTABLE="%PYTHON:\=/%"              ^
     -DNO_QT_TOOLS=yes                               ^
     -B build .
 if errorlevel 1 exit 1
