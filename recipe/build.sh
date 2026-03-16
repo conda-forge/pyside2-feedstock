@@ -56,6 +56,9 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -B build_shiboken -S sources/shiboken6
 cmake --build build_shiboken --target install
 
+# https://github.com/conda/conda-build/issues/5563
+export SP_DIR=$PREFIX/lib/python`python -c "import sysconfig; print(sysconfig.get_config_var('LDVERSION'))"`/site-packages
+
 mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
 cp ${RECIPE_DIR}/METADATA.shiboken6.in ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
 echo "Version: ${PKG_VERSION}" >> ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
