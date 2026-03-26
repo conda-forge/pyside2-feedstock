@@ -28,8 +28,8 @@ then
       -DCMAKE_INSTALL_PREFIX=${BUILD_PREFIX} \
       -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
       -DBUILD_TESTS=OFF \
-      -B build_shiboken_native -S sources/shiboken6
-    cmake --build build_shiboken_native --target install
+      -B build_shiboken_gen_native -S sources/shiboken6_generator
+    cmake --build build_shiboken_gen_native --target install
     mv _hidden $BUILD_PREFIX/${HOST}
   )
   # wrapper path is hardcoded in sources/shiboken6/cmake/ShibokenHelpers.cmake:
@@ -53,11 +53,22 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
   -DFORCE_LIMITED_API=OFF \
-  -B build_shiboken -S sources/shiboken6
-cmake --build build_shiboken --target install
+  -B build_shiboken_gen -S sources/shiboken6_generator
+cmake --build build_shiboken_gen --target install
 
 # https://github.com/conda/conda-build/issues/5563
 export SP_DIR=$PREFIX/lib/python`python -c "import sysconfig; print(sysconfig.get_config_var('LDVERSION'))"`/site-packages
+
+cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
+  -DBUILD_TESTS=OFF \
+  -DFORCE_LIMITED_API=OFF \
+  -B build_shiboken -S sources/shiboken6
+cmake --build build_shiboken --target install
 
 mkdir ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info
 cp ${RECIPE_DIR}/METADATA.shiboken6.in ${SP_DIR}/shiboken6-${PKG_VERSION}.dist-info/METADATA
