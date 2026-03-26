@@ -1,12 +1,12 @@
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp b/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
-index 4eb1a9ee8..137b4c44a 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
-+++ b/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
-@@ -295,6 +295,7 @@ static QString findClangBuiltInIncludesDir()
- 
+diff --git a/sources/shiboken6_generator/ApiExtractor/clangparser/compilersupport.cpp b/sources/shiboken6_generator/ApiExtractor/clangparser/compilersupport.cpp
+index 4b15214b5..2f42521ec 100644
+--- a/sources/shiboken6_generator/ApiExtractor/clangparser/compilersupport.cpp
++++ b/sources/shiboken6_generator/ApiExtractor/clangparser/compilersupport.cpp
+@@ -347,6 +347,7 @@ QString compilerFromCMake()
+ // Return a compiler suitable for determining the internal include paths
  static QString compilerFromCMake(const QString &defaultCompiler)
  {
 +    return qEnvironmentVariable("CXX", defaultCompiler);
      if (!compilerPath().isEmpty())
          return compilerPath();
- // Added !defined(Q_OS_DARWIN) due to PYSIDE-1032
+     // Exclude macOS since cmakeCompiler returns the full path instead of the
