@@ -52,7 +52,6 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
-  -DFORCE_LIMITED_API=OFF \
   -B build_shiboken_gen -S sources/shiboken6_generator
 cmake --build build_shiboken_gen --target install
 
