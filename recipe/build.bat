@@ -1,3 +1,14 @@
+:: build shiboken generator only
+cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
+    -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
+    -DBUILD_TESTS=OFF                               ^
+    -DPython_EXECUTABLE="%PYTHON:\=/%"              ^
+    -B build_shiboken_gen %SRC_DIR:\=/%/sources/shiboken6_generator
+if errorlevel 1 exit 1
+
+cmake --build build_shiboken_gen --target install
+if errorlevel 1 exit 1
+
 :: build shiboken only
 cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
