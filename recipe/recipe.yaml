@@ -30,6 +30,7 @@ source:
     - patches/0001-Fix-memory-leak.patch
 
     - patches/no_abi3.patch
+    - patches/typesystems.patch
 
 build:
   number: 1

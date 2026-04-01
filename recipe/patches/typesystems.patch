@@ -1,0 +1,14 @@
+diff --git a/sources/pyside6/libpyside/CMakeLists.txt b/sources/pyside6/libpyside/CMakeLists.txt
+index 4f95ce0a8..ecdf89387 100644
+--- a/sources/pyside6/libpyside/CMakeLists.txt
++++ b/sources/pyside6/libpyside/CMakeLists.txt
+@@ -161,9 +161,6 @@ configure_package_config_file(
+ )
+ 
+ # Install-tree / wheel configuration
+-set(PYSIDE_PYTHONPATH "")
+-set(PYSIDE_TYPESYSTEMS "typesystems")
+-set(PYSIDE_GLUE "glue")
+ set(PYSIDE_SOVERSION "${pyside6_library_so_version}")
+ 
+ configure_package_config_file(
