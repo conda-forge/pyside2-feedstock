@@ -29,7 +29,7 @@ source:
     # https://github.com/pyqtgraph/pyqtgraph/issues/3265
     - patches/0001-Fix-memory-leak.patch
 
-      #- patches/no_abi3.patch
+    - patches/no_abi3.patch
     - patches/typesystems.patch
 
 build:
