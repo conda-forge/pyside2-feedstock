@@ -33,7 +33,7 @@ source:
     - patches/typesystems.patch
 
 build:
-  number: 1
+  number: 2
   python:
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
@@ -83,6 +83,9 @@ requirements:
     - qt6-multimedia
     - qt6-networkauth
     - qt6-quick3d
+    # Provides QtScxml and QtStateMachine
+    - qt6-scxml
+    - qt6-serialport
     - if: not osx
       then:
         # Pin clang<22.x, see PYSIDE-3286
@@ -118,6 +121,8 @@ requirements:
       - qt6-multimedia
       - qt6-networkauth
       - qt6-quick3d
+      - qt6-scxml
+      - qt6-serialport
 
 tests:
   - python:
@@ -142,11 +147,8 @@ tests:
         - PySide6.QtQuickControls2
         - PySide6.QtQuickWidgets
         #- PySide6.QtRemoteObjects
-        # - PySide6.QtScxml
         # - PySide6.QtSensors
-        # - PySide6.QtSerialPort
         - PySide6.QtSql
-        #- PySide6.QtStateMachine
         - PySide6.QtSvg
         - PySide6.QtSvgWidgets
         - PySide6.QtTest
@@ -191,7 +193,10 @@ tests:
         - python -c "import PySide6.QtNetworkAuth"
         - python -c "import PySide6.QtMultimediaWidgets"
         - python -c "import PySide6.QtQuick3D"
+        - python -c "import PySide6.QtScxml"
+        - python -c "import PySide6.QtSerialPort"
         - python -c "import PySide6.QtSpatialAudio"
+        - python -c "import PySide6.QtStateMachine"
     requirements:
       run:
         - if: match(python, "<=3.10")
@@ -204,6 +209,8 @@ tests:
             - qt6-graphs
             - qt6-multimedia
             - qt6-networkauth
+            - qt6-scxml
+            - qt6-serialport
 
 about:
   homepage: https://wiki.qt.io/PySide2
