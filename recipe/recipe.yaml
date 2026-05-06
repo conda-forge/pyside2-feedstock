@@ -99,6 +99,10 @@ requirements:
         - libgl-devel
         - libegl-devel
         - libopengl-devel
+    # libxkfile is needed for webengine on linux
+    - if: linux and (not aarch64)
+      then:
+        - libxkbfile
     - if: osx
       then:
         - llvmdev  ${{ cxx_compiler_version }}.*
