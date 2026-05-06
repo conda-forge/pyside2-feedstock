@@ -83,8 +83,8 @@ requirements:
     - qt6-multimedia
     - qt6-networkauth
     - qt6-quick3d
-    # qt-webengine is not built on osx-x86_64
-    - if: not (osx and x86_64)
+    # qt-webengine is not built on osx-x86_64 or linux-aarch64
+    - if: not ((osx and x86_64) or (linux and aarch64))
       then:
         - qt6-webengine
     - if: not osx
@@ -194,8 +194,8 @@ tests:
         - python -c "import PySide6.QtMultimediaWidgets"
         - python -c "import PySide6.QtQuick3D"
         - python -c "import PySide6.QtSpatialAudio"
-    # qt-webengine is not built on osx-x86_64
-    - if: match(python, "<=3.10") and not (osx and x86_64)
+    # qt-webengine is not built on osx-x86_64 or linux-aarch64
+    - if: match(python, "<=3.10") and not ((osx and x86_64) or (linux and aarch64))
       then:
         - python -c "import PySide6.QtWebEngineCore"
         - python -c "import PySide6.QtWebEngineQuick"
@@ -212,7 +212,7 @@ tests:
             - qt6-graphs
             - qt6-multimedia
             - qt6-networkauth
-        - if: match(python, "<=3.10") and not (osx and x86_64)
+        - if: match(python, "<=3.10") and not ((osx and x86_64) or (linux and aarch64))
           then:
             - qt6-webengine
 
