@@ -205,7 +205,7 @@ tests:
         - python -c "import PySide6.QtWebEngineQuick"
         - python -c "import PySide6.QtWebEngineWidgets"
     # WHy do we need this???
-    - if: match(python, "<=3.10") and (linux and not aarch64))
+    - if: match(python, "<=3.10") and linux and not aarch64
       then:
         - libxkbfile
     requirements:
