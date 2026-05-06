@@ -100,6 +100,7 @@ requirements:
         - libegl-devel
         - libopengl-devel
     # libxkfile is needed for webengine on linux
+    # https://github.com/conda-forge/libxkbfile-feedstock/pull/3
     - if: linux and (not aarch64)
       then:
         - libxkbfile
