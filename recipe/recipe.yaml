@@ -99,11 +99,6 @@ requirements:
         - libgl-devel
         - libegl-devel
         - libopengl-devel
-    # libxkfile is needed for webengine on linux
-    # https://github.com/conda-forge/libxkbfile-feedstock/pull/3
-    - if: linux and (not aarch64)
-      then:
-        - libxkbfile
     - if: osx
       then:
         - llvmdev  ${{ cxx_compiler_version }}.*
@@ -211,6 +206,8 @@ tests:
           then:
             # these are optional
             # test them with one version of python
+            # The other versions of python ensure that pyside is still
+            # usable without the full set of dependencies
             - qt6-3d
             - qt6-charts
             - qt6-datavis3d
@@ -220,10 +217,6 @@ tests:
         - if: match(python, "<=3.10") and not ((osx and x86_64) or (linux and aarch64))
           then:
             - qt6-webengine
-        # qt-webengine pulls in libxkbfile.so.1 on linux-64
-        - if: match(python, "<=3.10") and linux and not aarch64
-          then:
-            - libxkbfile
 
 about:
   homepage: https://wiki.qt.io/PySide2
