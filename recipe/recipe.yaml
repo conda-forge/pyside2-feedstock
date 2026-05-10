@@ -33,7 +33,7 @@ source:
     - patches/typesystems.patch
 
 build:
-  number: 2
+  number: 3
   python:
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
@@ -86,6 +86,10 @@ requirements:
     # Provides QtScxml and QtStateMachine
     - qt6-scxml
     - qt6-serialport
+    # qt-webengine is not built on osx-x86_64
+    - if: not (osx and x86_64)
+      then:
+        - qt6-webengine
     - if: not osx
       then:
         # Pin clang<22.x, see PYSIDE-3286
@@ -123,6 +127,7 @@ requirements:
       - qt6-quick3d
       - qt6-scxml
       - qt6-serialport
+      - qt6-webengine
 
 tests:
   - python:
@@ -155,9 +160,6 @@ tests:
         #- PySide6.QtTextToSpeech
         - PySide6.QtUiTools
         - PySide6.QtWebChannel
-        #- PySide6.QtWebEngineCore
-        #- PySide6.QtWebEngineQuick
-        #- PySide6.QtWebEngineWidgets
         - PySide6.QtWebSockets
         - PySide6.QtWidgets
         - PySide6.QtXml
@@ -197,12 +199,20 @@ tests:
         - python -c "import PySide6.QtSerialPort"
         - python -c "import PySide6.QtSpatialAudio"
         - python -c "import PySide6.QtStateMachine"
+    # qt-webengine is not built on osx-x86_64
+    - if: match(python, "<=3.10") and not (osx and x86_64)
+      then:
+        - python -c "import PySide6.QtWebEngineCore"
+        - python -c "import PySide6.QtWebEngineQuick"
+        - python -c "import PySide6.QtWebEngineWidgets"
     requirements:
       run:
         - if: match(python, "<=3.10")
           then:
             # these are optional
             # test them with one version of python
+            # The other versions of python ensure that pyside is still
+            # usable without the full set of dependencies
             - qt6-3d
             - qt6-charts
             - qt6-datavis3d
@@ -211,6 +221,9 @@ tests:
             - qt6-networkauth
             - qt6-scxml
             - qt6-serialport
+        - if: match(python, "<=3.10") and not (osx and x86_64)
+          then:
+            - qt6-webengine
 
 about:
   homepage: https://wiki.qt.io/PySide2
