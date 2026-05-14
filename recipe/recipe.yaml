@@ -1,5 +1,5 @@
 context:
-  version: "6.11.0"
+  version: "6.11.1"
 
   # While this is typically "major and minor" on PySide 6.8.0
   # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
@@ -26,14 +26,8 @@ source:
     # change tools module location
     - patches/tools.patch
 
-    # https://github.com/pyqtgraph/pyqtgraph/issues/3265
-    - patches/0001-Fix-memory-leak.patch
-
-    - patches/no_abi3.patch
-    - patches/typesystems.patch
-
 build:
-  number: 3
+  number: 0
   python:
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
@@ -58,10 +52,9 @@ requirements:
         - qt6-main ${{ maj_min_patch }}.*
     - if: not osx and (build_platform != target_platform)
       then:
-        # Pin clang<22.x, see PYSIDE-3286
-        - libclang 21.*
-        - llvmdev 21.*
-        - clangdev 21.*
+        - libclang
+        - llvmdev
+        - clangdev
     - if: osx and (build_platform != target_platform)
       then:
         - llvmdev ${{ cxx_compiler_version }}.*
@@ -85,6 +78,7 @@ requirements:
     - qt6-quick3d
     # Provides QtScxml and QtStateMachine
     - qt6-scxml
+    - qt6-sensors
     - qt6-serialport
     # qt-webengine is not built on osx-x86_64
     - if: not (osx and x86_64)
@@ -92,10 +86,9 @@ requirements:
         - qt6-webengine
     - if: not osx
       then:
-        # Pin clang<22.x, see PYSIDE-3286
-        - llvmdev 21.*
-        - clangdev 21.*
-        - libclang 21.*
+        - llvmdev
+        - clangdev
+        - libclang
     - if: linux
       then:
         - qt6-wayland
@@ -126,6 +119,7 @@ requirements:
       - qt6-networkauth
       - qt6-quick3d
       - qt6-scxml
+      - qt6-sensors
       - qt6-serialport
       - qt6-webengine
 
@@ -196,6 +190,7 @@ tests:
         - python -c "import PySide6.QtMultimediaWidgets"
         - python -c "import PySide6.QtQuick3D"
         - python -c "import PySide6.QtScxml"
+        - python -c "import PySide6.QtSensors"
         - python -c "import PySide6.QtSerialPort"
         - python -c "import PySide6.QtSpatialAudio"
         - python -c "import PySide6.QtStateMachine"
