@@ -1,5 +1,5 @@
 context:
-  version: "6.11.1"
+  version: "6.11.2"
 
   # While this is typically "major and minor" on PySide 6.8.0
   # There were two "emergency" releases 6.8.0.1 and 6.8.0.2 that came out quickly
@@ -31,7 +31,7 @@ source:
     - patches/71c4d17.patch
 
 build:
-  number: 1
+  number: 0
   python:
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
