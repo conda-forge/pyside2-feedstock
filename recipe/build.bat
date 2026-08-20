@@ -22,6 +22,8 @@ if errorlevel 1 exit 1
 cmake --build build_shiboken --target install
 if errorlevel 1 exit 1
 
+echo "SP_DIR=%SP_DIR%"
+set "SP_DIR=%PREFIX%\Lib\site-packages"
 :: write dummy shiboken metadata
 mkdir %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info
 copy %RECIPE_DIR%\METADATA.shiboken6.in %SP_DIR%\shiboken6-%PKG_VERSION%.dist-info\METADATA
