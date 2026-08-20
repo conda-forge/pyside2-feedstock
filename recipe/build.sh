@@ -43,6 +43,8 @@ then
   then
     CMAKE_ARGS="${CMAKE_ARGS} -DPython_SOABI=cpython-${PY_VER//./}-darwin"
   fi
+else
+  CMAKE_ARGS="${CMAKE_ARGS} -DPython_EXECUTABLE=${PYTHON}"
 fi
 
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
