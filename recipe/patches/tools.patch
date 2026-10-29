@@ -1,15 +1,16 @@
-diff -ur a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
---- a/sources/pyside-tools/pyside_tool.py	2024-04-05 12:14:14.000000000 -0400
-+++ b/sources/pyside-tools/pyside_tool.py	2024-05-19 16:27:51.368920401 -0400
-@@ -8,6 +8,7 @@
- import sys
+diff --git a/sources/pyside-tools/pyside_tool.py b/sources/pyside-tools/pyside_tool.py
+index d08a7c8..cdac349 100644
+--- a/sources/pyside-tools/pyside_tool.py
++++ b/sources/pyside-tools/pyside_tool.py
+@@ -12,6 +12,7 @@ import sys
  import sysconfig
+ import tempfile
  from pathlib import Path
 +from subprocess import PIPE, Popen
  
  import PySide6 as ref_mod
  
-@@ -49,18 +50,22 @@
+@@ -42,18 +43,22 @@ def main():
  def qt_tool_wrapper(qt_tool, args, libexec=False):
      # Taking care of pyside6-uic, pyside6-rcc, and pyside6-designer
      # listed as an entrypoint in setup.py
