@@ -30,8 +30,11 @@ source:
     - patches/d252378.patch
     - patches/71c4d17.patch
 
+    # https://qt-project.atlassian.net/browse/PYSIDE-3516
+    - patches/install_py_typed.patch
+
 build:
-  number: 0
+  number: 1
   python:
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
@@ -161,6 +164,27 @@ tests:
         - PySide6.QtWebSockets
         - PySide6.QtWidgets
         - PySide6.QtXml
+  - package_contents:
+      bin:
+        - shiboken6
+      site_packages:
+        - shiboken6
+      files:
+        exists:
+          # Qt Designer plugin
+          - "**/plugins/designer/*PySidePlugin*"
+          # pyside6-uic entry point (Scripts/pyside6-uic.exe on Windows)
+          - "**/pyside6-uic*"
+          # installed by patches/install_py_typed.patch
+          # NB: PySide6 is installed to lib/site-packages (not lib/python/site-packages),
+          # so site_packages helper does not match it; use files globs instead
+          - "**/PySide6/__init__.py"
+          - "**/PySide6/py.typed"
+          - "**/PySide6/__feature__.pyi"
+        not_exists:
+          # Regression to avoid clobber with qt-main package
+          - bin/uic
+          - Library/bin/uic.exe
   - script:
       - shiboken6 --help
       - pyside6-rcc -help
@@ -170,13 +194,6 @@ tests:
     # https://github.com/spyder-ide/qtpy/issues/480
     # We add it here for safety so we don't release really broken packages
       - python -c "import PySide6; from PySide6.QtCore import *"
-      - if: unix
-        then:
-          - test -f ${PREFIX}/lib/qt6/plugins/designer/libPySidePlugin${SHLIB_EXT}
-        # Regression to avoid clobber with qt-main package
-          - test ! -f $PREFIX/bin/uic
-        else:
-          - if exist %LIBRARY_BIN%\uic.exe exit 1
       - if: match(python, "<=3.10")
         then:
           - python -c "import PySide6.Qt3DAnimation"
