@@ -1,0 +1,23 @@
+diff -Naur a/sources/shiboken6_generator/generator/qtdoc/qtdocgenerator.cpp b/sources/shiboken6_generator/generator/qtdoc/qtdocgenerator.cpp
+--- a/sources/shiboken6_generator/generator/qtdoc/qtdocgenerator.cpp	2026-11-14 21:43:07.319493763 +0100
++++ b/sources/shiboken6_generator/generator/qtdoc/qtdocgenerator.cpp	2026-11-14 21:43:07.321893126 +0100
+@@ -504,7 +504,8 @@
+                              parsedImages);
+     if (!writeInjectDocumentation(s, TypeSystem::DocModificationReplace, metaClass,
+                                   parsedImages)) {
+-        QtXmlToSphinxOptions options{.headingOffset = 3};
++        QtXmlToSphinxOptions options;
++        options.headingOffset = 3;
+         writeFormattedDetailedText(s, documentation, options, scope, parsedImages);
+     }
+     writeInjectDocumentation(s, TypeSystem::DocModificationAppend, metaClass,
+@@ -1414,7 +1415,8 @@
+         } else if (!webXmlModuleDoc.isEmpty()) {
+             // try the normal way
+             if (webXmlModuleDoc.format() == DocumentationFormat::Native) {
+-                QtXmlToSphinxOptions options{.headingOffset = 3};
++                QtXmlToSphinxOptions options;
++                options.headingOffset = 3;
+                 QtXmlToSphinx x(this, m_options.parameters, options, webXmlModuleDoc.detailed(), context);
+                 s << x;
+                 parsedImages += x.images();

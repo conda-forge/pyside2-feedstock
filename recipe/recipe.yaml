@@ -29,6 +29,10 @@ source:
     # https://qt-project.atlassian.net/browse/PYSIDE-3516
     - patches/install_py_typed.patch
 
+    # C++20 designated initializers crept into 6.12.0 and break MSVC at the
+    # pinned C++17; upstream dev removed them (commit 48052f609), mirror that
+    - patches/no_designated_initializers.patch
+
 build:
   number: 0
   python:

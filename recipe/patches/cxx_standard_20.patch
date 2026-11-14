@@ -1,0 +1,78 @@
+diff -Naur a/sources/pyside6/cmake/PySideSetup.cmake b/sources/pyside6/cmake/PySideSetup.cmake
+--- a/sources/pyside6/cmake/PySideSetup.cmake	2026-11-14 21:32:04.065824244 +0100
++++ b/sources/pyside6/cmake/PySideSetup.cmake	2026-11-14 21:32:15.113718297 +0100
+@@ -121,8 +121,8 @@
+     endif()
+ endif()
+ 
+-# Force usage of the C++17 standard
+-set(CMAKE_CXX_STANDARD 17)
++# Force usage of the C++20 standard (C++20 constructs are used, e.g. designated initializers)
++set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ # Obtain QT_INCLUDE_DIR from INTERFACE_INCLUDE_DIRECTORIES which returns a list
+diff -Naur a/sources/pyside6/libpyside/CMakeLists.txt b/sources/pyside6/libpyside/CMakeLists.txt
+--- a/sources/pyside6/libpyside/CMakeLists.txt	2026-11-14 21:32:04.081824260 +0100
++++ b/sources/pyside6/libpyside/CMakeLists.txt	2026-11-14 21:32:07.421827772 +0100
+@@ -129,7 +129,7 @@
+ endif()
+ set_target_properties(pyside6 PROPERTIES ${set_props_args})
+ 
+-set_property(TARGET pyside6 PROPERTY CXX_STANDARD 17)
++set_property(TARGET pyside6 PROPERTY CXX_STANDARD 20)
+ 
+ if(PYSIDE_QT_CONF_PREFIX)
+     set_property(SOURCE pyside.cpp
+diff -Naur a/sources/pyside6/libpysideqml/CMakeLists.txt b/sources/pyside6/libpysideqml/CMakeLists.txt
+--- a/sources/pyside6/libpysideqml/CMakeLists.txt	2026-11-14 21:32:04.088824267 +0100
++++ b/sources/pyside6/libpysideqml/CMakeLists.txt	2026-11-14 21:32:07.422926169 +0100
+@@ -86,7 +86,7 @@
+ 
+ target_compile_definitions(pyside6qml PRIVATE -DQT_LEAN_HEADERS=1)
+ 
+-set_property(TARGET pyside6qml PROPERTY CXX_STANDARD 17)
++set_property(TARGET pyside6qml PROPERTY CXX_STANDARD 20)
+ 
+ if(PYSIDE_QT_CONF_PREFIX)
+     set_property(SOURCE pysideqml.cpp
+diff -Naur a/sources/pyside6/plugins/uitools/CMakeLists.txt b/sources/pyside6/plugins/uitools/CMakeLists.txt
+--- a/sources/pyside6/plugins/uitools/CMakeLists.txt	2026-11-14 21:32:04.096824276 +0100
++++ b/sources/pyside6/plugins/uitools/CMakeLists.txt	2026-11-14 21:32:07.422965202 +0100
+@@ -18,7 +18,7 @@
+ endif()
+ add_compile_definitions(QT_STATICPLUGIN)
+ 
+-set_property(TARGET pyside6 PROPERTY CXX_STANDARD 17)
++set_property(TARGET pyside6 PROPERTY CXX_STANDARD 20)
+ 
+ target_include_directories(uiplugin INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+ target_link_libraries(uiplugin
+diff -Naur a/sources/shiboken6/cmake/ShibokenSetup.cmake b/sources/shiboken6/cmake/ShibokenSetup.cmake
+--- a/sources/shiboken6/cmake/ShibokenSetup.cmake	2026-11-14 21:32:04.057824235 +0100
++++ b/sources/shiboken6/cmake/ShibokenSetup.cmake	2026-11-14 21:32:15.113554634 +0100
+@@ -82,8 +82,8 @@
+ set_cmake_cxx_flags()
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII")
+ 
+-# Force usage of the C++17 standard
+-set(CMAKE_CXX_STANDARD 17)
++# Force usage of the C++20 standard (C++20 constructs are used, e.g. designated initializers)
++set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+diff -Naur a/sources/shiboken6_generator/cmake/ShibokenGeneratorSetup.cmake b/sources/shiboken6_generator/cmake/ShibokenGeneratorSetup.cmake
+--- a/sources/shiboken6_generator/cmake/ShibokenGeneratorSetup.cmake	2026-11-14 21:32:04.072824251 +0100
++++ b/sources/shiboken6_generator/cmake/ShibokenGeneratorSetup.cmake	2026-11-14 21:32:15.113917666 +0100
+@@ -42,8 +42,8 @@
+ set(CMAKE_CXX_FLAGS
+     "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII -D LLVM_VERSION=${LLVM_VERSION}")
+ 
+-# Force usage of the C++17 standard
+-set(CMAKE_CXX_STANDARD 17)
++# Force usage of the C++20 standard (C++20 constructs are used, e.g. designated initializers)
++set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
