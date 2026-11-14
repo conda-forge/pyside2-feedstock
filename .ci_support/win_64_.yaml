@@ -10,11 +10,7 @@ cxx_compiler:
 - vs2022
 libxml2_devel:
 - '2.15'
-pin_run_as_build:
-  python:
-    min_pin: x.x
-    max_pin: x.x
-python:
-- 3.13.* *_cp313
+python_min:
+- '3.11'
 target_platform:
 - win-64

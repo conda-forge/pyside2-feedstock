@@ -67,7 +67,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
   -DBUILD_TESTS=OFF \
-  -DFORCE_LIMITED_API=OFF \
+  -DFORCE_LIMITED_API=ON \
   -B build_shiboken -S sources/shiboken6
 cmake --build build_shiboken --target install
 
@@ -82,6 +82,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_RPATH="${PREFIX}/lib" -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_MACOSX_RPATH=ON \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DBUILD_TESTS=OFF \
+  -DFORCE_LIMITED_API=ON \
   -B build_pyside -S sources/pyside6
 cmake --build build_pyside --target install
 
