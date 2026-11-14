@@ -32,10 +32,15 @@ source:
 
     # https://qt-project.atlassian.net/browse/PYSIDE-3516
     - patches/install_py_typed.patch
+    
+    # normalize .pc paths to forward slashes on Windows (mixed separators
+    # break prefix replacement); propose upstream
+    - patches/pc_forward_slashes.patch
 
 build:
   number: 1
   python:
+    version_independent: true
     entry_points:
       - pyside6-rcc = PySide6.scripts.pyside_tool:rcc
       - pyside6-uic = PySide6.scripts.pyside_tool:uic
@@ -52,7 +57,9 @@ requirements:
     - ${{ compiler('cxx') }}
     - if: build_platform != target_platform
       then:
-        - python
+        - python-abi3 ${{ python_min }}.*
+        - python ${{ python_min }}.*
+        - cross-python_${{ target_platform }}
         - setuptools
         - libxslt
         - libxml2-devel
@@ -70,7 +77,8 @@ requirements:
         - libclang ${{ cxx_compiler_version }}.*
 
   host:
-    - python
+    - python-abi3 ${{ python_min }}.*
+    - python ${{ python_min }}.*
     - setuptools
     - libxslt
     - libxml2-devel
@@ -112,7 +120,7 @@ requirements:
         - libvulkan-headers
         - libvulkan-loader
   run:
-    - python
+    - python >=${{ python_min }}
     - qt6-main ${{ maj_min_patch }}.*
   ignore_run_exports:
     from_package:
@@ -165,20 +173,19 @@ tests:
         - PySide6.QtWidgets
         - PySide6.QtXml
   - package_contents:
-      bin:
-        - shiboken6
       site_packages:
         - shiboken6
+        - PySide6
       files:
         exists:
+          # shiboken6 binary: bin/shiboken6(.exe) on Windows, but staged as
+          # python-scripts/shiboken6 in noarch (abi3) tarballs on Unix
+          # (mapped back to bin/ on install); `shiboken6 --help` below
+          # checks the installed location
+          - "**/shiboken6*"
           # Qt Designer plugin
           - "**/plugins/designer/*PySidePlugin*"
-          # pyside6-uic entry point (Scripts/pyside6-uic.exe on Windows)
-          - "**/pyside6-uic*"
           # installed by patches/install_py_typed.patch
-          # NB: PySide6 is installed to lib/site-packages (not lib/python/site-packages),
-          # so site_packages helper does not match it; use files globs instead
-          - "**/PySide6/__init__.py"
           - "**/PySide6/py.typed"
           - "**/PySide6/__feature__.pyi"
         not_exists:
@@ -194,53 +201,27 @@ tests:
     # https://github.com/spyder-ide/qtpy/issues/480
     # We add it here for safety so we don't release really broken packages
       - python -c "import PySide6; from PySide6.QtCore import *"
-      - if: match(python, "<=3.10")
-        then:
-          - python -c "import PySide6.Qt3DAnimation"
-          - python -c "import PySide6.Qt3DCore"
-          - python -c "import PySide6.Qt3DExtras"
-          - python -c "import PySide6.Qt3DInput"
-          - python -c "import PySide6.Qt3DLogic"
-          - python -c "import PySide6.Qt3DRender"
-          - python -c "import PySide6.QtCharts"
-          - python -c "import PySide6.QtDataVisualization"
-          - python -c "import PySide6.QtGraphs"
-          - python -c "import PySide6.QtMultimedia"
-          - python -c "import PySide6.QtMultimediaWidgets"
-          - python -c "import PySide6.QtNetworkAuth"
-          - python -c "import PySide6.QtMultimediaWidgets"
-          - python -c "import PySide6.QtQuick3D"
-          - python -c "import PySide6.QtScxml"
-          - python -c "import PySide6.QtSensors"
-          - python -c "import PySide6.QtSerialPort"
-          - python -c "import PySide6.QtSpatialAudio"
-          - python -c "import PySide6.QtStateMachine"
     # qt-webengine is not built on osx-x86_64
-          - if: not (osx and x86_64)
-            then:
-              - python -c "import PySide6.QtWebEngineCore"
-              - python -c "import PySide6.QtWebEngineQuick"
-              - python -c "import PySide6.QtWebEngineWidgets"
+      - if: not (osx and x86_64)
+        then:
+          - python -c "import PySide6.QtWebEngineCore"
+          - python -c "import PySide6.QtWebEngineQuick"
+          - python -c "import PySide6.QtWebEngineWidgets"
     requirements:
       run:
-        - if: match(python, "<=3.10")
+        # these are optional
+        - qt6-3d
+        - qt6-charts
+        - qt6-datavis3d
+        - qt6-graphs
+        - qt6-multimedia
+        - qt6-networkauth
+        - qt6-scxml
+        - qt6-sensors
+        - qt6-serialport
+        - if: not (osx and x86_64)
           then:
-            # these are optional
-            # test them with one version of python
-            # The other versions of python ensure that pyside is still
-            # usable without the full set of dependencies
-            - qt6-3d
-            - qt6-charts
-            - qt6-datavis3d
-            - qt6-graphs
-            - qt6-multimedia
-            - qt6-networkauth
-            - qt6-scxml
-            - qt6-sensors
-            - qt6-serialport
-            - if: not (osx and x86_64)
-              then:
-                - qt6-webengine
+            - qt6-webengine
 
 about:
   homepage: https://wiki.qt.io/PySide2

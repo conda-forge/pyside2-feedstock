@@ -14,7 +14,7 @@ cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DBUILD_TESTS=OFF                               ^
-    -DFORCE_LIMITED_API=OFF                         ^
+    -DFORCE_LIMITED_API=ON                         ^
     -DPython_EXECUTABLE="%PYTHON:\=/%"              ^
     -B build_shiboken %SRC_DIR:\=/%/sources/shiboken6
 if errorlevel 1 exit 1
@@ -36,7 +36,7 @@ cmake %CMAKE_ARGS% -LAH -G "Ninja"                               ^
     -DCMAKE_UNITY_BUILD_BATCH_SIZE=32               ^
     -DPYTHON_SITE_PACKAGES="%SP_DIR:\=/%"           ^
     -DBUILD_TESTS=OFF                               ^
-    -DFORCE_LIMITED_API=OFF                         ^
+    -DFORCE_LIMITED_API=ON                         ^
     -DPython_EXECUTABLE="%PYTHON:\=/%"              ^
     -DNO_QT_TOOLS=yes                               ^
     -B build .

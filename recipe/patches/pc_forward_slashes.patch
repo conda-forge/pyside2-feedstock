@@ -1,0 +1,31 @@
+diff --git a/sources/pyside6/libpyside/CMakeLists.txt b/sources/pyside6/libpyside/CMakeLists.txt
+index 7e5b12692..31322185b 100644
+--- a/sources/pyside6/libpyside/CMakeLists.txt
++++ b/sources/pyside6/libpyside/CMakeLists.txt
+@@ -153,6 +153,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_T
+ qfp_strip_library("pyside6")
+ 
+ # create pkg-config file
++# Normalize to forward slashes, see comment in sources/shiboken6/data/CMakeLists.txt.
++file(TO_CMAKE_PATH "${PYTHON_SITE_PACKAGES}" PYTHON_SITE_PACKAGES)
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pyside6.pc.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/pyside6${pyside6_SUFFIX}.pc" @ONLY)
+ 
+diff --git a/sources/shiboken6/data/CMakeLists.txt b/sources/shiboken6/data/CMakeLists.txt
+index eb3c0e1f0..662fc6154 100644
+--- a/sources/shiboken6/data/CMakeLists.txt
++++ b/sources/shiboken6/data/CMakeLists.txt
+@@ -28,6 +28,13 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Shiboken6Config.cmake.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/Shiboken6Config.cmake" @ONLY)
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Shiboken6ConfigVersion.cmake.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/Shiboken6ConfigVersion.cmake" @ONLY)
++# Normalize to forward slashes for the .pc file. FindPython returns native
++# (backslashed) paths on Windows while CMAKE_INSTALL_PREFIX uses forward
++# slashes, producing a prefix with mixed separators which breaks
++# prefix-replacement tools (e.g. conda rattler-build) and pkg-config consumers.
++file(TO_CMAKE_PATH "${Python_EXECUTABLE}" Python_EXECUTABLE)
++file(TO_CMAKE_PATH "${Python_INCLUDE_DIRS}" Python_INCLUDE_DIRS)
++file(TO_CMAKE_PATH "${SHIBOKEN_PYTHON_LIBRARIES}" SHIBOKEN_PYTHON_LIBRARIES)
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/shiboken6.pc.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/shiboken6${shiboken6_SUFFIX}.pc" @ONLY)
+ 
