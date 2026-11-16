@@ -68,6 +68,16 @@ jobs:
         store_build_artifacts: false
         tools_install_dir: ~/miniforge3
         vm_image: macOS-15
+      osx_64_python3.15.____cp315t:
+        CONFIG: osx_64_python3.15.____cp315t
+        UPLOAD_PACKAGES: 'True'
+        build_workspace_dir: ~/miniforge3/conda-bld
+        free_disk_space: skip
+        pagefile_size: 0
+        resize_partitions: false
+        store_build_artifacts: false
+        tools_install_dir: ~/miniforge3
+        vm_image: macOS-15
       osx_arm64_python3.11.____cpython:
         CONFIG: osx_arm64_python3.11.____cpython
         UPLOAD_PACKAGES: 'True'
@@ -120,6 +130,16 @@ jobs:
         vm_image: macOS-15-arm64
       osx_arm64_python3.15.____cp315:
         CONFIG: osx_arm64_python3.15.____cp315
+        UPLOAD_PACKAGES: 'True'
+        build_workspace_dir: ~/miniforge3/conda-bld
+        free_disk_space: skip
+        pagefile_size: 0
+        resize_partitions: false
+        store_build_artifacts: false
+        tools_install_dir: ~/miniforge3
+        vm_image: macOS-15-arm64
+      osx_arm64_python3.15.____cp315t:
+        CONFIG: osx_arm64_python3.15.____cp315t
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: ~/miniforge3/conda-bld
         free_disk_space: skip
